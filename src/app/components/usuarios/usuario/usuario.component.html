@@ -1,0 +1,178 @@
+<div class="container">
+    <h1><small>Usuario</small></h1>
+    <hr>
+    
+    <!-- <form [formGroup]="usuarioForm" (ngSubmit)="guardar()" > -->
+        <div class="row form-group"  >
+            <div class="row mt-3 ">
+                <div class="col"> 
+                    <div class="mb-3 form-group form">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="nombre" placeholder="Escriba el nombre" maxlength="30"
+                        name="nombre"    
+                        formControlName="nombre"
+                        >
+                    </div>        
+                </div>
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="apaterno" class="form-label">Apellido paterno:</label>
+                        <input type="text" class="form-control" id="apaterno" placeholder="Escriba el apellido paterno" maxlength="30">
+                    </div>        
+                </div>
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="amaterno" class="form-label">Apellido materno:</label>
+                        <input type="text" class="form-control" id="amaterno" placeholder="Escriba el apellido materno" maxlength="30">
+                    </div>        
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
+                        <p-calendar [(ngModel)]="fechaNacimiento"></p-calendar>
+                    </div>        
+                </div>
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="rfc" class="form-label">RFC:</label>
+                        <input type="text" class="form-control" id="rfc" placeholder="Escriba el RFC" maxlength="25">
+                    </div>        
+                </div>
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="fechaIngreso" class="form-label">Fecha de Ingreso:</label>
+                        <p-calendar [(ngModel)]="fechaIngreso" ></p-calendar>
+                    </div>        
+                </div>        
+            </div>
+            
+            <div class="row">
+                <div class="col"> 
+                    <label for="matricula" class="form-label">Matricula:</label>
+                    <input type="text" class="form-control" id="matricula" placeholder="Escriba la matricula" maxlength="15">
+                </div>
+                <div class="col">
+                    <label for="curp" class="form-label">CURP:</label>
+                    <input type="text" class="form-control" id="curp" placeholder="Escriba la CURP" maxlength="18">
+                </div>
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="sexo" class="form-label">Sexo:</label>
+                        <div class="form-check">
+                            <p-radioButton name="sexo" value="M" [(ngModel)]="sexo"></p-radioButton>
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                &nbsp;Masculino
+                            </label>
+                        </div>
+                        <div class="form-check">
+
+                            <p-radioButton name="sexo" value="F" [(ngModel)]="sexo"></p-radioButton>
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                &nbsp;Femenino
+                            </label>
+                        </div>
+                    </div>        
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col"> 
+                    Direccion:            
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6"> 
+                    <div class="mb-3 form">
+                        <label for="callenumero" class="form-label">Calle y numero:</label>
+                        <input type="text" class="form-control" id="callenumero" placeholder="Escriba la calle y el numero" maxlength="100">
+                    </div>        
+                </div>
+                <div class="col-6" >
+                    <div class="mb-3 form">
+                        <label for="colonia" class="form-label">Colonia:</label>
+                        <br>
+                        <!-- <input type="text" class="form-control" id="colonia" placeholder="Escriba la colonia" maxlength="100"> -->
+                        <p-autoComplete 
+                            class="p-autocomplete" 
+                            [minLength]="3" [delay]="200"
+                            [forceSelection]="true"
+                            [(ngModel)]="colonia" 
+                            [suggestions]="results" 
+                            (completeMethod)="search($event)" 
+                            ></p-autoComplete>
+                    </div>        
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-5"> 
+                    <div class="mb-3 form">
+                        <label for="Municipio" class="form-label">Municipio o Alcaldia:</label>
+                        <input type="text" class="form-control" id="Municipio" placeholder="Municipio" maxlength="50">
+                    </div>        
+                </div>
+                <div class="col-5"> 
+                    <div class="mb-3 form">
+                        <label for="Estado" class="form-label">Estado:</label>
+                        <br>
+                        <p-dropdown [options]="states" [(ngModel)]="selectedState" optionLabel="name"></p-dropdown>
+                    </div>        
+                </div>
+                <div class="col-2"> 
+                    <div class="mb-3 form">
+                        <label for="CP" class="form-label">Codigo Postal:</label>
+                        <input type="text" class="form-control" id="CP" placeholder="CP"  maxlength="5" style="width: 70px;">
+                    </div>        
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="tCelular" class="form-label">Telefono Celular:</label>
+                        <p-inputMask [(ngModel)]="tCelular" mask="(999) 999-9999" characterPattern="[А-Яа-я]"></p-inputMask>
+                    </div>        
+                </div>
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="tCasa" class="form-label">Telefono Casa:</label>
+                        <p-inputMask [(ngModel)]="tCasa" mask="(999) 999-9999" characterPattern="[А-Яа-я]"></p-inputMask>
+                    </div>        
+                </div>
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="tTrabajo" class="form-label">Telefono Trabajo:</label>
+                        <p-inputMask [(ngModel)]="tTrabajo" mask="(999) 999-9999? x99999" characterPattern="[А-Яа-я]"></p-inputMask>
+                    </div>        
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="col-8"> 
+                    <div class="mb-3 form">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" maxlength="100">
+                    </div>        
+                </div>
+                <div class="col"> 
+                    <button type="submit" class="btn btn-warning position-relative top-50 start-50 translate-middle">Guardar</button>
+                    <button type="button" class="btn btn-secondary position-relative top-50 start-50 translate-middle" [routerLink]="['/usuarios']">Cancelar</button>
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="col"> 
+                    <div class="mb-3">
+                        <label for="observaciones" class="form-label">Notas:</label>
+                        <textarea class="form-control" id="observaciones" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    <!-- </form> -->
+</div>

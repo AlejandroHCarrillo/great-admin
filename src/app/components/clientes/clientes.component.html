@@ -1,0 +1,46 @@
+<div class="container">
+    <h1>Clientes</h1>
+    <hr>
+
+    <button class="btn btn-primary" [routerLink]="['/cliente']" routerLinkActive="active" >
+        <span class="icon"><i class="fas fa-user"></i></span>
+        <span class="title">Cliente</span>
+    </button>
+
+    <p-table [value]="clientes">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Nombre</th>
+                <th>Paterno</th>
+                <th>Materno</th>
+                <th>Activo</th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-cliente>
+            <tr>
+                <td>{{cliente.NOMBREC}}</td>
+                <td>{{cliente.APaterno}}</td>
+                <td>{{cliente.AMaterno}}</td>
+                <td>{{cliente.Activo}}</td>
+                <td >
+                    <button class="btn btn-warning btn-sm" (click)="edit(cliente.id)">
+                        <span class="icon"><i class="fas fa-pencil-alt"></i></span>    
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm">
+                        <span class="icon"><i class="fas fa-trash"></i></span>
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <pre>
+        clientes: {{ clientes | json  }}
+    </pre>
+
+    <div class="btn btn-primary fab" (click)="edit('new')">
+        <span class="icon"><i class="fas fa-plus"></i></span>
+    </div>
+
+</div>

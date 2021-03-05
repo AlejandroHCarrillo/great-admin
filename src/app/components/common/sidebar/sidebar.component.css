@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* font-family: 'Open Sans', sans-serif; */
+}
+/* 
+*/
+body{
+    min-height: 10vh;
+    background: #190f00;
+}
+
+.navigation{
+    position: relative;
+    width: 60px;
+    height: 100%;
+    background: #3e0748;
+    transition: 0.5s;
+    overflow: hidden;
+}
+
+.navigation:hover,
+.navigation.active
+{
+    width: 200px;
+}
+
+.navigation>ul{
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+}
+
+.navigation>ul>li{
+    position: relative;
+    width: 100%;
+    list-style: none;    
+}
+.navigation>ul>li:hover{
+    /* background: #ea1d63; */
+    background: linear-gradient(70deg, #1d32ea57, rgba(255, 255, 255, 0.335));;
+}
+.navigation>ul>li>a:hover{
+    color:rgb(40, 207, 207);
+}
+.navigation>ul>li>a{
+    position: relative;
+    display: block;
+    width: 100%;
+    display: flex;
+    text-decoration: none;
+    color: #fff;
+
+}
+
+.navigation ul li a .icon {
+    position: relative;
+    display: block;
+    min-width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+
+}
+
+div .toggle span.icon .fas{
+    position: relative;
+    display: block;
+    width: 100%;
+    display: flex;
+
+    text-decoration: none;
+    color: #fff;
+
+    min-width: 60%;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+}
+
+.navigation ul li a .icon .fas {
+    font-size: 24px;
+}
+
+.navigation ul li a .title {
+    position: relative;
+    display: block;
+    min-width: 60%;
+    height: 60px;
+    line-height: 60px;
+    text-align: start;
+    white-space: nowrap;
+} 
+
+.toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    background: #330748;
+    cursor: pointer;
+
+    color: #fff;
+    text-align: center;
+    line-height: 60px;
+}
+
+.toggle:hover {
+    background: #ea1d63; 
+}
+
+@media (max-width: 767px)
+{
+    .navigation{
+        left: -60px;
+    }
+    .navigation.active{
+        position: absolute;
+        left: 0;
+        width: 100%;
+    }
+}

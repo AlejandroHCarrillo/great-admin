@@ -1,0 +1,23 @@
+button{
+    margin-right: 10px;
+}
+
+.form-group{
+    background-color: whitesmoke;
+}
+
+.container{
+    margin-bottom: 70px;
+}
+
+.p-autocomplete{
+    width: 100%;
+}
+
+.ui-autocomplete{
+    width: 100% !important;
+}
+
+.ui-autocomplete-input{
+    width: 90% !important;
+}

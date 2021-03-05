@@ -1,0 +1,704 @@
+{
+    "Clientes":[
+       {
+          "Nombre":"ABASCAL SEPTIEN CARLOS",
+          "APaterno":"ABASCAL",
+          "AMaterno":"SEPTIEN",
+          "NOMBREC":"CARLOS",
+          "Activo":1
+       },
+       {
+          "Nombre":"ABOITES DAVILA RACHEL",
+          "APaterno":"ABOITES",
+          "AMaterno":"DAVILA",
+          "NOMBREC":"RACHEL",
+          "Activo":1
+       },
+       {
+          "Nombre":"ABURTO PARRA PATRICIA",
+          "APaterno":"ABURTO",
+          "AMaterno":"PARRA",
+          "NOMBREC":"PATRICIA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ACEVEDO FRAGOSO RUBEN",
+          "APaterno":"ACEVEDO",
+          "AMaterno":"FRAGOSO",
+          "NOMBREC":"RUBEN",
+          "Activo":1
+       },
+       {
+          "Nombre":"ACEVEDO QUINTERO MARIA DOLORES",
+          "APaterno":"ACEVEDO",
+          "AMaterno":"QUINTERO",
+          "NOMBREC":"MARIA DOLORES",
+          "Activo":1
+       },
+       {
+          "Nombre":"ACEVEDO ZETINA ALVARO",
+          "APaterno":"ACEVEDO",
+          "AMaterno":"ZETINA",
+          "NOMBREC":"ALVARO",
+          "Activo":1
+       },
+       {
+          "Nombre":"ACEVES GONZALEZ MARIA CANDELARIA",
+          "APaterno":"ACEVES",
+          "AMaterno":"GONZALEZ",
+          "NOMBREC":"MARIA CANDELARIA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ACOLTZI ALCAZAR PIEDAD ROSA",
+          "APaterno":"ACOLTZI",
+          "AMaterno":"ALCAZAR",
+          "NOMBREC":"PIEDAD ROSA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ACOSTA ESPARZA HECTOR",
+          "APaterno":"ACOSTA",
+          "AMaterno":"ESPARZA",
+          "NOMBREC":"HECTOR",
+          "Activo":1
+       },
+       {
+          "Nombre":"ACOSTA GALICIA JAVIER",
+          "APaterno":"ACOSTA",
+          "AMaterno":"GALICIA",
+          "NOMBREC":"JAVIER",
+          "Activo":1
+       },
+       {
+          "Nombre":"ACOSTA SEGURA JUAN MANUEL",
+          "APaterno":"ACOSTA",
+          "AMaterno":"SEGURA",
+          "NOMBREC":"JUAN MANUEL",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILA CASANOVA JOSE CARLOS",
+          "APaterno":"AGUILA",
+          "AMaterno":"CASANOVA",
+          "NOMBREC":"JOSE CARLOS",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR ALMAZAN ROSALIO LUIS",
+          "APaterno":"AGUILAR",
+          "AMaterno":"ALMAZAN",
+          "NOMBREC":"ROSALIO LUIS",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR BALBUENA GUILLERMINA ESTELA",
+          "APaterno":"AGUILAR",
+          "AMaterno":"BALBUENA",
+          "NOMBREC":"GUILLERMINA ESTELA",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR BALBUENA GUILLERMINA ESTELA",
+          "APaterno":"AGUILAR",
+          "AMaterno":"BALBUENA",
+          "NOMBREC":"GUILLERMINA ESTELA",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR BALBUENA GUILLERMINA ESTELA",
+          "APaterno":"AGUILAR",
+          "AMaterno":"BALBUENA",
+          "NOMBREC":"GUILLERMINA ESTELA",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR CRUZ SERGIO",
+          "APaterno":"AGUILAR",
+          "AMaterno":"CRUZ",
+          "NOMBREC":"SERGIO",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR GONZALEZ JULIAN",
+          "APaterno":"AGUILAR",
+          "AMaterno":"GONZALEZ",
+          "NOMBREC":"JULIAN",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR HERRERA EFREN",
+          "APaterno":"AGUILAR",
+          "AMaterno":"HERRERA",
+          "NOMBREC":"EFREN",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR HUERTA ATENOGENES",
+          "APaterno":"AGUILAR",
+          "AMaterno":"HUERTA",
+          "NOMBREC":"ATENOGENES",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR HUERTA ATENOGENES",
+          "APaterno":"AGUILAR",
+          "AMaterno":"HUERTA",
+          "NOMBREC":"ATENOGENES",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR HUERTA ATENOGENES",
+          "APaterno":"AGUILAR",
+          "AMaterno":"HUERTA",
+          "NOMBREC":"ATENOGENES",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR ORTIZ ARMANDO",
+          "APaterno":"AGUILAR",
+          "AMaterno":"ORTIZ",
+          "NOMBREC":"ARMANDO",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR PEREZ DANNY ISRAEL",
+          "APaterno":"AGUILAR",
+          "AMaterno":"PEREZ",
+          "NOMBREC":"DANNY ISRAEL",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR PEREZ DANNY ISRAEL",
+          "APaterno":"AGUILAR",
+          "AMaterno":"PEREZ",
+          "NOMBREC":"DANNY ISRAEL",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR PEREZ DANNY ISRAEL",
+          "APaterno":"AGUILAR",
+          "AMaterno":"PEREZ",
+          "NOMBREC":"DANNY ISRAEL",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR TOVAR ALEJANDRO",
+          "APaterno":"AGUILAR",
+          "AMaterno":"TOVAR",
+          "NOMBREC":"ALEJANDRO",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR URSINA LUIS",
+          "APaterno":"AGUILAR",
+          "AMaterno":"URSINA",
+          "NOMBREC":"LUIS",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR URSINA LUIS",
+          "APaterno":"AGUILAR",
+          "AMaterno":"URSINA",
+          "NOMBREC":"LUIS",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILAR URSINA LUIS",
+          "APaterno":"AGUILAR",
+          "AMaterno":"URSINA",
+          "NOMBREC":"LUIS",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILERA CASTILLO MARCELA",
+          "APaterno":"AGUILERA",
+          "AMaterno":"CASTILLO",
+          "NOMBREC":"MARCELA",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILERA NAVA GLORIA",
+          "APaterno":"AGUILERA",
+          "AMaterno":"NAVA",
+          "NOMBREC":"GLORIA",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILERA NAVA GLORIA",
+          "APaterno":"AGUILERA",
+          "AMaterno":"NAVA",
+          "NOMBREC":"GLORIA",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILERA ORTIZ DANIEL",
+          "APaterno":"AGUILERA",
+          "AMaterno":"ORTIZ",
+          "NOMBREC":"DANIEL",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILLON MARTINEZ ANGEL",
+          "APaterno":"AGUILLON",
+          "AMaterno":"MARTINEZ",
+          "NOMBREC":"ANGEL",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILLON MARTINEZ ANGEL",
+          "APaterno":"AGUILLON",
+          "AMaterno":"MARTINEZ",
+          "NOMBREC":"ANGEL",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUILLON RESENDIZ MARIA DEL CARMEN",
+          "APaterno":"AGUILLON",
+          "AMaterno":"RESENDIZ",
+          "NOMBREC":"MARIA DEL CARMEN",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUIRRE ARNAUD PEDRO",
+          "APaterno":"AGUIRRE",
+          "AMaterno":"ARNAUD",
+          "NOMBREC":"PEDRO",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUIRRE JIMENEZ ALFONSO CAY",
+          "APaterno":"AGUIRRE",
+          "AMaterno":"JIMENEZ",
+          "NOMBREC":"ALFONSO CAY",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUIRRE JIMENEZ GABRIEL",
+          "APaterno":"AGUIRRE",
+          "AMaterno":"JIMENEZ",
+          "NOMBREC":"GABRIEL",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUIRRE JIMENEZ GUILLERMINA",
+          "APaterno":"AGUIRRE",
+          "AMaterno":"JIMENEZ",
+          "NOMBREC":"GUILLERMINA",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUIRRE LIMA MAXIMINO",
+          "APaterno":"AGUIRRE",
+          "AMaterno":"LIMA",
+          "NOMBREC":"MAXIMINO",
+          "Activo":1
+       },
+       {
+          "Nombre":"AGUIRRE MARCELO DAVID",
+          "APaterno":"AGUIRRE",
+          "AMaterno":"MARCELO",
+          "NOMBREC":"DAVID",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALAMILLA MOSQUEDA JOSE LUIS",
+          "APaterno":"ALAMILLA",
+          "AMaterno":"MOSQUEDA",
+          "NOMBREC":"JOSE LUIS",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALARCON CAMPOS MARIO",
+          "APaterno":"ALARCON",
+          "AMaterno":"CAMPOS",
+          "NOMBREC":"MARIO",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALARCON CAMPOS MARIO",
+          "APaterno":"ALARCON",
+          "AMaterno":"CAMPOS",
+          "NOMBREC":"MARIO",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALARCON CASTRO JOSE CARMELO S",
+          "APaterno":"ALARCON",
+          "AMaterno":"CASTRO",
+          "NOMBREC":"JOSE CARMELO S",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALARCON CASTRO JOSE CARMELO S",
+          "APaterno":"ALARCON",
+          "AMaterno":"CASTRO",
+          "NOMBREC":"JOSE CARMELO S",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALARCON CASTRO JOSE CARMELO S",
+          "APaterno":"ALARCON",
+          "AMaterno":"CASTRO",
+          "NOMBREC":"JOSE CARMELO S",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALARCON JAIME CESAR",
+          "APaterno":"ALARCON",
+          "AMaterno":"JAIME",
+          "NOMBREC":"CESAR",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALATORRE SALAS ELIZABETH",
+          "APaterno":"ALATORRE",
+          "AMaterno":"SALAS",
+          "NOMBREC":"ELIZABETH",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALBA CORNEJO JUANA",
+          "APaterno":"ALBA",
+          "AMaterno":"CORNEJO",
+          "NOMBREC":"JUANA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALBA SUAREZ MARIA DE LOURDES",
+          "APaterno":"ALBA",
+          "AMaterno":"SUAREZ",
+          "NOMBREC":"MARIA DE LOURDES",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALBINEDA ARRIETA LUIS ALBERTO",
+          "APaterno":"ALBINEDA",
+          "AMaterno":"ARRIETA",
+          "NOMBREC":"LUIS ALBERTO",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALBINEDA ARRIETA LUIS ALBERTO",
+          "APaterno":"ALBINEDA",
+          "AMaterno":"ARRIETA",
+          "NOMBREC":"LUIS ALBERTO",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALCALA CORONADO CAROLINA",
+          "APaterno":"ALCALA",
+          "AMaterno":"CORONADO",
+          "NOMBREC":"CAROLINA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALCANTARA BERNAL ENRIQUE",
+          "APaterno":"ALCANTARA",
+          "AMaterno":"BERNAL",
+          "NOMBREC":"ENRIQUE",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALCANTARA BERNAL ENRIQUE",
+          "APaterno":"ALCANTARA",
+          "AMaterno":"BERNAL",
+          "NOMBREC":"ENRIQUE",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALCANTARA GARCIA MARIA DEL CARMEN",
+          "APaterno":"ALCANTARA",
+          "AMaterno":"GARCIA",
+          "NOMBREC":"MARIA DEL CARMEN",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALCANTARA GODOY ANA ESTELA",
+          "APaterno":"ALCANTARA",
+          "AMaterno":"GODOY",
+          "NOMBREC":"ANA ESTELA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALCANTARA PINEDA JOSE GUADALUPE",
+          "APaterno":"ALCANTARA",
+          "AMaterno":"PINEDA",
+          "NOMBREC":"JOSE GUADALUPE",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALCANTARA ROCHA ARTURO PASCUAL",
+          "APaterno":"ALCANTARA",
+          "AMaterno":"ROCHA",
+          "NOMBREC":"ARTURO PASCUAL",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALCANTARA SANCHEZ BLANCA ESTELA",
+          "APaterno":"ALCANTARA",
+          "AMaterno":"SANCHEZ",
+          "NOMBREC":"BLANCA ESTELA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALCANTARA SANCHEZ BLANCA ESTELA",
+          "APaterno":"ALCANTARA",
+          "AMaterno":"SANCHEZ",
+          "NOMBREC":"BLANCA ESTELA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALCANTARA TREJO FELIPE",
+          "APaterno":"ALCANTARA",
+          "AMaterno":"TREJO",
+          "NOMBREC":"FELIPE",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALCAZAR BRAVO MARIA DE LOS ANGELES",
+          "APaterno":"ALCAZAR",
+          "AMaterno":"BRAVO",
+          "NOMBREC":"MARIA DE LOS ANGELES",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALCAZAR BRAVO MARIA DE LOS ANGELES",
+          "APaterno":"ALCAZAR",
+          "AMaterno":"BRAVO",
+          "NOMBREC":"MARIA DE LOS ANGELES",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALDAMA ARAIZA RAUL",
+          "APaterno":"ALDAMA",
+          "AMaterno":"ARAIZA",
+          "NOMBREC":"RAUL",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALDAMA ARAIZA RAUL",
+          "APaterno":"ALDAMA",
+          "AMaterno":"ARAIZA",
+          "NOMBREC":"RAUL",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALDAMA ARAIZA RAUL",
+          "APaterno":"ALDAMA",
+          "AMaterno":"ARAIZA",
+          "NOMBREC":"RAUL",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALEJANDRI GOMEZ MARIA CONCEPCION",
+          "APaterno":"ALEJANDRI",
+          "AMaterno":"GOMEZ",
+          "NOMBREC":"MARIA CONCEPCION",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALEMAN MARTINEZ RAMON",
+          "APaterno":"ALEMAN",
+          "AMaterno":"MARTINEZ",
+          "NOMBREC":"RAMON",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALFARO CARRILLO ALEJANDRA IVONNE",
+          "APaterno":"ALFARO",
+          "AMaterno":"CARRILLO",
+          "NOMBREC":"ALEJANDRA IVONNE",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALFARO MONROY CLAUDIA",
+          "APaterno":"ALFARO",
+          "AMaterno":"MONROY",
+          "NOMBREC":"CLAUDIA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALFARO MONROY CLAUDIA",
+          "APaterno":"ALFARO",
+          "AMaterno":"MONROY",
+          "NOMBREC":"CLAUDIA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALMADA CABRERA MARIA SYLVIA",
+          "APaterno":"ALMADA",
+          "AMaterno":"CABRERA",
+          "NOMBREC":"MARIA SYLVIA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALMADA CABRERA MARIA SYLVIA",
+          "APaterno":"ALMADA",
+          "AMaterno":"CABRERA",
+          "NOMBREC":"MARIA SYLVIA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALMANZA HERNANDEZ EDUARDO",
+          "APaterno":"ALMANZA",
+          "AMaterno":"HERNANDEZ",
+          "NOMBREC":"EDUARDO",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALMARAZ HERRERA LISETTE",
+          "APaterno":"ALMARAZ",
+          "AMaterno":"HERRERA",
+          "NOMBREC":"LISETTE",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALMAZAN CAMARILLO MIGUEL ANGEL",
+          "APaterno":"ALMAZAN",
+          "AMaterno":"CAMARILLO",
+          "NOMBREC":"MIGUEL ANGEL",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALMAZAN TORRES BLAS",
+          "APaterno":"ALMAZAN",
+          "AMaterno":"TORRES",
+          "NOMBREC":"BLAS",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALMAZAN TORRES MARIA ANGELA",
+          "APaterno":"ALMAZAN",
+          "AMaterno":"TORRES",
+          "NOMBREC":"MARIA ANGELA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALMEDA RIVAS JUAN",
+          "APaterno":"ALMEDA",
+          "AMaterno":"RIVAS",
+          "NOMBREC":"JUAN",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALONSO GARCIA JORGE",
+          "APaterno":"ALONSO",
+          "AMaterno":"GARCIA",
+          "NOMBREC":"JORGE",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALONSO TREJO ALMA DELIA",
+          "APaterno":"ALONSO",
+          "AMaterno":"TREJO",
+          "NOMBREC":"ALMA DELIA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALONSO TREJO ALMA DELIA",
+          "APaterno":"ALONSO",
+          "AMaterno":"TREJO",
+          "NOMBREC":"ALMA DELIA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALPIZAR ALPIZAR ELIAS",
+          "APaterno":"ALPIZAR",
+          "AMaterno":"ALPIZAR",
+          "NOMBREC":"ELIAS",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALTAMIRANO RESENDIZ ESTEBAN",
+          "APaterno":"ALTAMIRANO",
+          "AMaterno":"RESENDIZ",
+          "NOMBREC":"ESTEBAN",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALTAMIRANO RESENDIZ ESTEBAN",
+          "APaterno":"ALTAMIRANO",
+          "AMaterno":"RESENDIZ",
+          "NOMBREC":"ESTEBAN",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALVA FLORES AMADO",
+          "APaterno":"ALVA",
+          "AMaterno":"FLORES",
+          "NOMBREC":"AMADO",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALVA FLORES PEDRO",
+          "APaterno":"ALVA",
+          "AMaterno":"FLORES",
+          "NOMBREC":"PEDRO",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALVA GUTIERRES JUAN",
+          "APaterno":"ALVA",
+          "AMaterno":"GUTIERRES",
+          "NOMBREC":"JUAN",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALVA HERRERA SUSANA",
+          "APaterno":"ALVA",
+          "AMaterno":"HERRERA",
+          "NOMBREC":"SUSANA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALVA HERRERA SUSANA",
+          "APaterno":"ALVA",
+          "AMaterno":"HERRERA",
+          "NOMBREC":"SUSANA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALVA HERRERA SUSANA",
+          "APaterno":"ALVA",
+          "AMaterno":"HERRERA",
+          "NOMBREC":"SUSANA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALVARADO DIAZ BERTHA GEORGINA",
+          "APaterno":"ALVARADO",
+          "AMaterno":"DIAZ",
+          "NOMBREC":"BERTHA GEORGINA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALVARADO FARFAN MARIA ANTONIA",
+          "APaterno":"ALVARADO",
+          "AMaterno":"FARFAN",
+          "NOMBREC":"MARIA ANTONIA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALVARADO FARFAN MARIA ANTONIA",
+          "APaterno":"ALVARADO",
+          "AMaterno":"FARFAN",
+          "NOMBREC":"MARIA ANTONIA",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALVARADO JURADO MARIA ISABEL",
+          "APaterno":"ALVARADO",
+          "AMaterno":"JURADO",
+          "NOMBREC":"MARIA ISABEL",
+          "Activo":1
+       },
+       {
+          "Nombre":"ALVARADO JURADO MARIA ISABEL",
+          "APaterno":"ALVARADO",
+          "AMaterno":"JURADO",
+          "NOMBREC":"MARIA ISABEL",
+          "Activo":1
+       }
+    ]
+ }
