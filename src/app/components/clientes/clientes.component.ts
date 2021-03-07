@@ -18,22 +18,26 @@ export class ClientesComponent implements OnInit {
   ngOnInit(): void {
     this.clientesService
     .getClientes()
-    .then( ( data : any) => {
-      this.clientes = data;
-      // console.log(data);      
+    .then(async (resp)=>{
+      const body = await resp.json();
+      this.clientes = body.clientes;
+    })
+    .catch((e)=>{
+        console.log("error: ", e);            
     });
-    
-    // this.clientesService.getClientes()
-    // .then( (clientes) => { this.clientes = clientes } );
-  // .then( (clientes) => { this.clientes = clientes || [] } );
+
   }
 
   edit(id?:string){
-    console.log("edit: ", id);
-    if(id){
-      this.router.navigate(['cliente', id]);
-    }
-    this.router.navigate(['cliente']);
+    // console.log("edit: ", id);
+    this.router.navigate([`cliente/${id}`]);
+  }
+
+  delete(cliente:any){
+    alert("eliminar:" + cliente.nombre);
+
+    this.clientesService.delete(cliente._id);
+
   }
 
   search( event : any ) {

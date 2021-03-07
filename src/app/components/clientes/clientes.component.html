@@ -13,21 +13,25 @@
                 <th>Nombre</th>
                 <th>Paterno</th>
                 <th>Materno</th>
+                <th>RFC</th>
                 <th>Activo</th>
+                <th></th>
                 <th></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-cliente>
             <tr>
-                <td>{{cliente.NOMBREC}}</td>
-                <td>{{cliente.APaterno}}</td>
-                <td>{{cliente.AMaterno}}</td>
-                <td>{{cliente.Activo}}</td>
+                <td>{{cliente.nombre}}</td>
+                <td>{{cliente.apaterno}}</td>
+                <td>{{cliente.amaterno}}</td>
+                <td>{{cliente.rfc}}</td>
+                <td>{{!!cliente.activo}}</td>
+                <td>{{cliente._id}}</td>
                 <td >
-                    <button class="btn btn-warning btn-sm" (click)="edit(cliente.id)">
+                    <button class="btn btn-warning btn-sm" (click)="edit(cliente._id)">
                         <span class="icon"><i class="fas fa-pencil-alt"></i></span>    
                     </button>
-                    <button type="button" class="btn btn-danger btn-sm">
+                    <button type="button" class="btn btn-danger btn-sm" (click)="delete(cliente)">
                         <span class="icon"><i class="fas fa-trash"></i></span>
                     </button>
                 </td>
