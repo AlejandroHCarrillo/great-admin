@@ -23,16 +23,21 @@ const fetchSimple = (endpoint:string, data:any, method:string = 'GET') => {
 }
 
 const fetchToken = (endpoint:string, data:any, method:string = 'GET') => {
-    const url = `${ baseURL }/${endpoint}`;
+    let url = `${ baseURL }/${endpoint}`;
     const token = localStorage.getItem('token') || '';
 
     // console.log("url: ", url );
     // console.log("method: ", method );
     // console.log("input data: ", data );
     // console.log("token: ", token );
+    // console.log("data:", data);
 
-    if ( method === 'GET' ){
-        console.log("Ejecutamos el fetch");
+    if ( method === 'GET' ) {        
+        // console.log("Ejecutamos el fetch sin token");        
+        if(data){
+            url =  `${url}?${data}`
+            // console.log(url);
+        }
         
         return fetch( url, {
             method,

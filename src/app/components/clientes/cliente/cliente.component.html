@@ -1,13 +1,24 @@
 <div class="container">
+    
+    <div style="float: right;">
+        <span class="icon"><i class="fas fa-pencil-alt"></i></span>
+
+        <p-checkbox #editcheck
+            name="edit" 
+            value="editMode" 
+            label=""
+            (click)="toggleEdit()"
+        >
+        </p-checkbox>
+    </div>
+    
     <h1><small>Cliente</small></h1>
     <hr>
-
+    
     <form [formGroup]="form" (ngSubmit)="submit()">
-
         <div class="form-group row">
-
             <div class="row mt-3 ">
-                <div class="col"> 
+                <div class="col col-4"> 
                     <div class="mb-3 form-group form">
                         <label for="nombre" class="form-label">Nombre:</label>
                         <input type="text" class="form-control" id="nombre" placeholder="Escriba el nombre" maxlength="30"
@@ -17,8 +28,9 @@
                         >
                         <small *ngIf="isInvalidControl('nombre')" class="text-danger">El nombre es obligatorio </small>
                     </div>
+                    <!-- <p-checkbox [formControl]="form.controls['editMode']"></p-checkbox>edit -->
                 </div>
-                <div class="col"> 
+                <div class="col col-4"> 
                     <div class="mb-3 form">
                         <label for="apaterno" class="form-label">Apellido paterno:</label>
                         <input type="text" class="form-control" id="apaterno" placeholder="Escriba el apellido paterno" maxlength="30"
@@ -29,7 +41,7 @@
                         <small *ngIf="isInvalidControl('apaterno')" class="text-danger">El apellido paterno es obligatorio </small>
                     </div>        
                 </div>
-                <div class="col"> 
+                <div class="col col-3"> 
                     <div class="mb-3 form">
                         <label for="amaterno" class="form-label">Apellido materno:</label>
                         <input type="text" class="form-control" id="amaterno" placeholder="Escriba el apellido materno" maxlength="30"
@@ -39,13 +51,20 @@
                         >
                     </div>        
                 </div>
+                <div class="col col-1"> 
+                    <div class="mb-3 form">
+                        <label class="form-label">Activo:</label>
+                        <div >
+                            <p-inputSwitch name="activo" formControlName="activo"></p-inputSwitch>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
                 <div class="col"> 
                     <div class="mb-3 form">
                         <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
-                        <!-- [(ngModel)]="fechaNacimiento"  -->
                         <p-calendar 
                         name="fechaNacimiento" 
                         formControlName="fechaNacimiento"
@@ -65,7 +84,6 @@
                 <div class="col"> 
                     <div class="mb-3 form">
                         <label for="fechaIngreso" class="form-label">Fecha de Ingreso:</label>
-                        <!-- [(ngModel)]="fechaIngreso"  -->
                         <p-calendar name="fechaIngreso" 
                         formControlName="fechaIngreso"
                         [class.is-invalid]="isInvalidControl('fechaIngreso')"></p-calendar>
@@ -74,7 +92,7 @@
             </div>
 
             <div class="row">
-                <div class="col"> 
+                <div class="col col-4"> 
                     <label for="matricula" class="form-label">Matricula:</label>
                     <input type="text" class="form-control" id="matricula" placeholder="Escriba la matricula" maxlength="15"
                             name="matricula" 
@@ -82,7 +100,7 @@
                             [class.is-invalid]="isInvalidControl('matricula')"
                         >
                 </div>
-                <div class="col">
+                <div class="col col-4">
                     <label for="curp" class="form-label">CURP:</label>
                     <input type="text" class="form-control" id="curp" placeholder="Escriba la CURP" maxlength="18"
                     name="curp" 
@@ -90,29 +108,23 @@
                     [class.is-invalid]="isInvalidControl('curp')"
                 >
                 </div>
-                <div class="col"> 
+                <div class="col col-4"> 
                     <div class="mb-3 form">
-                        <label for="sexo" class="form-label">Sexo:</label>
+                        <label class="form-label">Sexo:</label>
                         <div class="form-check">
-                            <!-- <p-radioButton name="sexo" value="M" [(ngModel)]="sexo" 
-                            name="sexo" 
-                            formControlName="sexo"
-                        ></p-radioButton> -->
-                            <label class="form-check-label" for="flexRadioDefault1">
+                            <p-radioButton name="sexo" value="M" formControlName="sexo"></p-radioButton>
+                            <label class="form-check-label">
                                 &nbsp;Masculino
                             </label>
-                        </div>
-                        <div class="form-check">
-                            <!-- <p-radioButton name="sexo" value="F" [(ngModel)]="sexo"
-                                name="sexoF" 
-                                formControlName="sexoF"
-                            ></p-radioButton> -->
-                            <label class="form-check-label" for="flexRadioDefault1">
+                            <br>
+                            <p-radioButton name="sexo" value="F" formControlName="sexo"></p-radioButton>
+                            <label class="form-check-label">
                                 &nbsp;Femenino
-                            </label>
+                            </label>                            
                         </div>
                     </div>        
                 </div>
+
             </div>
 
             <div class="row" >
@@ -136,8 +148,6 @@
                     <div class="mb-3 form">
                         <label for="colonia" class="form-label">Colonia:</label>
                         <br>
-                        <!-- <input type="text" class="form-control" id="colonia" placeholder="Escriba la colonia" maxlength="100"> -->
-                        <!-- [(ngModel)]="colonia"  -->
                         <p-autoComplete 
                             class="p-autocomplete" 
                             [minLength]="3" [delay]="200"
@@ -185,7 +195,6 @@
                 <div class="col"> 
                     <div class="mb-3 form">
                         <label for="tCelular" class="form-label">Telefono Celular:</label>
-                        <!-- [(ngModel)]="tCelular" -->
                         <p-inputMask mask="(999) 999-9999" characterPattern="[А-Яа-я]"
                         name="tcelular" 
                         formControlName="tcelular"></p-inputMask>
@@ -194,7 +203,6 @@
                 <div class="col"> 
                     <div class="mb-3 form">
                         <label for="tCasa" class="form-label">Telefono Casa:</label>
-                        <!-- [(ngModel)]="tCasa" -->
                         <p-inputMask mask="(999) 999-9999" characterPattern="[А-Яа-я]"
                         name="tcasa" 
                         formControlName="tcasa"></p-inputMask>
@@ -203,7 +211,6 @@
                 <div class="col"> 
                     <div class="mb-3 form">
                         <label for="tTrabajo" class="form-label">Telefono Trabajo:</label>
-                        <!-- [(ngModel)]="tTrabajo" -->
                         <p-inputMask mask="(999) 999-9999? x99999" characterPattern="[А-Яа-я]"
                         name="ttrabajo" 
                         formControlName="ttrabajo"></p-inputMask>
@@ -243,50 +250,17 @@
                 </div>
             </div>
 
-            <!-- <div class="col-sm-6">
-                <div>
-                    <h1>Foo</h1>
-                    <input id="foo" type="text" class="form-control" formControlName="foo" placeholder="Enter Foo" required />
-                    <div *ngIf="getFormControl('foo')?.invalid 
-                            && ( form.controls['foo']?.dirty || form.controls['foo'].touched)" 
-                        class="alert alert-danger"> 
-                        FOO is required
-                    </div>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div>
-                <h1>DUE DATE</h1>
-                <p-calendar formControlName="dueDate"  
-                    placeholder="Select Date"></p-calendar>
-                <div *ngIf="getFormControl('dueDate')?.invalid 
-                        && ( form.controls['dueDate']?.dirty || form.controls['dueDate']?.touched)" 
-                    class="alert alert-danger col-sm-9"> Due Date is required</div>
-              </div>
-              </div> -->
-
         </div>
-
-            <!-- <div class="row">
-              <div class="col-sm-12">
-                  <button type="submit" [disabled]="form.pristine || form.invalid">Generate</button>
-              </div>
-            </div> -->
 
       </form>
 
 
-
 <pre>
     Estado formulario: {{ form.valid }}
-
     Status: {{ form.status }}
-
-    erros: {{ form.status }}
 </pre>
-     
 <pre>
-    {{ form.value | json }}
+{{ form.value | json }}
 </pre>
     
 </div>

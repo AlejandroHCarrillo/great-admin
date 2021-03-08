@@ -13,14 +13,11 @@ import { ClientesService } from 'src/app/services/clientes.service';
   styleUrls: ['./cliente.component.css']
 })
 export class ClienteComponent implements OnInit {
+  editMode: boolean = false;
   clientId: string = "";
 
   results: string[] = [];
   states: string[] = [];
-  selectedStateCode = {
-    "name": "Baja California Sur",
-    "code": "ZAC"
-  };
 
   form : FormGroup = new FormGroup({});
   
@@ -32,11 +29,15 @@ export class ClienteComponent implements OnInit {
   ngOnInit() {
     this.clientId = this.route.snapshot.paramMap.get("id") || "";
 
-    console.log("this.clientId: ", this.clientId);
+    if(this.clientId==="new"){
+      this.clientId = "";
+    }
+
+    // console.log("this.clientId: ", this.clientId);
     
     this.initFormGroup();
-
-     this.myService
+    
+    this.myService
      .getEstados()
      .then( ( data : any) => {        
        this.states = data;        
@@ -45,8 +46,11 @@ export class ClienteComponent implements OnInit {
    }
 
   initFormGroup() {
+    localStorage.setItem("prevScreen", "cliente");
+
     this.crearFormulario();
     this.loadFormData();
+    this.toggleEdit();
   }
 
   getFormControl(name: any){
@@ -61,17 +65,20 @@ export class ClienteComponent implements OnInit {
   submit(){
     console.log("submiting Form...");
     // console.log(this.form.value);
-    this.verificaCampos();
+    if(this.form.invalid) {
+      this.verificaCampos();
+      return;
+    }
 
     try{
       let obj = {...this.form.value};      
       obj.estado = JSON.stringify(this.form.value.estado);
 
       if(!this.clientId || this.clientId === ""){
-        console.log("Guardando Nuevo Cliente"); 
+        // console.log("Guardando Nuevo Cliente"); 
         this.saveCliente(obj);
       } else {
-        console.log("Actualizando Cliente");
+        // console.log("Actualizando Cliente");
         this.updateCliente(obj);
       }
       
@@ -98,7 +105,7 @@ export class ClienteComponent implements OnInit {
 
   crearFormulario(){
     this.form = this.fb.group({
-
+      activo: [true],
       nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       apaterno: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       amaterno: ['', [Validators.maxLength(50)]],
@@ -132,8 +139,7 @@ export class ClienteComponent implements OnInit {
       ttrabajo: [''],
 
       email: ['', [Validators.required, Validators.pattern(REGEXP_EMAIL)]],
-      notas: [''],
-
+      notas: ['']
     });
   }
 
@@ -165,11 +171,11 @@ export class ClienteComponent implements OnInit {
       ttrabajo: "",
       
       email: "",
-      notas: ""
+      notas: ""  
     };
 
     if(this.clientId){
-      console.log("buscando el usuario con el id:", this.clientId);
+      // console.log("buscando el usuario con el id:", this.clientId);
       this.clientesService.getClienteById(this.clientId)
           .then(async (resp)=>{
             const body = await resp.json();
@@ -234,7 +240,7 @@ export class ClienteComponent implements OnInit {
   private saveCliente(obj:any) {
     this.clientesService.save(obj)
     .then( (resp) => {
-      console.log("La respuesta es: ", resp);
+      // console.log("La respuesta es: ", resp);
       
       if(resp.ok){
         Swal.fire({
@@ -262,4 +268,14 @@ export class ClienteComponent implements OnInit {
       });
     }
 
+  toggleEdit(){
+    this.editMode = !this.editMode;
+    
+    if (this.editMode) {
+      this.form.disable()
+    } else {
+      this.form.enable()
+    }
+  }
+  
 }

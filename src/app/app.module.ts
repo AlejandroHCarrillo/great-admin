@@ -11,6 +11,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { InputMaskModule } from 'primeng/inputmask';
 import { TableModule } from 'primeng/table';
+import { CheckboxModule } from 'primeng/checkbox';
+import { PaginatorModule } from 'primeng/paginator';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -54,7 +57,10 @@ import { ClientesService } from './services/clientes.service';
     RadioButtonModule,
     DropdownModule,
     AutoCompleteModule,
-    InputMaskModule
+    InputMaskModule,
+    CheckboxModule,
+    PaginatorModule,
+    InputSwitchModule
 
   ],
   providers: [

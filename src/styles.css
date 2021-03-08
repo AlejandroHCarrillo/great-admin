@@ -21,6 +21,6 @@
     right: 25px;
 }
 
-.p-component, .p-component * {
+.p-component, .p-component {
     width: 100%;
 }

@@ -10,8 +10,8 @@ export class ClientesService {
 
   constructor(private http: HttpClient) { }
 
-  getClientes() {
-    return fetchToken(`cliente`, {}, 'GET');
+  getClientes(urlQueryParams?:string) {
+    return fetchToken(`cliente`, urlQueryParams, 'GET');
   }
 
   getClienteById(id:string) {

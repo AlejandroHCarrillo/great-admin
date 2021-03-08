@@ -1,21 +1,58 @@
 <div class="container">
-    <h1>Clientes</h1>
+    <div style="float: right;">
+        <span class="icon"><i class="fas fa-trash"></i></span>
+
+        <p-checkbox #editcheck
+            name="edit" 
+            value="editMode" 
+            label=""
+            (click)="toggleDelete()"
+        >
+        </p-checkbox>
+    </div>
+
+    <h1>Clientes</h1> 
+
     <hr>
 
     <button class="btn btn-primary" [routerLink]="['/cliente']" routerLinkActive="active" >
         <span class="icon"><i class="fas fa-user"></i></span>
         <span class="title">Cliente</span>
     </button>
-
-    <p-table [value]="clientes">
+    
+    <p-table [value]="clientes" >
         <ng-template pTemplate="header">
             <tr>
-                <th>Nombre</th>
-                <th>Paterno</th>
-                <th>Materno</th>
-                <th>RFC</th>
-                <th>Activo</th>
-                <th></th>
+                <th (click)="setOrder('nombre')">
+                    <div [ngClass]="{'header-sort': pageinfo.sort==='nombre'}">
+                        Nombre&nbsp;
+                    <span class="icon" *ngIf="pageinfo.sort==='nombre'" ><i class="fas fa-sort-alpha-down"></i></span>
+                    </div>
+                </th>
+                <th (click)="setOrder('apaterno')" >
+                    <div [ngClass]="{'header-sort': pageinfo.sort==='apaterno'}">
+                        Paterno&nbsp;
+                        <span class="icon" *ngIf="pageinfo.sort==='apaterno'" ><i class="fas fa-sort-alpha-down"></i></span>
+                    </div>    
+                </th>
+                <th (click)="setOrder('amaterno')">
+                    <div [ngClass]="{'header-sort': pageinfo.sort==='amaterno'}">
+                        Materno&nbsp;
+                        <span class="icon" *ngIf="pageinfo.sort==='amaterno'" ><i class="fas fa-sort-alpha-down"></i></span>
+                    </div>    
+                </th>
+                <th (click)="setOrder('rfc')">
+                    <div [ngClass]="{'header-sort': pageinfo.sort==='rfc'}">
+                        RFC&nbsp;
+                        <span class="icon" *ngIf="pageinfo.sort==='rfc'" ><i class="fas fa-sort-alpha-down"></i></span>
+                    </div>    
+                </th>
+                <th (click)="setOrder('activo')">
+                    <div [ngClass]="{'header-sort': pageinfo.sort==='activo'}">
+                        Activo&nbsp;
+                        <span class="icon" *ngIf="pageinfo.sort==='activo'" ><i class="fas fa-sort-alpha-down"></i></span>
+                    </div>    
+                </th>
                 <th></th>
             </tr>
         </ng-template>
@@ -26,12 +63,11 @@
                 <td>{{cliente.amaterno}}</td>
                 <td>{{cliente.rfc}}</td>
                 <td>{{!!cliente.activo}}</td>
-                <td>{{cliente._id}}</td>
                 <td >
                     <button class="btn btn-warning btn-sm" (click)="edit(cliente._id)">
                         <span class="icon"><i class="fas fa-pencil-alt"></i></span>    
                     </button>
-                    <button type="button" class="btn btn-danger btn-sm" (click)="delete(cliente)">
+                    <button *ngIf="showDeleteButtons" type="button" class="btn btn-danger btn-sm" (click)="delete(cliente)">
                         <span class="icon"><i class="fas fa-trash"></i></span>
                     </button>
                 </td>
@@ -39,9 +75,22 @@
         </ng-template>
     </p-table>
 
-    <pre>
-        clientes: {{ clientes | json  }}
-    </pre>
+    <div class="row">
+        <div class="col text-center">
+            <p-paginator #paginador
+                        [rows]="pagesize"
+                        [totalRecords]="totalRecords" 
+                        [rowsPerPageOptions]="[3,5,10,20,30]"
+                        (onPageChange)="paginate($event)"
+                        [showCurrentPageReport]="true"
+                        currentPageReportTemplate = "Pagina {currentPage} de {totalPages}"
+
+            ></p-paginator>
+            Registros del {{ pageinfo.first + 1 }} al {{ ((pageinfo.first + pageinfo.rows) < totalRecords ? ( pageinfo.first + pageinfo.rows): totalRecords ) }} de un total de {{ totalRecords }}
+        </div>
+    </div>
+
+    <br>
 
     <div class="btn btn-primary fab" (click)="edit('new')">
         <span class="icon"><i class="fas fa-plus"></i></span>
