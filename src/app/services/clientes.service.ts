@@ -14,6 +14,10 @@ export class ClientesService {
     return fetchToken(`cliente`, urlQueryParams, 'GET');
   }
 
+  findClientes(urlQueryParams?:string, buscar:string = '') {
+    return fetchToken(`cliente/find/${buscar}`, urlQueryParams, 'GET');
+  }
+
   getClienteById(id:string) {
     return fetchToken(`cliente/${id}`, {}, 'GET');
   }

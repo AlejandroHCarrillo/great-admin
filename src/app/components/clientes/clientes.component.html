@@ -14,11 +14,28 @@
     <h1>Clientes</h1> 
 
     <hr>
-
-    <button class="btn btn-primary" [routerLink]="['/cliente']" routerLinkActive="active" >
-        <span class="icon"><i class="fas fa-user"></i></span>
-        <span class="title">Cliente</span>
-    </button>
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-1">
+            <label for="buscar">Buscar:</label>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" id="buscar" placeholder="texto a buscar..." 
+                maxlength="30" name="buscar"
+                [(ngModel)]="txtbuscar"
+                (keyup.enter)="buscar()"
+                (keyup)="searchResultMsg = ''"
+                >
+            <div *ngIf="searchResultMsg">
+                <small>{{searchResultMsg}}</small>
+            </div>            
+        </div>
+        <div class="col-2">
+            <button class="btn btn-primary" (click)="buscar()" routerLinkActive="active" >
+                <span class="icon"><i class="fas fa-user"></i></span>
+                <span class="title">&nbsp;Buscar</span>
+            </button>
+        </div>
+    </div>
     
     <p-table [value]="clientes" >
         <ng-template pTemplate="header">

@@ -11,6 +11,9 @@ import { ClientesService } from 'src/app/services/clientes.service';
   styleUrls: ['./clientes.component.css']
 })
 export class ClientesComponent implements OnInit {
+  txtbuscar: string = "";
+  searchResultMsg = "";
+
   showDeleteButtons: boolean = false;
   pagesize = 4;
 
@@ -51,6 +54,37 @@ export class ClientesComponent implements OnInit {
       const body = await resp.json();
       this.clientes = body.clientes;
       this.totalRecords = body.total;
+      this.searchResultMsg = "";
+    })
+    .catch((e)=>{
+        console.log("error: ", e);            
+    });
+  }
+
+  buscar(){
+    if (!this.txtbuscar || this.txtbuscar===""){
+      this.loadClientes();
+      return;
+    }
+
+    let queryParams = `desde=${this.pageinfo.first}&records=${this.pageinfo.rows}&sort=${this.pageinfo.sort}`
+
+    let prevScreen = localStorage.getItem("prevScreen") || '';
+    if (prevScreen == "cliente"){
+      queryParams = localStorage.getItem("lastquery")||'';
+      localStorage.setItem('prevScreen', '');
+    }
+
+    // console.log(queryParams);
+    localStorage.setItem('lastquery', queryParams);
+    
+    this.clientesService
+    .findClientes(queryParams, this.txtbuscar)
+    .then(async (resp)=>{
+      const body = await resp.json();
+      this.clientes = body.clientes;
+      this.totalRecords = body.total;
+      this.searchResultMsg = `Se encontraron ${body.found} registros.`
     })
     .catch((e)=>{
         console.log("error: ", e);            
@@ -85,20 +119,6 @@ export class ClientesComponent implements OnInit {
             });
       }
     })
-
-
-  }
-
-  search( event : any ) {
-    console.log("event: ", event);
-    
-    // this.clientesService
-    //   .getClientes()
-    //   .then( ( data : any) => {
-    //     this.clientes = data;
-    //     // console.log(data);        
-    // });
-
   }
 
   toggleDelete(){
@@ -115,11 +135,7 @@ export class ClientesComponent implements OnInit {
       };
 
       this.loadClientes();
-    }    
-        //event.first = Index of the first record
-        //event.rows = Number of rows to display in new page
-        //event.page = Index of the new page
-        //event.pageCount = Total number of pages
+    }
   }
 
   setOrder(colname:string){
@@ -129,23 +145,4 @@ export class ClientesComponent implements OnInit {
     this.loadClientes();
   }
 
-  // next() {
-  //   this.pageinfo.first = this.pageinfo.first + this.pageinfo.rows;
-  // }
-
-  // prev() {
-  //     this.pageinfo.first = this.pageinfo.first - this.pageinfo.rows;
-  // }
-
-  // reset() {
-  //     this.pageinfo.first = 0;
-  // }
-
-  // isLastPage(): boolean {
-  //     return this.clientes ? this.pageinfo.first === (this.clientes.length - this.pageinfo.rows): true;
-  // }
-
-  // isFirstPage(): boolean {
-  //     return this.clientes ? this.pageinfo.first === 0 : true;
-  // }
 }
