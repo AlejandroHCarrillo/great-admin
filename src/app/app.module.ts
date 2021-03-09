@@ -23,8 +23,8 @@ import { FooterComponent } from './components/common/footer/footer.component';
 import { SidebarComponent } from './components/common/sidebar/sidebar.component';
 import { ClientesComponent } from './components/clientes/clientes.component';
 import { ClienteComponent } from './components/clientes/cliente/cliente.component';
-import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { UsuarioComponent } from './components/usuarios/usuario/usuario.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { LoginComponent } from './components/common/auth/login.component';
 import { RegisterComponent } from './components/common/auth/register.component';
 

@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { SharedService } from 'src/app/services/shared.service';
-import { DropDownItem } from '../../../interfaces/drop-down-item';
+import { ActivatedRoute } from "@angular/router";
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import * as moment from 'moment';
+import Swal from 'sweetalert2'
+
+import { REGEXP_EMAIL, REGEXP_RFC, REGEXP_CURP } from '../../../config/settings'
+import { UsuariosService } from 'src/app/services/usuarios.service';
+import { DropDownItem } from 'src/app/interfaces/drop-down-item';
 
 @Component({
   selector: 'app-usuario',
@@ -9,77 +14,223 @@ import { DropDownItem } from '../../../interfaces/drop-down-item';
   styleUrls: ['./usuario.component.css']
 })
 export class UsuarioComponent implements OnInit {
+  editMode: boolean = false;
+  usuarioId: string = "";
 
-  usuarioForm: FormGroup = new FormGroup({
-    nombre: new FormControl(),
-    aPaterno: new FormControl(),
-    aMaterno: new FormControl(),
-    email:  new FormControl(),
-  });
+  roles: DropDownItem[] = [
+    { name: 'Administrador', code: 'ADMIN_ROLE' },
+    { name: 'Usuario', code: 'USER_ROLE' }
+  ];
 
-  showDatepicker : boolean = false;
-
-  sexo = 'M';
-  fechaNacimiento = new Date();
-  fechaIngreso = new Date();
-
-  states: DropDownItem[] = [];
-  selectedState : DropDownItem = { name: "", code: ""};
-
-  colonia: string = "";
   results: string[] = [];
+  states: string[] = [];
 
-  tCelular: string = "";
-  tCasa: string = "";
-  tTrabajo: string = "";
+  form : FormGroup = new FormGroup({});
+  
+  constructor(  private fb: FormBuilder,
+                private route: ActivatedRoute,
+                private usuariosService :  UsuariosService  ){}
 
-  rfc: string = "";
+  ngOnInit() {
+    this.editMode = (this.usuarioId==="");
+    this.usuarioId = this.route.snapshot.paramMap.get("id") || "";
 
+    if(this.usuarioId==="new"){
+      this.usuarioId = "";
+    }
+    
+    this.initFormGroup();
+    
+   }
 
+  initFormGroup() {
+    localStorage.setItem("prevScreen", "usuario");
 
-  constructor(  private fb : FormBuilder,
-                private myService :  SharedService ) {
     this.crearFormulario();
+    this.loadFormData();
+    this.toggleEdit();
   }
 
-  ngOnInit(): void {
-      this.myService
-      .getEstados()
-      .then( ( data : any) => {        
-        this.states = data;        
-      }); 
+  getFormControl(name: any){
+    return this.form.get(name);
+  }
 
+  isInvalidControl(name: any){
+    const control = this.form.get(name);
+    return (!control?.valid && control?.touched);
+  }
+
+  submit(){
+    console.log("submiting Form...");
+    // console.log(this.form.value);
+    // if(this.form.invalid) {
+    //   console.log('No se pudo guardar forma no valida');
+      
+    //   this.verificaCampos();
+    //   return;
+    // }
+
+    try{
+      let obj = {...this.form.value};
+
+      obj.role = this.form.value.selectedRol.code;
+
+      if(!this.usuarioId || this.usuarioId === ""){
+        // console.log("Guardando Nuevo Usuario"); 
+        this.saveUsuario(obj);
+      } else {
+        // console.log("Actualizando Usuario");
+        this.updateUsuario(obj);
+      }
+      
+
+    } catch(e){
+      console.log(e);
+      Swal.fire({
+        title: 'Hubo un error',
+        text: 'Error al guardar el usuario' + e,
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      });
     }
 
-  search( event : any ) {
-    // console.log("event: ", event);
-    
-    this.myService
-      .getColonias(event.query)
-      .then( ( data : any) => {
-        this.results = data;
-        // console.log(data);
-        
-    });
   }
-
-  handleDropdown( event : any ) {
-    //event.query = current value in input field
-  } 
 
   crearFormulario(){
-    this.usuarioForm = this.fb.group({
-      nombre: ['Alejandro' ],
-      aPaterno: ['Hernandez'],
-      aMaterno: ['Carrillo'],
-      email: ['abc@def.com'],
+    this.form = this.fb.group({
+      activo: [true],
+      nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      username: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      email: ['', [Validators.required, Validators.pattern(REGEXP_EMAIL)]],
+
+      password: ['', [Validators.maxLength(50)]],
+      password2: ['', [Validators.maxLength(50)]],
+
+      role: ['', [Validators.required]],
+      selectedRol: [{
+        name: "Usuario",
+        code: "USER_ROLE"
+      }],
+      img: ['']
     });
   }
 
-  guardar(){
-    console.log("Guardar formulario usuarios");
-    console.log(this.usuarioForm);
+  loadFormData (){
+    let originalUsuario = {
+      nombre: "",
+      username: "",
+      name: "",
+      email: "",
+      password: "",
+      img: "",
+      selectedRol: { name:"Usuario", code:"USER_ROLE" },
+      role: "",
+      activo: true
+    };
+
+    if(this.usuarioId){
+      // console.log("buscando el usuario con el id:", this.usuarioId);
+      this.usuariosService.getUsuarioById(this.usuarioId)
+          .then(async (resp)=>{
+            const body = await resp.json();
+
+            if(!body.ok){
+              console.log(body.msg);
+              Swal.fire({
+                title: 'Error!',
+                text:  body.msg, //'El usuario que busca no ha sido encontrado',
+                icon: 'error',
+                confirmButtonText: 'Continuar'
+              });
+
+              this.usuarioId = "";
+              return;
+            }
+
+            const usuario = body.usuario;
+            
+            // usuario.selectedRol = { name: "", code:"" };
+
+            if (usuario){
+              Object.keys(originalUsuario).map((x)=>{            
+                if(x.toString().includes('fecha')){
+                  let Fecha = moment(eval(`usuario.${x}`));
+                  eval(`originalUsuario.${x} = '${ Fecha.format('MM/DD/yyyy')}' `);
+                } else if(x.toString().includes('estado')){
+                  // console.log(`originalUsuario.${x} = JSON.parse(usuario.${x})`);
+                  eval(`originalUsuario.${x} = JSON.parse(usuario.${x})`);
+                } 
+                else {
+                  eval(`originalUsuario.${x} = usuario.${x}`);
+                }
+              });
+            }
+
+            // originalUsuario.role = JSON.parse(usuario.selectedRol.code);
+            
+            this.form.reset(originalUsuario);
+          });
+    } else {
+      // this.form.setValue({
+        this.form.reset(originalUsuario);
+      }
+  }
+
+  verificaCampos(form?: any){
+    if (!form){
+      form = this.form;
+    }
+    // console.log(this.form);
+    if(form.invalid){
+      return Object.values( this.form.controls ).forEach( control => {
+        if( control instanceof FormGroup ){
+          this.verificaCampos(control);
+        } else{
+          control.markAllAsTouched();
+        }
+      });
+    }
+  }
+
+  private saveUsuario(obj:any) {
+    this.usuariosService.save(obj)
+    .then( (resp) => {
+      // console.log("La respuesta es: ", resp);
+      
+      if(resp.ok){
+        Swal.fire({
+          title: 'Guardar usuario',
+          text: 'Se guardo el usuario con exito',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        });
+      }         
+    });
+  }
+
+  private updateUsuario(obj:any) {
+      obj.id = this.usuarioId;
+      this.usuariosService.update(obj)
+      .then( (resp) => {
+        if(resp.ok){
+          Swal.fire({
+            title: 'Actualizar usuario',
+            text: 'Se actualizo el usuario con exito',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          });
+        }         
+      });
+    }
+
+  toggleEdit(){
+    this.editMode = !this.editMode;
     
+    if (this.editMode) {
+      this.form.disable()
+    } else {
+      this.form.enable()
+    }
   }
   
 }

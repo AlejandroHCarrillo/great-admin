@@ -202,8 +202,8 @@ export class ClienteComponent implements OnInit {
                   let Fecha = moment(eval(`cliente.${x}`));
                   eval(`originalClient.${x} = '${ Fecha.format('MM/DD/yyyy')}' `);
                 } else if(x.toString().includes('estado')){
-                  console.log(`originalClient.${x} = JSON.parse(cliente.${x})`);
-                  // eval(`originalClient.${x} = JSON.parse(cliente.${x})`);
+                  // console.log(`originalClient.${x} = JSON.parse(cliente.${x})`);
+                  eval(`originalClient.${x} = JSON.parse(cliente.${x})`);
                 } 
                 else {
                   eval(`originalClient.${x} = cliente.${x}`);

@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Cliente } from '../interfaces/cliente';
 import { fetchToken } from '../helpers/fetch';
 
 @Injectable({
