@@ -16,6 +16,7 @@ import { DropDownItem } from 'src/app/interfaces/drop-down-item';
 export class UsuarioComponent implements OnInit {
   editMode: boolean = false;
   usuarioId: string = "";
+  passwordconfirmation: boolean = false;
 
   roles: DropDownItem[] = [
     { name: 'Administrador', code: 'ADMIN_ROLE' },
@@ -103,8 +104,8 @@ export class UsuarioComponent implements OnInit {
       username: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       email: ['', [Validators.required, Validators.pattern(REGEXP_EMAIL)]],
 
-      password: ['', [Validators.maxLength(50)]],
-      password2: ['', [Validators.maxLength(50)]],
+      password: ['', [Validators.required, Validators.maxLength(50)]],
+      password2: ['', [Validators.required, Validators.maxLength(50)]],
 
       role: ['', [Validators.required]],
       selectedRol: [{
@@ -116,12 +117,13 @@ export class UsuarioComponent implements OnInit {
   }
 
   loadFormData (){
-    let originalUsuario = {
+    let valuesFormUsuario = {
       nombre: "",
       username: "",
       name: "",
       email: "",
       password: "",
+      password2: "",
       img: "",
       selectedRol: { name:"Usuario", code:"USER_ROLE" },
       role: "",
@@ -149,30 +151,30 @@ export class UsuarioComponent implements OnInit {
 
             const usuario = body.usuario;
             
-            // usuario.selectedRol = { name: "", code:"" };
-
             if (usuario){
-              Object.keys(originalUsuario).map((x)=>{            
+              Object.keys(valuesFormUsuario).map((x)=>{            
                 if(x.toString().includes('fecha')){
                   let Fecha = moment(eval(`usuario.${x}`));
-                  eval(`originalUsuario.${x} = '${ Fecha.format('MM/DD/yyyy')}' `);
-                } else if(x.toString().includes('estado')){
-                  // console.log(`originalUsuario.${x} = JSON.parse(usuario.${x})`);
-                  eval(`originalUsuario.${x} = JSON.parse(usuario.${x})`);
+                  eval(`valuesFormUsuario.${x} = '${ Fecha.format('MM/DD/yyyy')}' `);
+                } else if(x.toString().includes('password2')){
+                  // Casos especiales
+                  // console.log(`valuesFormUsuario.${x} = JSON.parse(usuario.${x})`);
+                  //eval(`valuesFormUsuario.${x} = JSON.parse(usuario.${x})`);
                 } 
                 else {
-                  eval(`originalUsuario.${x} = usuario.${x}`);
+                  eval(`valuesFormUsuario.${x} = usuario.${x}`);
                 }
               });
             }
 
-            // originalUsuario.role = JSON.parse(usuario.selectedRol.code);
-            
-            this.form.reset(originalUsuario);
+            valuesFormUsuario.selectedRol = this.setDropDownValue(usuario.role);
+            valuesFormUsuario.password2 = valuesFormUsuario.password;
+                        
+            this.form.reset(valuesFormUsuario);
           });
     } else {
       // this.form.setValue({
-        this.form.reset(originalUsuario);
+        this.form.reset(valuesFormUsuario);
       }
   }
 
@@ -231,6 +233,12 @@ export class UsuarioComponent implements OnInit {
     } else {
       this.form.enable()
     }
+  }
+
+  setDropDownValue(code:string) : any {
+    console.log("code rol: ", code);
+    
+    return this.roles.find((obj) => ( obj.code === code ));
   }
   
 }

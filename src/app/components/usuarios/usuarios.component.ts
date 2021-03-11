@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
+import { PAGE_SIZE } from '../../config/settings'
 
 import { Usuario } from 'src/app/interfaces/usuario';
 import { UsuariosService } from 'src/app/services/usuarios.service';
@@ -15,7 +16,7 @@ export class UsuariosComponent implements OnInit {
   searchResultMsg = "";
 
   showDeleteButtons: boolean = false;
-  pagesize = 10;
+  pagesize = PAGE_SIZE;
 
   pageinfo = {
                 first : 0,

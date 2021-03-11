@@ -46,7 +46,7 @@
                     <span class="icon" *ngIf="pageinfo.sort==='nombre'" ><i class="fas fa-sort-alpha-down"></i></span>
                     </div>
                 </th>
-                <th (click)="setOrder('username')" >
+                <th (click)="setOrder('username')"  class="col-large">
                     <div [ngClass]="{'header-sort': pageinfo.sort==='username'}">
                         Username&nbsp;
                         <span class="icon" *ngIf="pageinfo.sort==='username'" ><i class="fas fa-sort-alpha-down"></i></span>
@@ -58,28 +58,32 @@
                         <span class="icon" *ngIf="pageinfo.sort==='email'" ><i class="fas fa-sort-alpha-down"></i></span>
                     </div>    
                 </th>
-                <th (click)="setOrder('rol')">
+                <th (click)="setOrder('rol')"  class="col-small">
                     <div [ngClass]="{'header-sort': pageinfo.sort==='rol'}">
                         ROL&nbsp;
                         <span class="icon" *ngIf="pageinfo.sort==='rol'" ><i class="fas fa-sort-alpha-down"></i></span>
                     </div>    
                 </th>
-                <th (click)="setOrder('activo')">
+                <th (click)="setOrder('activo')"  class="col-small">
                     <div [ngClass]="{'header-sort': pageinfo.sort==='activo'}">
                         Activo&nbsp;
                         <span class="icon" *ngIf="pageinfo.sort==='activo'" ><i class="fas fa-sort-alpha-down"></i></span>
                     </div>    
                 </th>
-                <th></th>
+                <th class="col-medium"></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-usuario>
             <tr>
                 <td>{{usuario.nombre}}</td>
                 <td>{{usuario.username}}</td>
-                <td>{{usuario.email}}</td>
-                <td>{{usuario.role}}</td>
-                <td>{{!!usuario.activo}}</td>
+                <td >{{usuario.email}}</td>
+                <td class="text-center">
+                    <span class="icon" *ngIf="usuario.role==='ADMIN_ROLE'" ><i class="fas fa-users-cog"></i></span> 
+                    <span class="icon" *ngIf="usuario.role!=='ADMIN_ROLE'" ><i class="fas fa-user"></i></span> 
+                    <!-- {{usuario.role}} -->
+                </td>
+                <td class="text-center">{{!!usuario.activo}}</td>
                 <td >
                     <button class="btn btn-warning btn-sm" (click)="edit(usuario._id)">
                         <span class="icon"><i class="fas fa-pencil-alt"></i></span>    
@@ -110,7 +114,7 @@
     <br>
 
     <div class="btn btn-primary fab" (click)="edit('new')">
-        <span class="icon"><i class="fas fa-plus"></i></span>
+        <span class="icon"><i class="fas fa-user-plus"></i></span>
     </div>
 
 </div>

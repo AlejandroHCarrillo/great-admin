@@ -24,3 +24,28 @@
 .p-component, .p-component {
     width: 100%;
 }
+
+/* Columnas de los listados */
+.col-extra-small{
+    width: 25px;
+}
+
+.col-small{
+    width: 50px;
+}
+
+.col-medium{
+    width: 100px;
+}
+
+.col-large{
+    width: 150px;
+}
+
+.col-extra-large{
+    width: 250px;
+}
+
+.col-gigant{
+    width: 350px;
+}

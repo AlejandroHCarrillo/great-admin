@@ -1,15 +1,13 @@
-import { URL_BASE } from '../config/settings';
+import { environment } from '../../environments/environment';
 
-const baseURL = URL_BASE;
-// const baseURL = process.env.REACT_APP_API_URL;
+let baseURL = environment.baseUrl;
 
 const fetchSimple = (endpoint:string, data:any, method:string = 'GET') => {
-
     const url = `${ baseURL }/${endpoint}/`;
 
-    console.log("url: ", url );
-    console.log("method: ", method );
-    console.log("data: ", data );
+    // console.log("url: ", url );
+    // console.log("method: ", method );
+    // console.log("data: ", data );
 
     if ( method === 'GET' ){
         return fetch( url );

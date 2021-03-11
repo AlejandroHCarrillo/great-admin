@@ -1,0 +1,25 @@
+.grid-cards{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.card{
+    width: 180px;
+    height: 150px;
+    margin-top: 1rem;
+    margin-right: 1rem;
+    border-radius: 30;
+    min-width: 160px;
+}
+
+.icon{
+    font-size: 50px;
+}
+
+.icon:hover{
+    font-size: 55px;
+}
+span:hover{
+    color: red;
+}

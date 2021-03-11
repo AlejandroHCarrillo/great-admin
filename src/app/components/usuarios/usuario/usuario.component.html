@@ -53,7 +53,7 @@
                         name="email" 
                         formControlName="email"
                         [class.is-invalid]="isInvalidControl('email')">
-                        <small *ngIf="isInvalidControl('nombre')" class="text-danger">El email es obligatorio </small>
+                        <small *ngIf="isInvalidControl('email')" class="text-danger">El email es obligatorio </small>
                     </div>        
                 </div>
             </div>
@@ -62,26 +62,30 @@
                 <div class="col col-6"> 
                     <div class="mb-3 form">
                         <label for="password" class="form-label">Password:</label>
-                        <input type="text" class="form-control" id="password" placeholder="Escriba el password" maxlength="30"
+                        <input type="password" class="form-control" id="password" placeholder="Escriba el password" maxlength="30"
                         name="password" 
                         formControlName="password"
                         [class.is-invalid]="isInvalidControl('password')"
                         >
-                        <small *ngIf="isInvalidControl('nombre')" class="text-danger">El password es obligatorio </small>
+                        <small *ngIf="isInvalidControl('password')" class="text-danger">El password es obligatorio </small>
                     </div>
+                    Password: {{ this.form.value.password }}
                 </div>
 
                 <div class="col col-6"> 
                     <div class="mb-3 form">
                         <label for="password2" class="form-label">Confirmar password:</label>
-                        <input type="text" class="form-control" id="password2" placeholder="Escriba la confirmacion del password" maxlength="30"
+                        <input type="password" class="form-control" id="password2" placeholder="Escriba la confirmacion del password" maxlength="30"
                         name="password2" 
                         formControlName="password2"
                         [class.is-invalid]="isInvalidControl('password2')"
+                        autocomplete="false"
                         >
-                        <small *ngIf="isInvalidControl('nombre')" class="text-danger">La confirmacion del password es obligatoria </small>
+                        <small *ngIf="isInvalidControl('password2')" class="text-danger">La confirmacion del password es obligatoria. </small>
+                        <small *ngIf="(this.form.value.password != this.form.value.password2) " class="text-danger">La confirmacion y el password no conhinciden</small>
                     </div>        
                 </div>
+
 
             </div>
         
@@ -119,12 +123,25 @@
 
       </form>
       
-<pre>
+
+TODO: 
+<ul>
+    <li>
+        Crear un metodo de resetear el password del usuario, que le mande uno temporal y que le pida resetarlo la proxima vez
+    </li>
+    <li>
+        Crear un ventana para que el usuario ponga un password nuevo usando el password temporal que le envio el sistema
+    </li>
+    <li>
+        Si ya existe un password de usuario valido no actualizarlo con todo lo demas datos, solo se puede resetar cuando el punto 1
+    </li>
+</ul>
+<!-- <pre>
     Estado formulario: {{ form.valid }}
     Status: {{ form.status }}
 </pre>
 <pre>
 {{ form.value | json }}
-</pre>
+</pre> -->
     
 </div>

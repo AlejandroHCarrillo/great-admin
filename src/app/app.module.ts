@@ -30,6 +30,13 @@ import { RegisterComponent } from './components/common/auth/register.component';
 
 import { SharedService } from './services/shared.service';
 import { ClientesService } from './services/clientes.service';
+import { ProductosComponent } from './components/productos/productos.component';
+import { ProductoComponent } from './components/productos/producto/producto.component';
+import { ProgressComponent } from './components/common/progress/progress.component';
+import { BargraphicComponent } from './components/graphics/bargraphic/bargraphic.component';
+import { NopagefoundComponent } from './components/common/nopagefound/nopagefound.component';
+import { PagesComponent } from './components/pages/pages.component';
+import { CatalogosComponent } from './components/catalogos/catalogos.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +49,14 @@ import { ClientesService } from './services/clientes.service';
     UsuariosComponent,
     UsuarioComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ProductosComponent,
+    ProductoComponent,
+    ProgressComponent,
+    BargraphicComponent,
+    NopagefoundComponent,
+    PagesComponent,
+    CatalogosComponent
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
+import { PAGE_SIZE } from '../../config/settings'
+
 
 import { Cliente } from 'src/app/interfaces/cliente';
 import { ClientesService } from 'src/app/services/clientes.service';
@@ -15,7 +17,7 @@ export class ClientesComponent implements OnInit {
   searchResultMsg = "";
 
   showDeleteButtons: boolean = false;
-  pagesize = 4;
+  pagesize = PAGE_SIZE;
 
   pageinfo = {
                 first : 0,
@@ -126,7 +128,7 @@ export class ClientesComponent implements OnInit {
   }
 
   paginate(pageEvent:any){
-    if(pageEvent.page != this.currentPage){
+    // if(pageEvent.page != this.currentPage){
       this.currentPage = pageEvent.page;
       console.log("cambio de pagina", pageEvent);
       this.pageinfo = {
@@ -135,7 +137,7 @@ export class ClientesComponent implements OnInit {
       };
 
       this.loadClientes();
-    }
+    // }
   }
 
   setOrder(colname:string){

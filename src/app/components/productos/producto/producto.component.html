@@ -1,0 +1,131 @@
+<div class="container">
+    
+    <div style="float: right;">
+        <span class="icon"><i class="fas fa-pencil-alt"></i></span>
+
+        <p-checkbox #editcheck
+            name="edit" 
+            value="editMode" 
+            label=""
+            (click)="toggleEdit()"
+        >
+        </p-checkbox>
+    </div>
+    
+    <h1><small>Producto</small></h1>
+    <hr>
+    <!-- Roles: {{ clasificaciones | json }} -->
+    <!-- Rol seleccionado: {{ form.selectedRol | json }} -->
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-group row col">
+            <div class="row mt-3 ">
+                <div class="col-2"> 
+                    <div class="mb-3 form-group form">
+                        <label for="code" class="form-label">Codigo:</label>
+                        <input type="text" class="form-control" id="code" placeholder="Escriba el codigo del producto" maxlength="10"
+                        name="code" 
+                        formControlName="code"
+                        [class.is-invalid]="isInvalidControl('code')"
+                        >
+                        <small *ngIf="isInvalidControl('code')" class="text-danger">El codigo del producto es obligatorio </small>
+                    </div>        
+                </div>
+
+                <div class="col"> 
+                    <div class="mb-3 form-group form">
+                        <label for="nombre" class="form-label">Nombre producto:</label>
+                        <input type="text" class="form-control" id="nombre" placeholder="Escriba el nombre" maxlength="30"
+                        name="nombre" 
+                        formControlName="nombre"
+                        [class.is-invalid]="isInvalidControl('nombre')"
+                        >
+                        <small *ngIf="isInvalidControl('nombre')" class="text-danger">El nombre es obligatorio </small>
+                    </div>
+                </div>
+
+                <div class="col-2">
+                    <div class="mb-3 form-group form">
+                        <label for="selectedClasificacion" class="form-label">Clasificacion:</label>
+                        <p-dropdown [options]="clasificaciones" 
+                                optionLabel="selectedClasificacion"
+                                name="selectedClasificacion"
+                                formControlName="selectedClasificacion"></p-dropdown>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <div class="mb-3 form-group form">
+                        <label for="precio" class="form-label">Precio:</label>
+                        <input type="text" class="form-control" id="precio" placeholder="0.00" maxlength="10"
+                        name="precio" 
+                        formControlName="precio"
+                        [class.is-invalid]="isInvalidControl('precio')"
+                        >
+                        <small *ngIf="isInvalidControl('precio')" class="text-danger">El precio es obligatorio </small>
+                    </div>
+                </div>
+
+                <div class="col-2">
+                    <div class="mb-3 form-group form">
+                        <label for="tasaIVA" class="form-label">Tasa IVA:</label>
+                        <input type="text" class="form-control" id="tasaIVA" placeholder="0.00" maxlength="3"
+                        name="tasaIVA" 
+                        formControlName="tasaIVA"
+                        [class.is-invalid]="isInvalidControl('tasaIVA')"
+                        >
+                        <small *ngIf="isInvalidControl('tasaIVA')" class="text-danger">El tasa IVA es obligatorio </small>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="row">
+                <div class="col-2">
+                    <div >
+                        <p-inputSwitch name="activo" formControlName="activo"></p-inputSwitch>
+                    </div>
+                    <label class="form-label">Activo</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-8">
+
+                </div>
+                <div class="col">
+                    <button type="submit"  class="btn btn-primary">save</button>
+                    <button type="submit" 
+                            class="btn btn-warning position-relative top-50 start-50 translate-middle" 
+                            [disabled]="form.pristine || form.invalid">Guardar</button>
+                    <button type="button" 
+                            class="btn btn-secondary position-relative top-50 start-50 translate-middle" 
+                            [routerLink]="['/productos']">Cancelar</button>
+                </div>
+            </div>
+
+        </div>
+
+      </form>
+      
+
+TODO: 
+<ul>
+    <li>
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+</ul>
+
+<pre>
+    Estado formulario: {{ form.valid }}
+    Status: {{ form.status }}
+</pre>
+<pre>
+{{ form.value | json }}
+</pre>
+    
+</div>
