@@ -13,6 +13,9 @@ import { ProductosComponent } from './components/productos/productos.component';
 import { UsuarioComponent } from './components/usuarios/usuario/usuario.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { CatalogosComponent } from './components/catalogos/catalogos.component';
+import { VentasComponent } from './components/ventas/ventas.component';
+import { AlumnosComponent } from './components/alumnos/alumnos.component';
+import { AlumnoComponent } from './components/alumnos/alumno/alumno.component';
 
 const routes: Routes = [
   // Rutas protegidas
@@ -21,12 +24,21 @@ const routes: Routes = [
     children: [
       {path: 'home', component: HomeComponent},
       {path: 'catalogos', component: CatalogosComponent },
+      {path: 'bancos', component: NopagefoundComponent },
+      {path: 'cuentas', component: NopagefoundComponent },
+      {path: 'formaspago', component: NopagefoundComponent },
+
+
+      {path: 'ventas', component: VentasComponent },
       {path: 'usuarios', component: UsuariosComponent},
       {path: 'usuario', component: UsuarioComponent},
       {path: 'usuario/:id', component: UsuarioComponent},
       {path: 'clientes', component: ClientesComponent},
       {path: 'cliente', component: ClienteComponent},
       {path: 'cliente/:id', component: ClienteComponent},
+      {path: 'alumnos', component: AlumnosComponent},
+      {path: 'alumno', component: AlumnoComponent},
+      {path: 'alumno/:id', component: AlumnoComponent},
       {path: 'productos', component: ProductosComponent},
       {path: 'producto', component: ProductoComponent},
       {path: 'producto/:id', component: ProductoComponent},    

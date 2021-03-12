@@ -5,21 +5,23 @@
 
         <p-checkbox #editcheck
             name="edit" 
-            value="editMode" 
+            value="true" 
             label=""
             (click)="toggleEdit()"
+            [ngModel]="editMode"
+            checked="true"
         >
         </p-checkbox>
     </div>
     
     <h1><small>Producto</small></h1>
     <hr>
-    <!-- Roles: {{ clasificaciones | json }} -->
-    <!-- Rol seleccionado: {{ form.selectedRol | json }} -->
+    <!-- producto: {{ producto | json }} -->
+    <!-- Rol seleccionado: {{ form.selectedClasificacion | json }} -->
     <form [formGroup]="form" (ngSubmit)="submit()">
         <div class="form-group row col">
             <div class="row mt-3 ">
-                <div class="col-2"> 
+                <div class="col-3"> 
                     <div class="mb-3 form-group form">
                         <label for="code" class="form-label">Codigo:</label>
                         <input type="text" class="form-control" id="code" placeholder="Escriba el codigo del producto" maxlength="10"
@@ -33,7 +35,7 @@
 
                 <div class="col"> 
                     <div class="mb-3 form-group form">
-                        <label for="nombre" class="form-label">Nombre producto:</label>
+                        <label for="nombre" class="form-label">Nombre:</label>
                         <input type="text" class="form-control" id="nombre" placeholder="Escriba el nombre" maxlength="30"
                         name="nombre" 
                         formControlName="nombre"
@@ -43,22 +45,78 @@
                     </div>
                 </div>
 
-                <div class="col-2">
+                <div class="col-3">
                     <div class="mb-3 form-group form">
                         <label for="selectedClasificacion" class="form-label">Clasificacion:</label>
                         <p-dropdown [options]="clasificaciones" 
-                                optionLabel="selectedClasificacion"
+                                optionLabel="name"
                                 name="selectedClasificacion"
-                                formControlName="selectedClasificacion"></p-dropdown>
+                                formControlName="clasificacion"></p-dropdown>
                     </div>
                 </div>
 
             </div>
+
             <div class="row">
+                <div class="col">
+                    <div class="mb-3 form-group form">
+                        <label for="precio" class="form-label">Descripcion:</label>
+                        <input type="text" class="form-control" id="descripcion" 
+                        placeholder="Descripcion del producto" maxlength="100"
+                        name="descripcion" 
+                        formControlName="descripcion"
+                        [class.is-invalid]="isInvalidControl('descripcion')"
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-3">
+                    <div class="mb-3 form-group form">
+                        <label for="costo" class="form-label">Costo:</label>
+                        <input type="text" class="form-control text-numeric" id="costo" placeholder="0.00" maxlength="10"
+                        name="costo" 
+                        formControlName="costo"
+                        [class.is-invalid]="isInvalidControl('costo')"
+                        >
+                        <small *ngIf="isInvalidControl('costo')" class="text-danger">El costo es obligatorio </small>
+                    </div>
+                </div>
+
+                <div class="col"></div>
                 <div class="col-2">
                     <div class="mb-3 form-group form">
+                        <label for="tasaIVA" class="form-label" >Excenta IVA: {{ (!!form.value.exentoIVA)?"Si":"No" }}</label>
+                        <div style="display: flex; flex-direction: row;;" >
+                            <p-inputSwitch name="exentoIVA" formControlName="exentoIVA" ></p-inputSwitch>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <div class="mb-3 form-group form">
+                        <label for="tasaIVA" class="form-label" >% Tasa IVA:</label>
+                        <div  style="display: flex; flex-direction: row;" >
+                            <input type="text" class="form-control text-numeric" id="tasaIVA" placeholder="0.00" maxlength="3"
+                            name="tasaIVA" 
+                            formControlName="tasaIVA"
+                            [class.is-invalid]="isInvalidControl('tasaIVA')"
+                            ><span>%</span>
+                            <small *ngIf="isInvalidControl('tasaIVA')" class="text-danger">El tasa IVA es obligatorio </small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                
+                <div class="col-3">
+                    <div class="mb-3 form-group form">
                         <label for="precio" class="form-label">Precio:</label>
-                        <input type="text" class="form-control" id="precio" placeholder="0.00" maxlength="10"
+                        <input type="text" class="form-control text-numeric" id="precio" placeholder="0.00" maxlength="10"
                         name="precio" 
                         formControlName="precio"
                         [class.is-invalid]="isInvalidControl('precio')"
@@ -67,31 +125,41 @@
                     </div>
                 </div>
 
+                <div class="col-3">
+                    <div class="mb-3 form-group form">
+                        <label for="cantidad" class="form-label" >Cantidad:</label>
+                        <div style="display: flex; flex-direction: row;" >
+                            <input type="text" class="form-control text-numeric" id="cantidad" placeholder="" maxlength="10"
+                            name="cantidad" 
+                            formControlName="cantidad"
+                            [class.is-invalid]="isInvalidControl('cantidad')"
+                            >       
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4"></div>
+
                 <div class="col-2">
                     <div class="mb-3 form-group form">
-                        <label for="tasaIVA" class="form-label">Tasa IVA:</label>
-                        <input type="text" class="form-control" id="tasaIVA" placeholder="0.00" maxlength="3"
-                        name="tasaIVA" 
-                        formControlName="tasaIVA"
-                        [class.is-invalid]="isInvalidControl('tasaIVA')"
-                        >
-                        <small *ngIf="isInvalidControl('tasaIVA')" class="text-danger">El tasa IVA es obligatorio </small>
+                        <label class="form-label">Activo:{{ (!!form.value.activo)?"Si":"No" }}</label>
+                        <div>
+                            <p-inputSwitch name="activo" formControlName="activo"></p-inputSwitch>
+                        </div>
                     </div>
                 </div>
 
-            </div>
-            
-            <div class="row">
-                <div class="col-2">
-                    <div >
-                        <p-inputSwitch name="activo" formControlName="activo"></p-inputSwitch>
-                    </div>
-                    <label class="form-label">Activo</label>
-                </div>
+
             </div>
 
             <div class="row">
-                <div class="col-8">
+                <div class="col-3" style="margin-bottom: 10px;">
+                    <div class="card" style="width: 18rem;" *ngIf="producto.img && producto.img !=='' ">
+                        <img id="myImg" [src]="producto.img" alt="imagen del producto" class="card-img-top" (click)="toggleModal()" >
+                      </div>
+                </div>
+                
+                <div class="col-4">
 
                 </div>
                 <div class="col">
@@ -109,6 +177,15 @@
 
       </form>
       
+<!-- The Modal -->
+<div id="myModal" [ngClass]="{modal: showModal}" *ngIf="showModal" (click)="closeModal()">
+    <!-- The Close Button -->
+    <span class="close" (click)="closeModal()">&times;</span>
+    <!-- Modal Content (The Image) -->
+    <img class="modal-content" id="img01" [src]="producto.img">
+    <!-- Modal Caption (Image Text) -->
+    <div id="caption">{{producto.nombre}}</div>
+</div>
 
 TODO: 
 <ul>

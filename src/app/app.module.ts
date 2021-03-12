@@ -37,6 +37,11 @@ import { BargraphicComponent } from './components/graphics/bargraphic/bargraphic
 import { NopagefoundComponent } from './components/common/nopagefound/nopagefound.component';
 import { PagesComponent } from './components/pages/pages.component';
 import { CatalogosComponent } from './components/catalogos/catalogos.component';
+import { VentasComponent } from './components/ventas/ventas.component';
+import { AlumnosComponent } from './components/alumnos/alumnos.component';
+import { AlumnoComponent } from './components/alumnos/alumno/alumno.component';
+import { AlumnosService } from './services/alumnos.service';
+import { DireccionComponent } from './components/common/direccion/direccion.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,7 +61,11 @@ import { CatalogosComponent } from './components/catalogos/catalogos.component';
     BargraphicComponent,
     NopagefoundComponent,
     PagesComponent,
-    CatalogosComponent
+    CatalogosComponent,
+    VentasComponent,
+    AlumnosComponent,
+    AlumnoComponent,
+    DireccionComponent
   ],
   imports: [
     BrowserModule,
@@ -79,7 +88,8 @@ import { CatalogosComponent } from './components/catalogos/catalogos.component';
   ],
   providers: [
     SharedService,
-    ClientesService
+    ClientesService,
+    AlumnosService
   ],
   bootstrap: [AppComponent]
 })

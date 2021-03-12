@@ -10,7 +10,7 @@
         >
         </p-checkbox>
     </div>
-    <h1>Clientes</h1> 
+    <h1>Alumnos</h1> 
     <hr>
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-1">
@@ -35,7 +35,7 @@
         </div>
     </div>
     
-    <p-table [value]="clientes" >
+    <p-table [value]="alumnos" >
         <ng-template pTemplate="header">
             <tr>
                 <th (click)="setOrder('nombre')">
@@ -71,18 +71,18 @@
                 <th></th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-cliente>
+        <ng-template pTemplate="body" let-alumno>
             <tr>
-                <td>{{cliente.nombre}}</td>
-                <td>{{cliente.apaterno}}</td>
-                <td>{{cliente.amaterno}}</td>
-                <td>{{cliente.rfc}}</td>
-                <td>{{!!cliente.activo}}</td>
+                <td>{{alumno.nombre}}</td>
+                <td>{{alumno.apaterno}}</td>
+                <td>{{alumno.amaterno}}</td>
+                <td>{{alumno.rfc}}</td>
+                <td>{{!!alumno.activo}}</td>
                 <td >
-                    <button class="btn btn-warning btn-sm" (click)="edit(cliente._id)">
+                    <button class="btn btn-warning btn-sm" (click)="edit(alumno._id)">
                         <span class="icon"><i class="fas fa-pencil-alt"></i></span>    
                     </button>
-                    <button *ngIf="showDeleteButtons" type="button" class="btn btn-danger btn-sm" (click)="delete(cliente)">
+                    <button *ngIf="showDeleteButtons" type="button" class="btn btn-danger btn-sm" (click)="delete(alumno)">
                         <span class="icon"><i class="fas fa-trash"></i></span>
                     </button>
                 </td>

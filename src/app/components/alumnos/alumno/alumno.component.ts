@@ -6,15 +6,15 @@ import Swal from 'sweetalert2'
 
 import { REGEXP_EMAIL, REGEXP_RFC, REGEXP_CURP } from '../../../config/settings'
 import { SharedService } from 'src/app/services/shared.service';
-import { ClientesService } from 'src/app/services/clientes.service';
+import { AlumnosService } from 'src/app/services/alumnos.service';
 @Component({
-  selector: 'app-cliente',
-  templateUrl: './cliente.component.html',
-  styleUrls: ['./cliente.component.css']
+  selector: 'app-alumno',
+  templateUrl: './alumno.component.html',
+  styleUrls: ['./alumno.component.css']
 })
-export class ClienteComponent implements OnInit {
+export class AlumnoComponent implements OnInit {
   editMode: boolean = false;
-  clientId: string = "";
+  alumnoId: string = "";
 
   results: string[] = [];
   states: string[] = [];
@@ -24,16 +24,17 @@ export class ClienteComponent implements OnInit {
   constructor(  private fb: FormBuilder,
                 private route: ActivatedRoute,
                 private myService :  SharedService,
-                private clientesService :  ClientesService  ){}
+                private alumnosService :  AlumnosService  ){}
 
   ngOnInit() {
-    this.clientId = this.route.snapshot.paramMap.get("id") || "";
-
-    if(this.clientId==="new" || this.clientId === ""){
-      this.clientId = "";
+    this.alumnoId = this.route.snapshot.paramMap.get("id") || "";
+    
+    if(this.alumnoId==="new" || this.alumnoId === ""){
+      this.alumnoId = "";
       this.editMode = true;
     }
-    // console.log("this.clientId: ", this.clientId);
+
+    // console.log("this.alumnoId: ", this.alumnoId);
     
     this.initFormGroup();
     
@@ -46,7 +47,7 @@ export class ClienteComponent implements OnInit {
    }
 
   initFormGroup() {
-    localStorage.setItem("prevScreen", "cliente");
+    localStorage.setItem("prevScreen", "alumno");
 
     this.crearFormulario();
     this.loadFormData();
@@ -74,12 +75,12 @@ export class ClienteComponent implements OnInit {
       let obj = {...this.form.value};      
       obj.estado = JSON.stringify(this.form.value.estado);
 
-      if(!this.clientId || this.clientId === ""){
-        // console.log("Guardando Nuevo Cliente"); 
-        this.saveCliente(obj);
+      if(!this.alumnoId || this.alumnoId === ""){
+        // console.log("Guardando Nuevo Alumno"); 
+        this.saveAlumno(obj);
       } else {
-        // console.log("Actualizando Cliente");
-        this.updateCliente(obj);
+        // console.log("Actualizando Alumno");
+        this.updateAlumno(obj);
       }
       
 
@@ -87,7 +88,7 @@ export class ClienteComponent implements OnInit {
       console.log(e);
       Swal.fire({
         title: 'Hubo un error',
-        text: 'Error al guardar el cliente' + e,
+        text: 'Error al guardar el alumno' + e,
         icon: 'error',
         confirmButtonText: 'Ok'
       });
@@ -144,7 +145,7 @@ export class ClienteComponent implements OnInit {
   }
 
   loadFormData (){
-    let originalClient = {
+    let originalAlumno = {
       nombre: "",
       apaterno: "",
       amaterno: "", 
@@ -174,9 +175,9 @@ export class ClienteComponent implements OnInit {
       notas: ""  
     };
 
-    if(this.clientId){
-      // console.log("buscando el usuario con el id:", this.clientId);
-      this.clientesService.getClienteById(this.clientId)
+    if(this.alumnoId){
+      // console.log("buscando el usuario con el id:", this.alumnoId);
+      this.alumnosService.getAlumnoById(this.alumnoId)
           .then(async (resp)=>{
             const body = await resp.json();
             // console.log("body: ", body);
@@ -185,39 +186,39 @@ export class ClienteComponent implements OnInit {
               console.log(body.msg);
               Swal.fire({
                 title: 'Error!',
-                text:  body.msg, //'El cliente que busca no ha sido encontrado',
+                text:  body.msg, //'El alumno que busca no ha sido encontrado',
                 icon: 'error',
                 confirmButtonText: 'Continuar'
               });
 
-              this.clientId = "";
+              this.alumnoId = "";
               return;
             }
 
-            const cliente = body.cliente;
+            const alumno = body.alumno;
                     
-            if (cliente){
-              Object.keys(originalClient).map((x)=>{            
+            if (alumno){
+              Object.keys(originalAlumno).map((x)=>{            
                 if(x.toString().includes('fecha')){
-                  let Fecha = moment(eval(`cliente.${x}`));
-                  eval(`originalClient.${x} = '${ Fecha.format('MM/DD/yyyy')}' `);
+                  let Fecha = moment(eval(`alumno.${x}`));
+                  eval(`originalAlumno.${x} = '${ Fecha.format('MM/DD/yyyy')}' `);
                 } else if(x.toString().includes('estado')){
-                  // console.log(`originalClient.${x} = JSON.parse(cliente.${x})`);
-                  eval(`originalClient.${x} = JSON.parse(cliente.${x})`);
+                  // console.log(`originalAlumno.${x} = JSON.parse(alumno.${x})`);
+                  eval(`originalAlumno.${x} = JSON.parse(alumno.${x})`);
                 } 
                 else {
-                  eval(`originalClient.${x} = cliente.${x}`);
+                  eval(`originalAlumno.${x} = alumno.${x}`);
                 }
               });
             }
 
-            originalClient.estado = JSON.parse(cliente.estado);
+            originalAlumno.estado = JSON.parse(alumno.estado);
             
-            this.form.reset(originalClient);
+            this.form.reset(originalAlumno);
           });
     } else {
       // this.form.setValue({
-        this.form.reset(originalClient);
+        this.form.reset(originalAlumno);
       }
   }
 
@@ -237,15 +238,15 @@ export class ClienteComponent implements OnInit {
     }
   }
 
-  private saveCliente(obj:any) {
-    this.clientesService.save(obj)
+  private saveAlumno(obj:any) {
+    this.alumnosService.save(obj)
     .then( (resp) => {
       // console.log("La respuesta es: ", resp);
       
       if(resp.ok){
         Swal.fire({
-          title: 'Guardar cliente',
-          text: 'Se guardo el cliente con exito',
+          title: 'Guardar alumno',
+          text: 'Se guardo el alumno con exito',
           icon: 'success',
           confirmButtonText: 'Ok'
         });
@@ -253,14 +254,14 @@ export class ClienteComponent implements OnInit {
     });
   }
 
-  private updateCliente(obj:any) {
-      obj.id = this.clientId;
-      this.clientesService.update(obj)
+  private updateAlumno(obj:any) {
+      obj.id = this.alumnoId;
+      this.alumnosService.update(obj)
       .then( (resp) => {
         if(resp.ok){
           Swal.fire({
-            title: 'Actualizar cliente',
-            text: 'Se actualizo el cliente con exito',
+            title: 'Actualizar alumno',
+            text: 'Se actualizo el alumno con exito',
             icon: 'success',
             confirmButtonText: 'Ok'
           });

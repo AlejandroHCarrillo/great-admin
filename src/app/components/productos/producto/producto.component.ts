@@ -7,6 +7,7 @@ import Swal from 'sweetalert2'
 import { REGEXP_EMAIL, REGEXP_RFC, REGEXP_CURP } from '../../../config/settings'
 import { ProductosService } from 'src/app/services/productos.service';
 import { DropDownItem } from 'src/app/interfaces/drop-down-item';
+import { Producto } from 'src/app/interfaces/producto';
 
 @Component({
   selector: 'app-producto',
@@ -15,8 +16,11 @@ import { DropDownItem } from 'src/app/interfaces/drop-down-item';
 })
 export class ProductoComponent implements OnInit {
   editMode: boolean = false;
+  showModal: boolean = false;
   productoId: string = "";
-  passwordconfirmation: boolean = false;
+  producto: Producto = new Producto(); 
+  // exentoIVA: boolean = false;
+  imageURL: string = "";
 
   clasificaciones: DropDownItem[] = [
     { name: 'Producto', code: 'P' },
@@ -37,6 +41,7 @@ export class ProductoComponent implements OnInit {
 
     if(this.productoId==="new"){
       this.productoId = "";
+      this.editMode = true;
     }
     
     this.initFormGroup();
@@ -73,7 +78,7 @@ export class ProductoComponent implements OnInit {
     try{
       let obj = {...this.form.value};
 
-      obj.role = this.form.value.selectedRol.code;
+      obj.clasificacion = this.form.value.selectedClasificacion.code;
 
       if(!this.productoId || this.productoId === ""){
         // console.log("Guardando Nuevo Producto"); 
@@ -100,33 +105,37 @@ export class ProductoComponent implements OnInit {
     this.form = this.fb.group({
       activo: [true],
       nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      username: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      email: ['', [Validators.required, Validators.pattern(REGEXP_EMAIL)]],
-
-      password: ['', [Validators.required, Validators.maxLength(50)]],
-      password2: ['', [Validators.required, Validators.maxLength(50)]],
-
-      role: ['', [Validators.required]],
-      selectedRol: [{
+      code: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]],
+      descripcion: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(250)]],
+      costo: ['0.00', [Validators.required ]],
+      precio: ['0.00', [Validators.required ]],
+      cantidad: ['0', [Validators.required ]],
+      tasaIVA: ['16', []],
+      exentoIVA: [false, []],
+      conceptocontable: ['', [Validators.maxLength(50)]],
+      clasificacion: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      img: ['' ],
+      
+      selectedClasificacion: [{
         name: "Producto",
-        code: "USER_ROLE"
-      }],
-      img: ['']
+        code: "P"
+      }]
     });
   }
 
   loadFormData (){
     let valuesFormProducto = {
+      activo: true,
       nombre: "",
-      username: "",
-      name: "",
-      email: "",
-      password: "",
-      password2: "",
+      code: "",
+      descripcion: "",
+      precio: "0.0",
+      cantidad: "",
+      tasaIVA: "0",
+      exentoIVA: false,
+      clasificacion: "P",
       img: "",
-      selectedRol: { name:"Producto", code:"USER_ROLE" },
-      role: "",
-      activo: true
+      selectedClasificacion: this.setDropDownValue('P')
     };
 
     if(this.productoId){
@@ -149,6 +158,8 @@ export class ProductoComponent implements OnInit {
             }
 
             const producto = body.producto;
+
+            this.producto = producto;
             
             if (producto){
               Object.keys(valuesFormProducto).map((x)=>{            
@@ -166,10 +177,11 @@ export class ProductoComponent implements OnInit {
               });
             }
 
-            valuesFormProducto.selectedRol = this.setDropDownValue(producto.role);
-            valuesFormProducto.password2 = valuesFormProducto.password;
-                        
+            valuesFormProducto.selectedClasificacion = this.setDropDownValue(producto.clasificacion);
+
+            // console.log("producto", valuesFormProducto);
             this.form.reset(valuesFormProducto);
+
           });
     } else {
       // this.form.setValue({
@@ -235,9 +247,16 @@ export class ProductoComponent implements OnInit {
   }
 
   setDropDownValue(code:string) : any {
-    console.log("code rol: ", code);
-    
+    // console.log("code: ", code);    
     return this.clasificaciones.find((obj) => ( obj.code === code ));
+  }
+
+  toggleModal(){
+    this.showModal = !this.showModal;
+  }
+
+  closeModal(){
+    this.showModal = false;
   }
   
 }

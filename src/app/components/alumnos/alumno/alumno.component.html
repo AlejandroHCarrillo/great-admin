@@ -1,0 +1,281 @@
+<div class="container">
+    
+    <div style="float: right;">
+        <span class="icon"><i class="fas fa-pencil-alt"></i></span>
+
+        <p-checkbox #editcheck
+            name="edit" 
+            value="editMode" 
+            label=""
+            (click)="toggleEdit()"
+        >
+        </p-checkbox>
+    </div>
+    
+    <h1><small>Alumno</small></h1>
+    <hr>
+    
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-group row">
+            <div class="row mt-3 ">
+                <div class="col col-4"> 
+                    <div class="mb-3 form-group form">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="nombre" placeholder="Escriba el nombre" maxlength="30"
+                        name="nombre" 
+                        formControlName="nombre"
+                        [class.is-invalid]="isInvalidControl('nombre')"
+                        >
+                        <small *ngIf="isInvalidControl('nombre')" class="text-danger">El nombre es obligatorio </small>
+                    </div>
+                    <!-- <p-checkbox [formControl]="form.controls['editMode']"></p-checkbox>edit -->
+                </div>
+                <div class="col col-4"> 
+                    <div class="mb-3 form">
+                        <label for="apaterno" class="form-label">Apellido paterno:</label>
+                        <input type="text" class="form-control" id="apaterno" placeholder="Escriba el apellido paterno" maxlength="30"
+                        name="apaterno" 
+                        formControlName="apaterno"
+                        [class.is-invalid]="isInvalidControl('apaterno')"
+                        >
+                        <small *ngIf="isInvalidControl('apaterno')" class="text-danger">El apellido paterno es obligatorio </small>
+                    </div>        
+                </div>
+                <div class="col col-3"> 
+                    <div class="mb-3 form">
+                        <label for="amaterno" class="form-label">Apellido materno:</label>
+                        <input type="text" class="form-control" id="amaterno" placeholder="Escriba el apellido materno" maxlength="30"
+                        name="amaterno" 
+                        formControlName="amaterno"
+                        [class.is-invalid]="isInvalidControl('amaterno')"
+                        >
+                    </div>        
+                </div>
+                <div class="col col-1"> 
+                    <div class="mb-3 form">
+                        <label class="form-label">Activo:</label>
+                        <div >
+                            <p-inputSwitch name="activo" formControlName="activo"></p-inputSwitch>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
+                        <p-calendar 
+                        name="fechaNacimiento" 
+                        formControlName="fechaNacimiento"
+                        [class.is-invalid]="isInvalidControl('fechaNacimiento')"></p-calendar>
+                    </div>        
+                </div>
+                <div class="col"> 
+                    <!-- <div class="mb-3 form">
+                        <label for="rfc" class="form-label">RFC:</label>
+                        <input type="text" class="form-control" id="rfc" placeholder="Escriba el RFC" maxlength="13"
+                            name="rfc" 
+                            formControlName="rfc"
+                            [class.is-invalid]="isInvalidControl('rfc')"
+                        >
+                    </div>         -->
+                </div>
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="fechaIngreso" class="form-label">Fecha de Ingreso:</label>
+                        <p-calendar name="fechaIngreso" 
+                        formControlName="fechaIngreso"
+                        [class.is-invalid]="isInvalidControl('fechaIngreso')"></p-calendar>
+                    </div>        
+                </div>        
+            </div>
+
+            <div class="row">
+                <div class="col col-4"> 
+                    <label for="matricula" class="form-label">Matricula:</label>
+                    <input type="text" class="form-control" id="matricula" placeholder="Escriba la matricula" maxlength="15"
+                            name="matricula" 
+                            formControlName="matricula"
+                            [class.is-invalid]="isInvalidControl('matricula')"
+                        >
+                </div>
+                <div class="col col-4">
+                    <label for="curp" class="form-label">CURP:</label>
+                    <input type="text" class="form-control" id="curp" placeholder="Escriba la CURP" maxlength="18"
+                    name="curp" 
+                    formControlName="curp"
+                    [class.is-invalid]="isInvalidControl('curp')"
+                >
+                </div>
+                <div class="col col-4"> 
+                    <div class="mb-3 form">
+                        <label class="form-label">Sexo:</label>
+                        <div class="form-check">
+                            <p-radioButton name="sexo" value="M" formControlName="sexo"></p-radioButton>
+                            <label class="form-check-label">
+                                &nbsp;Masculino
+                            </label>
+                            <br>
+                            <p-radioButton name="sexo" value="F" formControlName="sexo"></p-radioButton>
+                            <label class="form-check-label">
+                                &nbsp;Femenino
+                            </label>                            
+                        </div>
+                    </div>        
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-8"> 
+                    <div class="mb-3 form">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" maxlength="100"
+                        name="email" 
+                        formControlName="email"
+                        [class.is-invalid]="isInvalidControl('email')">
+                    </div>        
+                </div>
+                <div class="col">
+                </div>
+            </div>
+                    
+            <div class="row">
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="tCelular" class="form-label">Telefono Celular:</label>
+                        <p-inputMask mask="(999) 999-9999" characterPattern="[А-Яа-я]"
+                        name="tcelular" 
+                        formControlName="tcelular"></p-inputMask>
+                    </div>        
+                </div>
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="tCasa" class="form-label">Telefono Casa:</label>
+                        <p-inputMask mask="(999) 999-9999" characterPattern="[А-Яа-я]"
+                        name="tcasa" 
+                        formControlName="tcasa"></p-inputMask>
+                    </div>        
+                </div>
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="tTrabajo" class="form-label">Telefono Trabajo:</label>
+                        <p-inputMask mask="(999) 999-9999? x99999" characterPattern="[А-Яа-я]"
+                        name="ttrabajo" 
+                        formControlName="ttrabajo"></p-inputMask>
+                    </div>        
+                </div>
+            </div>
+
+            <div class="row" >
+                <div class="col"> 
+                    Direccion:
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6"> 
+                    <div class="mb-3 form">
+                        <label for="callenumero" class="form-label">Calle y numero:</label>
+                        <input type="text" class="form-control" id="callenumero" 
+                                placeholder="Escriba la calle y el numero" maxlength="100" 
+                                name="callenumero" 
+                                formControlName="callenumero"
+                                [class.is-invalid]="isInvalidControl('callenumero')">
+                    </div>        
+                </div>
+                <div class="col-6" >
+                    <div class="mb-3 form">
+                        <label for="colonia" class="form-label">Colonia:</label>
+                        <br>
+                        <p-autoComplete 
+                            class="p-autocomplete" 
+                            [minLength]="3" [delay]="200"
+                            [forceSelection]="true"
+                            [suggestions]="results" 
+                            (completeMethod)="search($event)"                              
+                            name="colonia" 
+                            formControlName="colonia"
+                            [class.is-invalid]="isInvalidControl('colonia')"></p-autoComplete>
+                    </div>        
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-5"> 
+                    <div class="mb-3 form">
+                        <label for="Municipio" class="form-label">Municipio o Alcaldia:</label>
+                        <input type="text" class="form-control" id="Municipio" placeholder="Municipio" maxlength="50"
+                            name="municipio" 
+                            formControlName="municipio"
+                            [class.is-invalid]="isInvalidControl('municipio')">
+                    </div>        
+                </div>
+                <div class="col-5"> 
+                    <div class="mb-3 form">
+                        <label for="Estado" class="form-label">Estado:</label>
+                        <br>
+                        <p-dropdown [options]="states"
+                                    optionLabel="name"
+                                    name="estado"
+                                    formControlName="estado"></p-dropdown>
+                    </div>        
+                </div>
+                <div class="col-2"> 
+                    <div class="mb-3 form">
+                        <label for="CP" class="form-label">CP:</label>
+                        <input type="text" class="form-control" id="CP" placeholder="CP" maxlength="5" style="width: 80px;"
+                                    name="codigopostal" 
+                                    formControlName="codigopostal"
+                                    [class.is-invalid]="isInvalidControl('codigopostal')">
+                    </div>        
+                </div>
+            </div>
+                
+            <div class="row">
+                <div class="col-8"> 
+                </div>
+                <div class="col">
+                    <button type="submit"  class="btn btn-primary">save</button>
+                    <button type="submit" 
+                            class="btn btn-warning position-relative top-50 start-50 translate-middle" 
+                            [disabled]="form.pristine || form.invalid">Guardar</button>
+                    <button type="button" 
+                            class="btn btn-secondary position-relative top-50 start-50 translate-middle" 
+                            [routerLink]="['/alumnos']">Cancelar</button>
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="col"> 
+                    <div class="mb-3">
+                        <label for="observaciones" class="form-label">Notas:</label>
+                        <textarea class="form-control" id="observaciones" rows="3"
+                        name="notas" 
+                        formControlName="notas"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+      </form>
+
+<pre>
+    Estado formulario: {{ form.valid }}
+    Status: {{ form.status }}
+</pre>
+<pre>
+    {{ form.value | json }}
+</pre>
+
+TODO: 
+<ul>
+    <li>Hacer componente de direccion e implementarlo aqui</li>
+    <li>Replicar el componente de direccion en otros compnentes</li>
+</ul>
+
+
+
+</div>
