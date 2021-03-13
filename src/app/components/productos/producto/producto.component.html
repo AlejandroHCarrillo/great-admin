@@ -153,16 +153,22 @@
             </div>
 
             <div class="row">
+
                 <div class="col-3" style="margin-bottom: 10px;">
                     <div class="card" style="width: 18rem;" *ngIf="producto.img && producto.img !=='' ">
                         <img id="myImg" [src]="producto.img" alt="imagen del producto" class="card-img-top" (click)="toggleModal()" >
                       </div>
                 </div>
+                <div class="col-1"></div>
                 
-                <div class="col-4">
-
+                <div class="col-1">
+                    <span class="icon" (click)="showUploadImage()"><i class="fas fa-camera big-icon"></i></span>                    
                 </div>
-                <div class="col">
+
+                <div class="col-1"></div>
+                <div class="col-1"></div>
+  
+                <div class="col-4">
                     <button type="submit"  class="btn btn-primary">save</button>
                     <button type="submit" 
                             class="btn btn-warning position-relative top-50 start-50 translate-middle" 
@@ -176,33 +182,11 @@
         </div>
 
       </form>
-      
-<!-- The Modal -->
-<div id="myModal" [ngClass]="{modal: showModal}" *ngIf="showModal" (click)="closeModal()">
-    <!-- The Close Button -->
-    <span class="close" (click)="closeModal()">&times;</span>
-    <!-- Modal Content (The Image) -->
-    <img class="modal-content" id="img01" [src]="producto.img">
-    <!-- Modal Caption (Image Text) -->
-    <div id="caption">{{producto.nombre}}</div>
 </div>
 
-TODO: 
-<ul>
-    <li>
-    </li>
-    <li>
-    </li>
-    <li>
-    </li>
-</ul>
+<input type="file" id="fileSelector" name="file" style="display: none;"
+(change)="handleFileChange($event)" >
 
-<pre>
-    Estado formulario: {{ form.valid }}
-    Status: {{ form.status }}
-</pre>
-<pre>
-{{ form.value | json }}
-</pre>
-    
-</div>
+<modal-image [showModal]="showModal" 
+    [urlImage]="producto.img"
+    [description]="producto.nombre"></modal-image>

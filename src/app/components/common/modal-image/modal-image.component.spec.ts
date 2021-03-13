@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AlumnoComponent } from './alumno.component';
+import { ModalImageComponent } from './modal-image.component';
 
-describe('AlumnoComponent', () => {
-  let component: AlumnoComponent;
-  let fixture: ComponentFixture<AlumnoComponent>;
+describe('ModalImageComponent', () => {
+  let component: ModalImageComponent;
+  let fixture: ComponentFixture<ModalImageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AlumnoComponent ]
+      declarations: [ ModalImageComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AlumnoComponent);
+    fixture = TestBed.createComponent(ModalImageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -10,9 +10,7 @@
         >
         </p-checkbox>
     </div>
-
     <h1>Productos</h1> 
-
     <hr>
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-1">
@@ -40,6 +38,7 @@
     <p-table [value]="productos" >
         <ng-template pTemplate="header">
             <tr>
+                <th></th>
                 <th (click)="setOrder('nombre')" class="col-extra-large">
                     <div [ngClass]="{'header-sort': pageinfo.sort==='nombre'}">
                         Nombre&nbsp;
@@ -69,6 +68,9 @@
         </ng-template>
         <ng-template pTemplate="body" let-producto>
             <tr>
+                <td>
+                    <img [src]="producto.img" alt="producto.nombre" class="image-small-rounded">
+                </td>
                 <td>{{producto.nombre}}</td>
                 <td>{{producto.code}}</td>
                 <td >{{producto.descripcion}}</td>
@@ -105,5 +107,9 @@
     <div class="btn btn-primary fab" (click)="edit('new')">
         <span class="icon"><i class="fas fa-user-plus"></i></span>
     </div>
+
+    <!-- <pre>
+        {{productos | json }}
+    </pre> -->
 
 </div>

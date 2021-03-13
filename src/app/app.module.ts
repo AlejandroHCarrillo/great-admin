@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
-
 import { CalendarModule } from 'primeng/calendar';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DropdownModule } from 'primeng/dropdown';
@@ -42,6 +41,9 @@ import { AlumnosComponent } from './components/alumnos/alumnos.component';
 import { AlumnoComponent } from './components/alumnos/alumno/alumno.component';
 import { AlumnosService } from './services/alumnos.service';
 import { DireccionComponent } from './components/common/direccion/direccion.component';
+import { ModalImageComponent } from './components/common/modal-image/modal-image.component';
+import { UploadFilesComponent } from './components/common/upload-files/upload-files.component';
+import { UploadFilesService } from './shared/services/upload-files.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,7 +67,9 @@ import { DireccionComponent } from './components/common/direccion/direccion.comp
     VentasComponent,
     AlumnosComponent,
     AlumnoComponent,
-    DireccionComponent
+    DireccionComponent,
+    ModalImageComponent,
+    UploadFilesComponent
   ],
   imports: [
     BrowserModule,
@@ -89,7 +93,8 @@ import { DireccionComponent } from './components/common/direccion/direccion.comp
   providers: [
     SharedService,
     ClientesService,
-    AlumnosService
+    AlumnosService,
+    UploadFilesService
   ],
   bootstrap: [AppComponent]
 })

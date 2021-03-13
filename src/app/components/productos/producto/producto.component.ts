@@ -4,6 +4,8 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import * as moment from 'moment';
 import Swal from 'sweetalert2'
 
+import { fileUpload } from "../../../helpers/uploadimages";
+
 import { REGEXP_EMAIL, REGEXP_RFC, REGEXP_CURP } from '../../../config/settings'
 import { ProductosService } from 'src/app/services/productos.service';
 import { DropDownItem } from 'src/app/interfaces/drop-down-item';
@@ -258,5 +260,35 @@ export class ProductoComponent implements OnInit {
   closeModal(){
     this.showModal = false;
   }
-  
+
+  showUploadImage(){
+    console.log("Mostrar el upload file.");
+    document.getElementById('fileSelector')?.click();
+  }
+
+  startUploading ( file: any ) {
+    Swal.fire({
+      title: 'Cargando imagen...', 
+      text: 'Por favor espere', 
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+          Swal.showLoading()
+      }
+    });
+
+    fileUpload(file).then((fileUrl)  => {
+      this.producto.img = fileUrl;
+      this.form.value.img = fileUrl;
+    });
+    Swal.close();
+  };
+
+  handleFileChange(e:any){
+    console.log("handleFileChange...");
+    const file = e.target.files[0];
+    if ( file ){
+      this.startUploading(file);
+    }
+  }
 }
