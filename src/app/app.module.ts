@@ -44,6 +44,7 @@ import { DireccionComponent } from './components/common/direccion/direccion.comp
 import { ModalImageComponent } from './components/common/modal-image/modal-image.component';
 import { UploadFilesComponent } from './components/common/upload-files/upload-files.component';
 import { UploadFilesService } from './shared/services/upload-files.service';
+import { UploadFilesModalComponent } from './components/common/upload-files-modal/upload-files-modal.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -69,7 +70,8 @@ import { UploadFilesService } from './shared/services/upload-files.service';
     AlumnoComponent,
     DireccionComponent,
     ModalImageComponent,
-    UploadFilesComponent
+    UploadFilesComponent,
+    UploadFilesModalComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FileItem } from '../../../shared/models/file-item';
 import { UploadFilesService } from '../../../shared/services/upload-files.service';
 // import { ProductService } from 'shared/services/product.service';
@@ -12,18 +12,44 @@ import { UploadFilesService } from '../../../shared/services/upload-files.servic
 export class UploadFilesComponent implements OnInit {
   @Input("itemId") itemId: string="";
   @Input("showControls") showControls : boolean=true;
+  @Output() urls = new EventEmitter();
+
+  lasUrls : string[] = [];
   
   files: FileItem[] = [];
   isOverDropZone: boolean= false;
-
+  
   constructor(public _uploadfiles: UploadFilesService) {
    }
 
   ngOnInit(): void {
+
   }
 
-  uploadFiles(){
-    let urls = this._uploadfiles.uploadImages(this.files);
+  uploadFiles (){
+
+    this._uploadfiles.uploadFiles(this.files)
+      .then( (data) => {
+        console.log("urls de la promesa: ", data);
+        this.lasUrls = (data as string[]);
+
+        this.urls.emit(this.getUrls);
+    });
+
+    // this.uploadFilesSimulator(0);
+
+    // this.lasUrls = await this._uploadfiles.uploadImages(this.files);
+
+    // for (let i = 1; i < this.files.length; i++) {
+    //   this.uploadFilesSimulator(i);
+    // }
+    
+    // this.disparaEvento();
+
+  }
+
+  getUrls(){
+    return this.lasUrls;
   }
 
   cleanFiles(){
@@ -47,15 +73,15 @@ export class UploadFilesComponent implements OnInit {
   /**
    * handle file from browsing
    */
-  fileBrowseHandler(event:any) {
+  async fileBrowseHandler(event:any) {
     if (!event) return;
-    //.target.files
-    console.log("fileBrowseHandler event: ", event.target);
-    console.log("fileBrowseHandler files: ", event.target.files);
 
     this._extractFiles(event.target.files);
     this.uploadFiles();
-    console.log("files:", this.files);    
+
+    // console.log("fileBrowseHandler urls:", urls);
+    // await this.urls.emit([...urls]);
+    // console.log("files:", this.files);    
     // this.prepareFilesList(this.files);
   }
 
@@ -70,34 +96,34 @@ export class UploadFilesComponent implements OnInit {
   /**
    * Simulate the upload process
    */
-  // uploadFilesSimulator(index: number) {
-  //   setTimeout(() => {
-  //     if (index === this.files.length) {
-  //       return;
-  //     } else {
-  //       const progressInterval = setInterval(() => {
-  //         if (this.files[index].progress === 100) {
-  //           clearInterval(progressInterval);
-  //           this.uploadFilesSimulator(index + 1);
-  //         } else {
-  //           this.files[index].progress += 5;
-  //         }
-  //       }, 200);
-  //     }
-  //   }, 1000);
-  // }
+  uploadFilesSimulator(index: number) {
+    setTimeout(() => {
+      if (index === this.files.length) {
+        return;
+      } else {
+        const progressInterval = setInterval(() => {
+          if (this.files[index].progress === 100) {
+            clearInterval(progressInterval);
+            this.uploadFilesSimulator(index + 1);
+          } else {
+            this.files[index].progress += 5;
+          }
+        }, 20);
+      }
+    }, 100);
+  }
 
   /**
    * Convert Files list to normal array list
    * @param files (Files List)
    */
-  // prepareFilesList(files: Array<any>) {
-    // for (const item of files) {
-    //   item.progress = 0;
-    //   this.files.push(item);
-    // }
-  //   this.uploadFilesSimulator(0);
-  // }
+  prepareFilesList(files: Array<any>) {
+    for (const item of files) {
+      item.progress = 0;
+      this.files.push(item);
+    }
+    this.uploadFilesSimulator(0);
+  }
 
   /**
    * format bytes
@@ -152,4 +178,9 @@ export class UploadFilesComponent implements OnInit {
     return (fileType == '' || fileType == undefined ) ? false: fileType.startsWith('image');
   }
   
+  disparaEvento(){
+    console.log("dispara evento de links");
+    
+    this.urls.emit(this.lasUrls);
+  }
 }

@@ -23,6 +23,7 @@ export class ProductoComponent implements OnInit {
   producto: Producto = new Producto(); 
   // exentoIVA: boolean = false;
   imageURL: string = "";
+  urls: string = "";
 
   clasificaciones: DropDownItem[] = [
     { name: 'Producto', code: 'P' },
@@ -285,10 +286,23 @@ export class ProductoComponent implements OnInit {
   };
 
   handleFileChange(e:any){
-    console.log("handleFileChange...");
+    // console.log("handleFileChange...");
     const file = e.target.files[0];
     if ( file ){
       this.startUploading(file);
     }
   }
+
+  getUploadURLs(event:any){
+    // get Urls from the Child component
+    // console.log("Paso 0: Se disparo el evento getUrls del componente producto");
+    // console.log("producto get urls evento: ", event);  
+
+    this.urls = event;
+    this.imageURL = this.urls[0];
+
+    // console.log("Esta es la nueva imagen: ", event[0]);
+    this.producto.img = event[0];
+  }
+
 }

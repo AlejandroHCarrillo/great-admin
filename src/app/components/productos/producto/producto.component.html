@@ -1,8 +1,19 @@
-<div class="container">
-    
+<upload-files-modal
+buttonText = "Imagen"
+modalTitle = "Imagen(es) del producto(s)"
+[itemId] = "productoId"
+closeButtonText = "Cerrar"
+(outImageUrls)="getUploadURLs($event)"
+#uploadmodal
+></upload-files-modal>
+
+outImageUrls: {{ urls || "nada todavia" }}
+<p >url: {{ urls.length || "nada de nada" }}</p>
+<p *ngIf="uploadmodal.outImageUrls">urls: {{ uploadmodal.outImageUrls || "ni maiz" }}</p>
+
+<div class="container">    
     <div style="float: right;">
         <span class="icon"><i class="fas fa-pencil-alt"></i></span>
-
         <p-checkbox #editcheck
             name="edit" 
             value="true" 
@@ -155,9 +166,9 @@
             <div class="row">
 
                 <div class="col-3" style="margin-bottom: 10px;">
-                    <div class="card" style="width: 18rem;" *ngIf="producto.img && producto.img !=='' ">
+                    <div class="card" style="width: 18rem;" >
                         <img id="myImg" [src]="producto.img" alt="imagen del producto" class="card-img-top" (click)="toggleModal()" >
-                      </div>
+                    </div>
                 </div>
                 <div class="col-1"></div>
                 

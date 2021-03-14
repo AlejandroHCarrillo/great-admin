@@ -51,7 +51,7 @@ export class SharedService {
     
         return promise;
       }
-                        
+             
   getColonias(text : any = "") {
     const promise =  new Promise( (resolve, reject) => {
       let data = [

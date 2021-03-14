@@ -10,23 +10,42 @@ export class UploadFilesService {
 
   constructor() { }
 
-  uploadImages(files: FileItem[], productId: string = ""): string[]{
+  uploadFiles(files: FileItem[]) {
     let imageUrls: string[] = [];
 
-    console.log(files);
+    const promise =  new Promise( (resolve, reject) => {
+      files.forEach(async(file)=>{
+        // console.log(file);
+        await fileUpload(file.archivo).then((fileUrl)  => {
+          // console.log("Recibo esta url: ", fileUrl);  
+          imageUrls.push(fileUrl)
+          // this.producto.img = fileUrl;
+          // this.form.value.img = fileUrl;
+        });
 
-    files.forEach( async(file)=>{
-      console.log(file);
-      
-      await fileUpload(file.archivo).then((fileUrl)  => {
-        console.log(fileUrl);  
-        // this.producto.img = fileUrl;
-        // this.form.value.img = fileUrl;
-      });
-    })
-    
-
-    return imageUrls;
+      })
+      resolve(imageUrls);
+    });
+    return promise;
   }
+
+  // uploadImages(files: FileItem[]): string[] {
+  //   let imageUrls: string[] = [];
+
+  //   // console.log(files);
+
+  //   files.forEach(async(file)=>{
+  //     // console.log(file);
+  //     await fileUpload(file.archivo).then((fileUrl)  => {
+  //       // console.log("Recibo esta url: ", fileUrl);  
+  //       imageUrls.push(fileUrl)
+  //       // this.producto.img = fileUrl;
+  //       // this.form.value.img = fileUrl;
+  //     });
+
+
+  //   })
+  //   return imageUrls;
+  // }
 
 }

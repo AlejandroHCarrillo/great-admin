@@ -31,6 +31,8 @@
       <button (click)="uploadFiles()" class="btn btn-success" [disabled]="files.length===0">Upload</button>
       <button (click)="cleanFiles()" class="btn btn-danger">Clean</button>
       
+      <button (click)="disparaEvento()" #botonAccion id="btnAccion">emitir urls</button>
+
       <div class="files-list">
         <div class="single-file" *ngFor="let file of files; let i = index">
   
