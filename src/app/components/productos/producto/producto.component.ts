@@ -216,7 +216,7 @@ export class ProductoComponent implements OnInit {
     obj.clasificacion = this.form.value.selectedClasificacion.code;
 
     this.productosService.save(obj)
-    .then( (resp) => {
+    .then(async (resp) => {
       // console.log("La respuesta es: ", resp);      
       if(resp.ok){
         Swal.fire({
@@ -225,8 +225,11 @@ export class ProductoComponent implements OnInit {
           icon: 'success',
           confirmButtonText: 'Ok'
         });
+        
+        const body = await resp.json();
 
-        this.router.navigate([`producto/${this.productoId}`]);
+        console.log("body: ", body);
+        this.router.navigate([`producto/${body.id}`]);
       }         
     });
   }
@@ -328,7 +331,9 @@ export class ProductoComponent implements OnInit {
     this.imagesService.findImages(queryParams, ownerId)
     .then( async (resp)=> {
       const body = await resp.json();
-      this.imagesUrls = body.imagenes.map((x:any)=>(x.url));
+      if(body.imagenes){
+        this.imagesUrls = body.imagenes.map((x:any)=>(x.url));
+      }
     });
   }
 }

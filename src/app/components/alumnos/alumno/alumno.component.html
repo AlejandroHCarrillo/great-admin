@@ -18,13 +18,18 @@
             <div class="row mt-3 ">
                 <div class="col-2" >
                     <div style="display: flex; direction: row; ;">
-                        <img *ngIf="alumno && alumno.img" 
-                             [src]="alumno.img" 
-                             [alt]="alumno.name" 
-                             class="image-medium-rounded"
-                             style="z-index: index 1; top: 0px;"
-                             >
-                        <span class="icon" (click)="showUploadImage()"><i class="fas fa-camera big-icon"></i></span>
+                        <div *ngIf="alumno.img" class="card" style="width: 18rem;" >
+                            <img *ngIf="alumno && alumno.img" 
+                            id="myImg" 
+                            [src]="alumno.img" 
+                            [alt]="alumno.name" 
+                            class="card-img-top image-medium-rounded"
+                            (click)="toggleModal()"
+                            style="z-index: index 1; top: 0px;"
+                            >
+
+                        </div>
+                        <span *ngIf="editMode" class="icon" (click)="showUploadImage()"><i class="fas fa-camera big-icon"></i></span>
                     </div>
                 </div>
                 <!-- <div *ngIf="alumnoId" class="position-relative top-50 start-50 translate-middle">
@@ -101,7 +106,7 @@
                         [class.is-invalid]="isInvalidControl('fechaIngreso')"></p-calendar>
                     </div>        
                 </div>
-                <div class="col col-1"> 
+                <div class="col"> 
                     <div class="mb-3 form">
                         <label class="form-label">Activo:</label>
                         <div >
@@ -263,7 +268,7 @@
                             [disabled]="form.pristine || form.invalid">Guardar</button>
                     <button type="button" 
                             class="btn btn-secondary position-relative top-50 start-50 translate-middle" 
-                            [routerLink]="['/alumnos']">Cancelar</button>
+                            [routerLink]="['/alumnos']">Regresar</button>
                 </div>
             </div>
         

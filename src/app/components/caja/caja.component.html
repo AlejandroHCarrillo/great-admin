@@ -1,0 +1,53 @@
+<div class="container">
+    <h1>Caja</h1> 
+    <hr>
+    <div class="row">
+        <div class="col">
+            <!-- <p-autoComplete 
+            class="p-autocomplete" 
+            [minLength]="3" [delay]="200"
+            [forceSelection]="true"
+            [suggestions]="results" 
+            (completeMethod)="search($event)"
+            name="colonia" 
+            formControlName="colonia"
+            [class.is-invalid]="isInvalidControl('colonia')"></p-autoComplete> -->
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-1">
+            <label for="buscar">Buscar:</label>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" id="buscar" placeholder="texto a buscar..." 
+                maxlength="30" name="buscar"
+                [(ngModel)]="txtbuscar"
+                (keyup.enter)="buscar()"
+                (keyup)="searchResultMsg = ''"
+            >
+            <div *ngIf="searchResultMsg">
+                <small>{{searchResultMsg}}</small>
+            </div>            
+        </div>
+        <div class="col-2">
+            <button class="btn btn-primary" (click)="buscar()" routerLinkActive="active" >
+                <span class="icon"><i class="fas fa-user"></i></span>
+                <span class="title">&nbsp;Buscar</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        alumnoSelected: {{ alumnoSelected | json }}
+        <div class="col">
+            <p-dropdown [options]="alumnoslist"
+            optionLabel="name"
+            name="alumnoslist"
+            [(ngModel)]="alumnoSelected"
+            >
+        </p-dropdown>
+        </div>
+    </div>
+    
+
+</div>

@@ -16,6 +16,7 @@ import { CatalogosComponent } from './components/catalogos/catalogos.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import { AlumnosComponent } from './components/alumnos/alumnos.component';
 import { AlumnoComponent } from './components/alumnos/alumno/alumno.component';
+import { CajaComponent } from './components/caja/caja.component';
 
 const routes: Routes = [
   // Rutas protegidas
@@ -28,7 +29,7 @@ const routes: Routes = [
       {path: 'cuentas', component: NopagefoundComponent },
       {path: 'formaspago', component: NopagefoundComponent },
 
-
+      {path: 'caja', component: CajaComponent },
       {path: 'ventas', component: VentasComponent },
       {path: 'usuarios', component: UsuariosComponent},
       {path: 'usuario', component: UsuarioComponent},

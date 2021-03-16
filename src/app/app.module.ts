@@ -46,6 +46,7 @@ import { UploadFilesComponent } from './components/common/upload-files/upload-fi
 import { UploadFilesService } from './shared/services/upload-files.service';
 import { UploadFilesModalComponent } from './components/common/upload-files-modal/upload-files-modal.component';
 import { ImagesGalleryComponent } from './components/common/images-gallery/images-gallery.component';
+import { CajaComponent } from './components/caja/caja.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -73,7 +74,8 @@ import { ImagesGalleryComponent } from './components/common/images-gallery/image
     ModalImageComponent,
     UploadFilesComponent,
     UploadFilesModalComponent,
-    ImagesGalleryComponent
+    ImagesGalleryComponent,
+    CajaComponent
   ],
   imports: [
     BrowserModule,

@@ -60,7 +60,7 @@
                 </th>
                 <th (click)="setOrder('rfc')">
                     <div [ngClass]="{'header-sort': pageinfo.sort==='rfc'}">
-                        RFC&nbsp;
+                        Matricula&nbsp;
                         <span class="icon" *ngIf="pageinfo.sort==='rfc'" ><i class="fas fa-sort-alpha-down"></i></span>
                     </div>    
                 </th>
@@ -81,10 +81,10 @@
                 <td>{{alumno.nombre}}</td>
                 <td>{{alumno.apaterno}}</td>
                 <td>{{alumno.amaterno}}</td>
-                <td>{{alumno.rfc}}</td>
+                <td>{{alumno.matricula}}</td>
                 <td>{{!!alumno.activo}}</td>
                 <td >
-                    <button class="btn btn-warning btn-sm" (click)="edit(alumno._id)">
+                    <button class="btn btn-warning btn-sm" (click)="edit(alumno.id)">
                         <span class="icon"><i class="fas fa-pencil-alt"></i></span>    
                     </button>
                     <button *ngIf="showDeleteButtons" type="button" class="btn btn-danger btn-sm" (click)="delete(alumno)">

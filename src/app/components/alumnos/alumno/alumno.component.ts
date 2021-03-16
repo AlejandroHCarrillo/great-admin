@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import Swal from 'sweetalert2'
@@ -30,6 +30,7 @@ export class AlumnoComponent implements OnInit {
   urlImagen: string = "";
   
   constructor(  private fb: FormBuilder,
+                private router: Router,
                 private route: ActivatedRoute,
                 private myService :  SharedService,
                 private alumnosService :  AlumnosService  ){
@@ -51,8 +52,7 @@ export class AlumnoComponent implements OnInit {
       this.alumnoId = "";
       this.editMode = true;
     }
-
-    // console.log("this.alumnoId: ", this.alumnoId);
+        // console.log("this.alumnoId: ", this.alumnoId);
     
     this.initFormGroup();
 
@@ -64,7 +64,9 @@ export class AlumnoComponent implements OnInit {
 
     this.crearFormulario();
     this.loadFormData();
-    this.toggleEdit();
+
+    this.toggleEdit(this.editMode);
+
   }
 
   getFormControl(name: any){
@@ -115,7 +117,7 @@ export class AlumnoComponent implements OnInit {
 
   crearFormulario(){
     this.form = this.fb.group({
-      activo: [true],
+      activo: [true, []],
       nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       apaterno: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       amaterno: ['', [Validators.maxLength(50)]],
@@ -125,18 +127,10 @@ export class AlumnoComponent implements OnInit {
       rfc: ['', [Validators.pattern(REGEXP_RFC)]],
       fechaIngreso: ['', [Validators.required]],
 
-      matricula: [''],
+      matricula: ['', []],
       curp: ['', [Validators.pattern(REGEXP_CURP)]],
       sexo: new FormControl('M', Validators.required),
 
-//       direccion: this.fb.group({
-//         callenumero: ['', [Validators.required]],
-//         colonia: ['', [Validators.required]],
-
-//         municipio: ['', [Validators.required]],
-//         estado: ['', [Validators.required]],
-//         codigopostal: ['', [Validators.required]],
-//       }),
       callenumero: ['', [Validators.required]],
       colonia: ['', [Validators.required]],
 
@@ -157,6 +151,7 @@ export class AlumnoComponent implements OnInit {
 
   loadFormData (){
     let originalAlumno = {
+      activo: true,
       nombre: "",
       apaterno: "",
       amaterno: "", 
@@ -248,10 +243,13 @@ export class AlumnoComponent implements OnInit {
   }
 
   private saveAlumno() {
-    let obj = {...this.form.value};      
+    let obj = {...this.form.value};
     obj.estado = this.form.value.selectedState.code;
+    obj.activo = this.form.value.activo;
+    obj.matricula = this.form.value.matricula;
+    obj.rfc = this.form.value.rfc;
+
     console.log("guardar: ", obj);
-    
     
     this.alumnosService.save(obj)
     .then( (resp) => {
@@ -259,12 +257,16 @@ export class AlumnoComponent implements OnInit {
       
       if(resp.ok){
         Swal.fire({
-          title: 'Guardar alumno',
+          title: 'Alumno guardado',
           text: 'Se guardo el alumno con exito',
           icon: 'success',
           confirmButtonText: 'Ok'
         });
-      }         
+        console.log(resp);
+        const body = resp.body;
+        console.log(body);
+        this.router.navigate([`alumno/${this.alumno.Id}`]);
+      }     
     });
   }
   
@@ -278,7 +280,7 @@ export class AlumnoComponent implements OnInit {
       .then( (resp) => {
         if(resp.ok){
           Swal.fire({
-            title: 'Actualizar alumno',
+            title: 'Alumno actualizado',
             text: 'Se actualizo el alumno con exito',
             icon: 'success',
             confirmButtonText: 'Ok'
@@ -292,10 +294,12 @@ export class AlumnoComponent implements OnInit {
   }
 
 
-  toggleEdit(){
-    this.editMode = !this.editMode;
+  toggleEdit(enabled?:boolean){
+    // console.log("is edit mode?", enabled)
+    if(enabled!==undefined) this.editMode = enabled;
+    else this.editMode = !this.editMode;
     
-    if (this.editMode) {
+    if (!this.editMode) {
       this.form.disable()
     } else {
       this.form.enable()
@@ -334,4 +338,11 @@ export class AlumnoComponent implements OnInit {
     Swal.close();
   };
   
+  toggleModal(){
+    this.showModal = !this.showModal;
+  }
+
+  closeModal(){
+    this.showModal = false;
+  }
 }
