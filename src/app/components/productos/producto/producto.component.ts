@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import Swal from 'sweetalert2'
 
 import { fileUpload } from "../../../helpers/uploadimages";
 
-import { REGEXP_EMAIL, REGEXP_RFC, REGEXP_CURP } from '../../../config/settings'
 import { ProductosService } from 'src/app/services/productos.service';
 import { DropDownItem } from 'src/app/interfaces/drop-down-item';
 import { Producto } from 'src/app/interfaces/producto';
+import { ImagesService } from 'src/app/shared/services/images.service';
 
 @Component({
   selector: 'app-producto',
@@ -19,11 +19,12 @@ import { Producto } from 'src/app/interfaces/producto';
 export class ProductoComponent implements OnInit {
   editMode: boolean = false;
   showModal: boolean = false;
+
   productoId: string = "";
   producto: Producto = new Producto(); 
-  // exentoIVA: boolean = false;
+
   imageURL: string = "";
-  urls: string = "";
+  imagesUrls: string[] = [];
 
   clasificaciones: DropDownItem[] = [
     { name: 'Producto', code: 'P' },
@@ -35,8 +36,10 @@ export class ProductoComponent implements OnInit {
   form : FormGroup = new FormGroup({});
   
   constructor(  private fb: FormBuilder,
+                private router: Router,
                 private route: ActivatedRoute,
-                private productosService :  ProductosService  ){}
+                private productosService :  ProductosService,
+                private imagesService :  ImagesService  ){}
 
   ngOnInit() {
     this.editMode = (this.productoId==="");
@@ -45,6 +48,8 @@ export class ProductoComponent implements OnInit {
     if(this.productoId==="new"){
       this.productoId = "";
       this.editMode = true;
+    } else {
+      this.getImages(this.productoId);
     }
     
     this.initFormGroup();
@@ -67,6 +72,7 @@ export class ProductoComponent implements OnInit {
     const control = this.form.get(name);
     return (!control?.valid && control?.touched);
   }
+  
 
   submit(){
     console.log("submiting Form...");
@@ -78,17 +84,13 @@ export class ProductoComponent implements OnInit {
     //   return;
     // }
 
-    try{
-      let obj = {...this.form.value};
-
-      obj.clasificacion = this.form.value.selectedClasificacion.code;
-
+    try{      
       if(!this.productoId || this.productoId === ""){
         // console.log("Guardando Nuevo Producto"); 
-        this.saveProducto(obj);
+        this.saveProducto();
       } else {
         // console.log("Actualizando Producto");
-        this.updateProducto(obj);
+        this.updateProducto();
       }
       
 
@@ -132,6 +134,7 @@ export class ProductoComponent implements OnInit {
       nombre: "",
       code: "",
       descripcion: "",
+      costo: "0.0",
       precio: "0.0",
       cantidad: "",
       tasaIVA: "0",
@@ -208,11 +211,13 @@ export class ProductoComponent implements OnInit {
     }
   }
 
-  private saveProducto(obj:any) {
+  private saveProducto() {
+    let obj = {...this.form.value};
+    obj.clasificacion = this.form.value.selectedClasificacion.code;
+
     this.productosService.save(obj)
     .then( (resp) => {
-      // console.log("La respuesta es: ", resp);
-      
+      // console.log("La respuesta es: ", resp);      
       if(resp.ok){
         Swal.fire({
           title: 'Guardar producto',
@@ -220,11 +225,16 @@ export class ProductoComponent implements OnInit {
           icon: 'success',
           confirmButtonText: 'Ok'
         });
+
+        this.router.navigate([`producto/${this.productoId}`]);
       }         
     });
   }
 
-  private updateProducto(obj:any) {
+  private updateProducto() {
+    let obj = {...this.form.value};
+    obj.clasificacion = this.form.value.selectedClasificacion.code;
+
       obj.id = this.productoId;
       this.productosService.update(obj)
       .then( (resp) => {
@@ -263,7 +273,7 @@ export class ProductoComponent implements OnInit {
   }
 
   showUploadImage(){
-    console.log("Mostrar el upload file.");
+    // console.log("Mostrar el upload file.");
     document.getElementById('fileSelector')?.click();
   }
 
@@ -281,6 +291,9 @@ export class ProductoComponent implements OnInit {
     fileUpload(file).then((fileUrl)  => {
       this.producto.img = fileUrl;
       this.form.value.img = fileUrl;
+      this.updateProducto();
+      this.saveImage(this.productoId, fileUrl, this.producto.nombre);
+      this.imagesUrls = [fileUrl, ...this.imagesUrls];      
     });
     Swal.close();
   };
@@ -295,14 +308,27 @@ export class ProductoComponent implements OnInit {
 
   getUploadURLs(event:any){
     // get Urls from the Child component
-    // console.log("Paso 0: Se disparo el evento getUrls del componente producto");
-    // console.log("producto get urls evento: ", event);  
-
-    this.urls = event;
-    this.imageURL = this.urls[0];
-
-    // console.log("Esta es la nueva imagen: ", event[0]);
-    this.producto.img = event[0];
+    this.imagesUrls = [...this.imagesUrls, ...event];
+    event.forEach((url: any) => {
+      this.saveImage(this.productoId, url, this.producto.nombre);
+    });
   }
 
+  saveImage(itemId:string, url:string, titulo:string=""){
+    this.imagesService.save({
+      ownerId: itemId,
+      tipoCatalogo: "Producto",
+      titulo: titulo,
+      url: url
+    });
+  }
+
+  getImages(ownerId:string){
+    let queryParams = `sort=title`;
+    this.imagesService.findImages(queryParams, ownerId)
+    .then( async (resp)=> {
+      const body = await resp.json();
+      this.imagesUrls = body.imagenes.map((x:any)=>(x.url));
+    });
+  }
 }

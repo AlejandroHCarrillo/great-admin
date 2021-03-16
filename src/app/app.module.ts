@@ -45,6 +45,7 @@ import { ModalImageComponent } from './components/common/modal-image/modal-image
 import { UploadFilesComponent } from './components/common/upload-files/upload-files.component';
 import { UploadFilesService } from './shared/services/upload-files.service';
 import { UploadFilesModalComponent } from './components/common/upload-files-modal/upload-files-modal.component';
+import { ImagesGalleryComponent } from './components/common/images-gallery/images-gallery.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -71,7 +72,8 @@ import { UploadFilesModalComponent } from './components/common/upload-files-moda
     DireccionComponent,
     ModalImageComponent,
     UploadFilesComponent,
-    UploadFilesModalComponent
+    UploadFilesModalComponent,
+    ImagesGalleryComponent
   ],
   imports: [
     BrowserModule,

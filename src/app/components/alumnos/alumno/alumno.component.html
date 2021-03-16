@@ -1,28 +1,4 @@
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadFilesModal">
-    Load images
-</button>
-
-<div class="modal fade modal-dialog-scrollable" id="uploadFilesModal" tabindex="-1" role="dialog" aria-labelledby="uploadFilesModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="uploadFilesModalLabel">Upload images</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="upload.cleanFiles()">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <upload-files [itemId]="alumnoId" #upload></upload-files>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="upload.cleanFiles()">Close</button>
-        </div>
-        </div>
-    </div>
-</div>
-
-<div class="container">
-    
+<div class="container">    
     <div style="float: right;">
         <span class="icon"><i class="fas fa-pencil-alt"></i></span>
 
@@ -37,11 +13,23 @@
     
     <h1><small>Alumno</small></h1>
     <hr>
-    
     <form [formGroup]="form" (ngSubmit)="submit()">
         <div class="form-group row">
             <div class="row mt-3 ">
-                <div class="col col-4"> 
+                <div class="col-2" >
+                    <div style="display: flex; direction: row; ;">
+                        <img *ngIf="alumno && alumno.img" 
+                             [src]="alumno.img" 
+                             [alt]="alumno.name" 
+                             class="image-medium-rounded"
+                             style="z-index: index 1; top: 0px;"
+                             >
+                        <span class="icon" (click)="showUploadImage()"><i class="fas fa-camera big-icon"></i></span>
+                    </div>
+                </div>
+                <!-- <div *ngIf="alumnoId" class="position-relative top-50 start-50 translate-middle">
+                </div> -->
+                <div class="col col-3"> 
                     <div class="mb-3 form-group form">
                         <label for="nombre" class="form-label">Nombre:</label>
                         <input type="text" class="form-control" id="nombre" placeholder="Escriba el nombre" maxlength="30"
@@ -53,7 +41,7 @@
                     </div>
                     <!-- <p-checkbox [formControl]="form.controls['editMode']"></p-checkbox>edit -->
                 </div>
-                <div class="col col-4"> 
+                <div class="col col-3"> 
                     <div class="mb-3 form">
                         <label for="apaterno" class="form-label">Apellido paterno:</label>
                         <input type="text" class="form-control" id="apaterno" placeholder="Escriba el apellido paterno" maxlength="30"
@@ -73,14 +61,6 @@
                         [class.is-invalid]="isInvalidControl('amaterno')"
                         >
                     </div>        
-                </div>
-                <div class="col col-1"> 
-                    <div class="mb-3 form">
-                        <label class="form-label">Activo:</label>
-                        <div >
-                            <p-inputSwitch name="activo" formControlName="activo"></p-inputSwitch>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -120,7 +100,15 @@
                         formControlName="fechaIngreso"
                         [class.is-invalid]="isInvalidControl('fechaIngreso')"></p-calendar>
                     </div>        
-                </div>        
+                </div>
+                <div class="col col-1"> 
+                    <div class="mb-3 form">
+                        <label class="form-label">Activo:</label>
+                        <div >
+                            <p-inputSwitch name="activo" formControlName="activo"></p-inputSwitch>
+                        </div>
+                    </div>
+                </div>    
             </div>
 
             <div class="row">
@@ -250,8 +238,8 @@
                         <br>
                         <p-dropdown [options]="states"
                                     optionLabel="name"
-                                    name="estado"
-                                    formControlName="estado"></p-dropdown>
+                                    name="selectedState"
+                                    formControlName="selectedState"></p-dropdown>
                     </div>        
                 </div>
                 <div class="col-2"> 
@@ -294,13 +282,21 @@
 
       </form>
 
-<pre>
+<input type="file" id="fileSelector" name="file" style="display: none;"
+        (change)="handleFileChange($event)" >
+
+<modal-image [showModal]="showModal" 
+    [urlImage]="alumno.img"
+    [description]="alumno.nombre"></modal-image>
+      
+
+<!-- <pre>
     Estado formulario: {{ form.valid }}
     Status: {{ form.status }}
 </pre>
 <pre>
     {{ form.value | json }}
-</pre>
+</pre> -->
 
 TODO: 
 <ul>

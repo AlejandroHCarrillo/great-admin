@@ -92,3 +92,16 @@ button{
   width: 50px;
   border-radius: 10px;
 }
+
+.image-medium-rounded{
+    height: 75px;
+    width: auto;
+    border-radius: 10px;
+  }
+
+@media screen and (max-width:992px){
+    .fab{
+        font-size: 15px;
+        padding: 20px;
+    } 
+}

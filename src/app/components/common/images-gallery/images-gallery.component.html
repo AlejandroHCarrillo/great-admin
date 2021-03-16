@@ -1,0 +1,45 @@
+<section class="section-gallery" *ngIf="direction!=='v' && direction!=='h' ">
+    <ul class="gallery-showcase">
+      <li *ngFor="let picture of pictures">
+        <figure class="gallery-photo" data-toggle="modal" data-target="#photoModal" (click)="setCurrentImg(picture)">
+          <img [src]="picture" [alt]="picture" style="cursor: pointer;">
+        </figure>
+      </li>
+    </ul>
+  </section>
+  
+  <section class="section-gallery" *ngIf="direction==='h'">
+    <div class="row" style="display: flex; flex-direction: row; flex-flow: wrap;" >
+      <ng-container *ngFor="let picture of pictures; let i = index" style="display: flex; flex-direction: row;">
+        <figure data-toggle="modal" data-target="#photoModal" (click)="setCurrentImg(picture)">
+          <img [src]="picture" style="height: 10rem; width: auto; padding: 5px; cursor: pointer;">
+        </figure>      
+      </ng-container>
+    </div>
+  </section>
+  
+  <section class="section-gallery" *ngIf="direction==='v'">
+    <ng-container *ngFor="let picture of pictures; let i = index" >
+      <figure data-toggle="modal" data-target="#photoModal" (click)="setCurrentImg(picture)">
+        <img [src]="picture" style="width: 100%; height: auto; padding: 1px; cursor: pointer;">
+      </figure>
+    </ng-container>
+  </section>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="photoModal" tabindex="-1" role="dialog" aria-labelledby="photoModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">{{title}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">
+            </span>
+          </button>
+        </div>
+        <div class="modal-body" style="align-content: center;">
+          <img [src]="currentImage" [alt]="currentImage" style="width: 29rem;">
+        </div>
+      </div>
+    </div>
+  </div>

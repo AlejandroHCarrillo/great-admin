@@ -12,6 +12,7 @@
     </div>
     <h1>Alumnos</h1> 
     <hr>
+
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-1">
             <label for="buscar">Buscar:</label>
@@ -38,6 +39,7 @@
     <p-table [value]="alumnos" >
         <ng-template pTemplate="header">
             <tr>
+                <th></th>
                 <th (click)="setOrder('nombre')">
                     <div [ngClass]="{'header-sort': pageinfo.sort==='nombre'}">
                         Nombre&nbsp;
@@ -73,6 +75,9 @@
         </ng-template>
         <ng-template pTemplate="body" let-alumno>
             <tr>
+                <td>
+                    <img [src]="alumno.img" [alt]="alumno.nombre" class="image-small-rounded">
+                </td>
                 <td>{{alumno.nombre}}</td>
                 <td>{{alumno.apaterno}}</td>
                 <td>{{alumno.amaterno}}</td>

@@ -3,10 +3,13 @@ import { ActivatedRoute } from "@angular/router";
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import Swal from 'sweetalert2'
+import { fileUpload } from "../../../helpers/uploadimages";
 
+import { STATES } from 'src/assets/data/drop-down-lists';
 import { REGEXP_EMAIL, REGEXP_RFC, REGEXP_CURP } from '../../../config/settings'
 import { SharedService } from 'src/app/services/shared.service';
 import { AlumnosService } from 'src/app/services/alumnos.service';
+import { DropDownItem } from 'src/app/interfaces/drop-down-item';
 @Component({
   selector: 'app-alumno',
   templateUrl: './alumno.component.html',
@@ -14,19 +17,34 @@ import { AlumnosService } from 'src/app/services/alumnos.service';
 })
 export class AlumnoComponent implements OnInit {
   editMode: boolean = false;
+  showModal: boolean = false;
   alumnoId: string = "";
+  alumno: any = {};
 
   results: string[] = [];
-  states: string[] = [];
+  states: DropDownItem[] = [];
+  // states: STATES;
 
   form : FormGroup = new FormGroup({});
+
+  urlImagen: string = "";
   
   constructor(  private fb: FormBuilder,
                 private route: ActivatedRoute,
                 private myService :  SharedService,
-                private alumnosService :  AlumnosService  ){}
+                private alumnosService :  AlumnosService  ){
+
+                  
+                }
 
   ngOnInit() {
+    this.states = STATES;
+    // this.myService
+    //  .getEstados()
+    //  .then( ( data : any) => {        
+    //    this.states = data;        
+    //  }); 
+
     this.alumnoId = this.route.snapshot.paramMap.get("id") || "";
     
     if(this.alumnoId==="new" || this.alumnoId === ""){
@@ -37,12 +55,7 @@ export class AlumnoComponent implements OnInit {
     // console.log("this.alumnoId: ", this.alumnoId);
     
     this.initFormGroup();
-    
-    this.myService
-     .getEstados()
-     .then( ( data : any) => {        
-       this.states = data;        
-     }); 
+
 
    }
 
@@ -66,24 +79,20 @@ export class AlumnoComponent implements OnInit {
   submit(){
     console.log("submiting Form...");
     // console.log(this.form.value);
-    if(this.form.invalid) {
-      this.verificaCampos();
-      return;
-    }
+    // if(this.form.invalid) {
+    //   this.verificaCampos();
+    //   return;
+    // }
 
     try{
-      let obj = {...this.form.value};      
-      obj.estado = JSON.stringify(this.form.value.estado);
-
       if(!this.alumnoId || this.alumnoId === ""){
         // console.log("Guardando Nuevo Alumno"); 
-        this.saveAlumno(obj);
+        this.saveAlumno();
       } else {
         // console.log("Actualizando Alumno");
-        this.updateAlumno(obj);
+        this.updateAlumno();
       }
       
-
     } catch(e){
       console.log(e);
       Swal.fire({
@@ -140,7 +149,9 @@ export class AlumnoComponent implements OnInit {
       ttrabajo: [''],
 
       email: ['', [Validators.required, Validators.pattern(REGEXP_EMAIL)]],
-      notas: ['']
+      notas: [''],
+      img: [this.urlImagen],
+      selectedState: ['']
     });
   }
 
@@ -161,10 +172,7 @@ export class AlumnoComponent implements OnInit {
       colonia: "",
       
       municipio: "",
-      estado: {
-        name: "",
-        code: ""
-      },
+      estado: "",
       codigopostal: "",
       
       tcelular: "",
@@ -172,7 +180,9 @@ export class AlumnoComponent implements OnInit {
       ttrabajo: "",
       
       email: "",
-      notas: ""  
+      img: this.urlImagen,
+      notas: "",
+      selectedState:  this.setDropDownValue('AGS')
     };
 
     if(this.alumnoId){
@@ -196,28 +206,27 @@ export class AlumnoComponent implements OnInit {
             }
 
             const alumno = body.alumno;
+            this.alumno = body.alumno;
                     
             if (alumno){
               Object.keys(originalAlumno).map((x)=>{            
                 if(x.toString().includes('fecha')){
                   let Fecha = moment(eval(`alumno.${x}`));
                   eval(`originalAlumno.${x} = '${ Fecha.format('MM/DD/yyyy')}' `);
-                } else if(x.toString().includes('estado')){
+                } else if(x.toString().includes('excepciones')){
                   // console.log(`originalAlumno.${x} = JSON.parse(alumno.${x})`);
-                  eval(`originalAlumno.${x} = JSON.parse(alumno.${x})`);
+                  eval(`originalAlumno.${x} = alumno.${x}`);
                 } 
                 else {
                   eval(`originalAlumno.${x} = alumno.${x}`);
                 }
               });
             }
+            originalAlumno.selectedState = this.setDropDownValue(alumno.estado);
 
-            originalAlumno.estado = JSON.parse(alumno.estado);
-            
             this.form.reset(originalAlumno);
           });
     } else {
-      // this.form.setValue({
         this.form.reset(originalAlumno);
       }
   }
@@ -238,7 +247,12 @@ export class AlumnoComponent implements OnInit {
     }
   }
 
-  private saveAlumno(obj:any) {
+  private saveAlumno() {
+    let obj = {...this.form.value};      
+    obj.estado = this.form.value.selectedState.code;
+    console.log("guardar: ", obj);
+    
+    
     this.alumnosService.save(obj)
     .then( (resp) => {
       // console.log("La respuesta es: ", resp);
@@ -253,9 +267,13 @@ export class AlumnoComponent implements OnInit {
       }         
     });
   }
-
-  private updateAlumno(obj:any) {
-      obj.id = this.alumnoId;
+  
+  private updateAlumno() {
+    let obj = {...this.form.value};      
+    obj.estado = this.form.value.selectedState.code;
+    obj.id = this.alumnoId;
+    
+    console.log("guardar: ", obj);
       this.alumnosService.update(obj)
       .then( (resp) => {
         if(resp.ok){
@@ -267,7 +285,12 @@ export class AlumnoComponent implements OnInit {
           });
         }         
       });
-    }
+  }
+
+  setDropDownValue(code:string) : any {
+    return this.states.find((obj : DropDownItem ) => ( obj.code === code ));
+  }
+
 
   toggleEdit(){
     this.editMode = !this.editMode;
@@ -278,5 +301,37 @@ export class AlumnoComponent implements OnInit {
       this.form.enable()
     }
   }
+
+  showUploadImage(){
+    // console.log("Mostrar el upload file.");
+    document.getElementById('fileSelector')?.click();
+  }
+
+  handleFileChange(e:any){
+    // console.log("handleFileChange...");
+    const file = e.target.files[0];
+    if ( file ){
+      this.startUploading(file);
+    }
+  }
+
+  startUploading ( file: any ) {
+    Swal.fire({
+      title: 'Cargando imagen...', 
+      text: 'Por favor espere', 
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+          Swal.showLoading()
+      }
+    });
+
+    fileUpload(file).then((fileUrl)  => {
+      this.alumno.img = fileUrl;
+      this.form.value.img = fileUrl;
+      this.updateAlumno();
+    });
+    Swal.close();
+  };
   
 }

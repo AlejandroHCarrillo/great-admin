@@ -29,7 +29,7 @@
         </div>
         <div class="col-2">
             <button class="btn btn-primary" (click)="buscar()" routerLinkActive="active" >
-                <span class="icon"><i class="fas fa-user"></i></span>
+                <span class="icon"><i class="fas fa-search"></i></span>
                 <span class="title">&nbsp;Buscar</span>
             </button>
         </div>
@@ -69,7 +69,7 @@
         <ng-template pTemplate="body" let-producto>
             <tr>
                 <td>
-                    <img [src]="producto.img" alt="producto.nombre" class="image-small-rounded">
+                    <img [src]="producto.img" [alt]="producto.nombre" class="image-small-rounded">
                 </td>
                 <td>{{producto.nombre}}</td>
                 <td>{{producto.code}}</td>
@@ -105,7 +105,7 @@
     <br>
 
     <div class="btn btn-primary fab" (click)="edit('new')">
-        <span class="icon"><i class="fas fa-user-plus"></i></span>
+        <span class="icon"><i class="fas fa-plus"></i></span>
     </div>
 
     <!-- <pre>
