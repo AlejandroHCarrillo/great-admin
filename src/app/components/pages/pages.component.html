@@ -1,22 +1,22 @@
-<div class="conteiner">
+<div class="main-container">
     <div class="row">
         <app-navbar></app-navbar> 
-    </div>
-    
-</div>
+    </div>    
 
-<div class="row" style="height: 82vh;">
-    <div class="col-2" >
-        <app-sidebar ></app-sidebar>
+    <div class="row" style="height: 82vh;">
+        <div class="col side-bar-area" >
+            <app-sidebar ></app-sidebar>
+        </div>
+        <div class="col-10">
+            <router-outlet></router-outlet>
+        </div>
+        <div class="col hide-bar-area" >
+            ads
+        </div>
     </div>
-    <div class="col-8">
-        <router-outlet></router-outlet>
-    </div>
-    <div class="col" >
-        ads
-    </div>
-</div>
 
-<div class="row">
-    <app-footer></app-footer>
+    <div class="row">
+        <app-footer></app-footer>
+    </div>
+
 </div>

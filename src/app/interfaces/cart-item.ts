@@ -1,4 +1,4 @@
-export class ChartItem {
+export class CartItem {
     constructor( 
         public id: string,
         public productoId: string = "", 
@@ -7,7 +7,10 @@ export class ChartItem {
         public tasaIVA: number = 0, 
         public impuestos: number = 0, 
         public descuento: number = 0,
-        public subtotal: number = 0
+        public monto: number = 0,
+        public productoNombre?: string,
+        public productoCode?: string,
+
         )
     {}
 

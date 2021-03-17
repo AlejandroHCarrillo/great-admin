@@ -11,7 +11,8 @@ export class Producto {
         public tasaIVA: number = 0, 
         public exentoIVA: boolean = false, 
         public conceptocontable: string = "", 
-        public clasificacion: string = "P"
+        public clasificacion: string = "P",
+        public id?: string
         ){
 }
 

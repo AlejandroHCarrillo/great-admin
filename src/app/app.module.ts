@@ -13,6 +13,12 @@ import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PaginatorModule } from 'primeng/paginator';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -47,6 +53,8 @@ import { UploadFilesService } from './shared/services/upload-files.service';
 import { UploadFilesModalComponent } from './components/common/upload-files-modal/upload-files-modal.component';
 import { ImagesGalleryComponent } from './components/common/images-gallery/images-gallery.component';
 import { CajaComponent } from './components/caja/caja.component';
+import { ButtonModule } from 'primeng/button';
+import { ProductosListComponent } from './components/productos/productos-list/productos-list.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -75,7 +83,8 @@ import { CajaComponent } from './components/caja/caja.component';
     UploadFilesComponent,
     UploadFilesModalComponent,
     ImagesGalleryComponent,
-    CajaComponent
+    CajaComponent,
+    ProductosListComponent
   ],
   imports: [
     BrowserModule,
@@ -84,6 +93,8 @@ import { CajaComponent } from './components/caja/caja.component';
     FormsModule,
     ReactiveFormsModule,
 
+    MessagesModule,
+    MessageModule,
     BrowserAnimationsModule,
     TableModule, 
     CalendarModule,
@@ -93,10 +104,14 @@ import { CajaComponent } from './components/caja/caja.component';
     InputMaskModule,
     CheckboxModule,
     PaginatorModule,
-    InputSwitchModule
-
+    InputSwitchModule,
+    InputNumberModule,
+    DynamicDialogModule,
+    ToastModule,
+    ButtonModule
   ],
   providers: [
+    MessageService,
     SharedService,
     ClientesService,
     AlumnosService,

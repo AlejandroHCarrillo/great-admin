@@ -1,17 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import Swal from 'sweetalert2'
 import { PAGE_SIZE } from '../../config/settings'
 
 import { Alumno } from 'src/app/interfaces/alumno';
 import { AlumnosService } from 'src/app/services/alumnos.service';
 import { DropDownItem } from 'src/app/interfaces/drop-down-item';
-import { ChartItem } from 'src/app/interfaces/chart-item';
+import { CartItem } from 'src/app/interfaces/cart-item';
+import { DialogService } from 'primeng/dynamicdialog';
+import { Producto } from 'src/app/interfaces/producto';
+import { MessageService } from 'primeng/api';
+import { ProductosListComponent } from '../productos/productos-list/productos-list.component';
 
 @Component({
   selector: 'app-caja',
   templateUrl: './caja.component.html',
-  styleUrls: ['./caja.component.css']
+  styleUrls: ['./caja.component.css'],
+  providers: [ DialogService ]
 })
 
 export class CajaComponent implements OnInit {
@@ -20,6 +24,21 @@ export class CajaComponent implements OnInit {
 
   alumnoslist : DropDownItem[] = [];
   alumnoSelected: DropDownItem = { name:"Seleccione un alumno", code:"-1" };
+
+  private emptytranscaction = { 
+    cantidad: 0,
+    producto: {
+      id: "",
+      code: "",
+      nombre: "",
+      precio: 0,
+      exentoIVA: false,
+      tasaIVA: 0
+    },
+    descuento: 0
+  };
+
+  currtransaction = this.emptytranscaction;
 
   pagesize = PAGE_SIZE;
   pageinfo = {
@@ -34,10 +53,14 @@ export class CajaComponent implements OnInit {
   totalRecords: number = 0;
   alumnos: Alumno[] = [];
 
-  shoppingcart: ChartItem[]= [];
+  shoppingcart: CartItem[]= [];
 
   constructor(  private router: Router,
-                private alumnosService: AlumnosService) { }
+                private alumnosService: AlumnosService,
+                public dialogService: DialogService,
+                private messageService: MessageService
+                ) 
+  { }
 
   ngOnInit(): void {
     // this.loadAlumnos()
@@ -127,9 +150,95 @@ export class CajaComponent implements OnInit {
 
   setOrder(colname:string){
     this.pageinfo.sort = colname;
-    this.pageinfo.first = 0;
-    
+    this.pageinfo.first = 0;    
     this.loadAlumnos();
   }
 
+  get subtotal(){
+    return Math.round(this.shoppingcart.reduce((prev, cur) => {
+      return prev + ( cur.cantidad * cur.precio );
+      }, 0)*100)/100;
+  }
+
+  get sumaDescuentos(){
+    return Math.round(this.shoppingcart.reduce((prev, cur) => {
+      return prev + cur.descuento;
+      }, 0)*100)/100;
+  }
+
+  get sumaIVA(){
+    return Math.round(this.shoppingcart.reduce((prev, cur) => {
+      return prev + cur.impuestos;
+      }, 0)*100)/100;
+  }
+
+  get total(){
+    return Math.round(this.shoppingcart.reduce((prev, cur) => {
+      return prev + ( cur.monto + cur.impuestos );
+      }, 0)*100)/100;
+  }
+
+  addProduct(){
+    const t = this.currtransaction;
+
+    const monto = (t.cantidad * t.producto.precio) - t.descuento;
+    const montoImpuestos = monto * (t.producto.tasaIVA/100);
+
+    const item = new CartItem("id",
+      t.producto.id,
+      t.producto.precio,
+      t.cantidad,
+      t.producto.tasaIVA,
+      montoImpuestos,
+      t.descuento,
+      monto,
+      t.producto.nombre,
+      t.producto.code
+    );
+
+    this.shoppingcart.push(item);
+
+    this.clearCurrTrans();
+  }
+
+  clearCurrTrans(){
+    // this.currtransaction = this.emptytranscaction;
+    this.currtransaction.producto = {
+      id: "",
+      code: "",
+      nombre: "",
+      precio: 0,
+      exentoIVA: false,
+      tasaIVA: 0
+    };
+    this.currtransaction.cantidad = 0;
+    this.currtransaction.descuento = 0;
+
+  }
+
+  selectedItem(index:number){
+    console.log(index);
+  }
+
+  show() {
+    const ref = this.dialogService.open(ProductosListComponent, {
+      header: 'Seleccione un producto',
+      width: '70%',
+      data: {
+        searchtext: this.currtransaction.producto.nombre
+      }
+  });
+
+  ref.onClose.subscribe((producto: Producto) => {
+      console.log(producto);
+      this.currtransaction.producto = {
+                    ...producto,
+                    id: producto.id || "",
+                    code: producto.code
+                    };
+      if (producto) {
+          this.messageService.add({severity:'info', summary: 'Producto seleccionado', detail:'code:' + producto.code });
+      }
+  });
+}
 }

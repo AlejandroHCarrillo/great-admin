@@ -36,9 +36,8 @@
             </button>
         </div>
     </div>
-
     <div class="row">
-        alumnoSelected: {{ alumnoSelected | json }}
+        <label for="producto" class="form-label" >Alumno:</label>
         <div class="col">
             <p-dropdown [options]="alumnoslist"
             optionLabel="name"
@@ -48,6 +47,99 @@
         </p-dropdown>
         </div>
     </div>
+
+    <div class="row mb-3 mt-3">
+        <div class="col">
+            <label for="cantidad" class="form-label" >Cantidad:</label>
+            <input type="text" class="form-control text-numeric" id="cantidad" placeholder=""
+            name="cantidad" 
+            [(ngModel)]="currtransaction.cantidad"
+            >
+        </div>
+        <div class="col-6">            
+            <label for="producto" class="form-label" >Producto:</label>
+            <div style="display: flex; direction: row;">
+                <input type="text" class="form-control" id="producto" placeholder=""
+                name="producto" 
+                [(ngModel)]="currtransaction.producto.nombre"
+                (keyup.enter)="show()"
+                >
+                <button class="btn btn-primary" (click)="show()">
+                    <span class="icon"><i class="fas fa-search"></i></span>
+                </button>
+            </div>
+        </div>
+        <div class="col">
+            <label for="producto" class="form-label" >Descuento:</label>
+            <input type="text" class="form-control text-numeric" id="producto" placeholder=""
+            name="descuento" 
+            [(ngModel)]="currtransaction.descuento"
+            >       
+        </div>
+        <div class="col">
+
+        </div>
+        <div class="col">
+
+        </div>
+        <div class="col">
+        </div>
+        <div class="col">
+            <label for="producto" class="form-label" >&nbsp;</label>
+            <button class="btn btn-primary" (click)="addProduct()">+</button>
+        </div>
+    </div>
+    <p-table [value]="shoppingcart" >
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="col-small">Cant</th>
+                <th class="col-medium">Code</th>
+                <th>Producto</th>
+                <th class="col-medium">$ unit</th>
+                <th class="col-medium">Desc</th>
+                <th class="col-medium">% IVA</th>
+                <th class="col-medium">$ IVA</th>
+                <th class="col-medium">Monto</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-p>
+            <tr (click)="selectedItem(1)" >
+                <td style="text-align: center;">{{p.cantidad}}</td>
+                <td class="col-medium text-start mr-10" >{{p.productoCode}}</td>
+                <td class="col-extra-large text-start" >{{p.productoNombre}}</td>
+                <td style="text-align: right;">{{p.precio | currency }}</td>
+                <td style="text-align: center;">{{p.descuento | currency }}</td>
+                <td style="text-align: center;">{{p.tasaIVA}}%</td>
+                <td style="text-align: right;">{{p.impuestos | currency }}</td>
+                <td style="text-align: right;">{{p.monto | currency }}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <tr>
+                <td colspan="6"></td>
+                <td class="text-end">Subtotal:</td>
+                <td class="text-end">{{ subtotal | currency }}</td>
+            </tr>
+            <tr>
+                <td colspan="6"></td>
+                <td class="text-end">Descuentos:</td>
+                <td class="text-end">{{ sumaDescuentos | currency }}</td>
+            </tr>
+            <tr>
+                <td colspan="6"></td>
+                <td class="text-end">IVA:</td>
+                <td class="text-end">{{ sumaIVA | currency }}</td>
+            </tr>
+            <tr>
+                <td colspan="6"></td>
+                <td class="text-end">Total:</td>
+                <td class="text-end">{{ total | currency }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
     
+    <!-- <pre>
+        shoppingcart: {{ shoppingcart | json }}
+    </pre> -->
 
 </div>
