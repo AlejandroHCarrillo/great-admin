@@ -19,6 +19,8 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -108,10 +110,12 @@ import { ProductosListComponent } from './components/productos/productos-list/pr
     InputNumberModule,
     DynamicDialogModule,
     ToastModule,
-    ButtonModule
+    ButtonModule,
+    ConfirmDialogModule
   ],
   providers: [
     MessageService,
+    ConfirmationService,
     SharedService,
     ClientesService,
     AlumnosService,

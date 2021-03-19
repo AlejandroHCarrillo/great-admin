@@ -69,11 +69,6 @@ export class ProductosListComponent implements OnInit {
   // }
 
   buscar(){
-    // if (!this.txtbuscar || this.txtbuscar===""){
-      // this.loadProductos();
-    //   return;
-    // }
-
     let queryParams = `desde=${this.pageinfo.first}&records=${this.pageinfo.rows}&sort=${this.pageinfo.sort}`
 
     let prevScreen = localStorage.getItem("prevScreen") || '';
@@ -92,6 +87,7 @@ export class ProductosListComponent implements OnInit {
       this.productos = body.productos;
       this.totalRecords = body.total;
       this.searchResultMsg = `Se encontraron ${body.found || 0 } registros.`
+
     })
     .catch((e)=>{
         console.log("error: ", e);            

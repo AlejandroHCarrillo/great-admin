@@ -39,17 +39,17 @@
         <ng-template pTemplate="header">
             <tr>
                 <th></th>
-                <th (click)="setOrder('nombre')" class="col-extra-large">
-                    <div [ngClass]="{'header-sort': pageinfo.sort==='nombre'}">
-                        Nombre&nbsp;
-                    <span class="icon" *ngIf="pageinfo.sort==='nombre'" ><i class="fas fa-sort-alpha-down"></i></span>
-                    </div>
-                </th>
                 <th (click)="setOrder('code')" class="col-large">
                     <div [ngClass]="{'header-sort': pageinfo.sort==='code'}">
                         Code&nbsp;
                         <span class="icon" *ngIf="pageinfo.sort==='code'" ><i class="fas fa-sort-alpha-down"></i></span>
                     </div>    
+                </th>
+                <th (click)="setOrder('nombre')" class="col-extra-large">
+                    <div [ngClass]="{'header-sort': pageinfo.sort==='nombre'}">
+                        Nombre&nbsp;
+                    <span class="icon" *ngIf="pageinfo.sort==='nombre'" ><i class="fas fa-sort-alpha-down"></i></span>
+                    </div>
                 </th>
                 <th (click)="setOrder('descripcion')">
                     <div [ngClass]="{'header-sort': pageinfo.sort==='descripcion'}">
@@ -69,10 +69,10 @@
         <ng-template pTemplate="body" let-producto>
             <tr>
                 <td>
-                    <img [src]="producto.img" [alt]="producto.nombre" class="image-small-rounded">
+                    <img *ngIf="producto.img" [src]="producto.img" [alt]="producto.nombre" class="image-small-rounded">
                 </td>
-                <td>{{producto.nombre}}</td>
                 <td>{{producto.code}}</td>
+                <td>{{producto.nombre}}</td>
                 <td >{{producto.descripcion}}</td>
                 <td class="text-center">{{!!producto.activo}}</td>
                 <td >

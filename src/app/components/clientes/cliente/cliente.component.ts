@@ -20,6 +20,15 @@ export class ClienteComponent implements OnInit {
   states: string[] = [];
 
   form : FormGroup = new FormGroup({});
+
+  alumnoscliente: {
+    nombre: string,
+    apaterno: string,
+    amaterno: string,
+    img: string,
+    matricula: string,
+    id: string
+  }[] = [];
   
   constructor(  private fb: FormBuilder,
                 private route: ActivatedRoute,
@@ -214,6 +223,8 @@ export class ClienteComponent implements OnInit {
             originalClient.estado = JSON.parse(cliente.estado);
             
             this.form.reset(originalClient);
+
+            this.getAlumnosCliente();
           });
     } else {
       // this.form.setValue({
@@ -276,6 +287,23 @@ export class ClienteComponent implements OnInit {
     } else {
       this.form.enable()
     }
+  }
+
+  getAlumnosCliente(){
+    this.alumnoscliente = [];
+
+    this.clientesService.getAlumnosCliente(this.clientId)
+    .then( async (resp) => {
+      const body = await resp.json();
+      // console.log("body: ", body);
+      if(!body.ok){
+        console.log(body.msg);
+        return;
+      }
+      // console.log(body.alumnos.map(( x:any )=>( x.alumno )) );
+      this.alumnoscliente = body.alumnos.map(( x:any )=>( x.alumno ));
+      // console.log(this.alumnoscliente);      
+    });
   }
   
 }

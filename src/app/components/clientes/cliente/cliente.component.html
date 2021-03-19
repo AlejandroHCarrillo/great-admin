@@ -253,7 +253,22 @@
 
         </div>
 
-      </form>
+    </form>
+
+    <label class="form-label">Alumnos:</label>
+    <div class="grid-cards">
+
+        <div *ngFor="let alumno of alumnoscliente" class="card">
+            <div class="card-img-overlay text-center">
+                <a [routerLink]="['/alumno/', alumno.id]" routerLinkActive="active" >
+                    <img _ngcontent-ryg-c121="" class="image-small-rounded" 
+                        [src]="alumno.img" 
+                        alt="Alejandro">
+                </a>
+                <h5 class="card-title">{{alumno.nombre}} {{alumno.apaterno}} {{alumno.amaterno}} </h5>
+            </div>
+        </div>
+    </div>
 
 <!-- <pre>
     Estado formulario: {{ form.valid }}

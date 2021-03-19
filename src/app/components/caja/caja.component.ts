@@ -8,7 +8,7 @@ import { DropDownItem } from 'src/app/interfaces/drop-down-item';
 import { CartItem } from 'src/app/interfaces/cart-item';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Producto } from 'src/app/interfaces/producto';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProductosListComponent } from '../productos/productos-list/productos-list.component';
 
 @Component({
@@ -26,6 +26,7 @@ export class CajaComponent implements OnInit {
   alumnoSelected: DropDownItem = { name:"Seleccione un alumno", code:"-1" };
 
   private emptytranscaction = { 
+    index: 0,
     cantidad: 0,
     producto: {
       id: "",
@@ -39,6 +40,9 @@ export class CajaComponent implements OnInit {
   };
 
   currtransaction = this.emptytranscaction;
+  selectedIndex = -1;
+  isSingleClick: Boolean = true;
+  errorMsgsCurTrns: string[] = [];
 
   pagesize = PAGE_SIZE;
   pageinfo = {
@@ -53,11 +57,117 @@ export class CajaComponent implements OnInit {
   totalRecords: number = 0;
   alumnos: Alumno[] = [];
 
-  shoppingcart: CartItem[]= [];
+  shoppingcart: CartItem[]= [
+    {
+      "index": 0,
+      "id": "",
+      "productoId": "604fcf2da3eaca46e8296845",
+      "precio": 25,
+      "cantidad": 1,
+      "tasaIVA": 10,
+      "impuestos": 2.5,
+      "descuento": 2,
+      "monto": 25,
+      "productoNombre": "1Manzana amarilla GOLDEN",
+      "productoCode": "MZNGLDN"
+    },
+    {
+      "index": 0,
+      "id": "",
+      "productoId": "604fb5b939009a2fc0e2f750",
+      "precio": 50,
+      "cantidad": 0,
+      "tasaIVA": 100,
+      "impuestos": 0,
+      "descuento": 10,
+      "monto": 0,
+      "productoNombre": "2Manzana roja ",
+      "productoCode": "MZNAWSHRDL"
+    },
+    {
+      "index": 0,
+      "id": "",
+      "productoId": "604fcf2da3eaca46e8296845",
+      "precio": 25,
+      "cantidad": 1,
+      "tasaIVA": 10,
+      "impuestos": 2.5,
+      "descuento": 2,
+      "monto": 25,
+      "productoNombre": "3Manzana amarilla GOLDEN",
+      "productoCode": "MZNGLDN"
+    },
+    {
+      "index": 0,
+      "id": "",
+      "productoId": "604fb5b939009a2fc0e2f750",
+      "precio": 50,
+      "cantidad": 0,
+      "tasaIVA": 100,
+      "impuestos": 0,
+      "descuento": 10,
+      "monto": 0,
+      "productoNombre": "4Manzana roja ",
+      "productoCode": "MZNAWSHRDL"
+    },
+    {
+      "index": 0,
+      "id": "",
+      "productoId": "604fcf2da3eaca46e8296845",
+      "precio": 25,
+      "cantidad": 1,
+      "tasaIVA": 10,
+      "impuestos": 2.5,
+      "descuento": 2,
+      "monto": 25,
+      "productoNombre": "5Manzana amarilla GOLDEN",
+      "productoCode": "MZNGLDN"
+    },
+    {
+      "index": 0,
+      "id": "",
+      "productoId": "604fb5b939009a2fc0e2f750",
+      "precio": 50,
+      "cantidad": 0,
+      "tasaIVA": 100,
+      "impuestos": 0,
+      "descuento": 10,
+      "monto": 0,
+      "productoNombre": "6Manzana roja ",
+      "productoCode": "MZNAWSHRDL"
+    },
+    {
+      "index": 0,
+      "id": "",
+      "productoId": "604fcf2da3eaca46e8296845",
+      "precio": 25,
+      "cantidad": 1,
+      "tasaIVA": 10,
+      "impuestos": 2.5,
+      "descuento": 2,
+      "monto": 25,
+      "productoNombre": "7Manzana amarilla GOLDEN",
+      "productoCode": "MZNGLDN"
+    },
+    {
+      "index": 0,
+      "id": "",
+      "productoId": "604fb5b939009a2fc0e2f750",
+      "precio": 50,
+      "cantidad": 0,
+      "tasaIVA": 100,
+      "impuestos": 0,
+      "descuento": 10,
+      "monto": 0,
+      "productoNombre": "8Manzana roja ",
+      "productoCode": "MZNAWSHRDL"
+    },            
+  ];
 
   constructor(  private router: Router,
                 private alumnosService: AlumnosService,
-                public dialogService: DialogService,
+                private dialogService: DialogService,
+                private confirmationService: ConfirmationService,
                 private messageService: MessageService
                 ) 
   { }
@@ -179,12 +289,19 @@ export class CajaComponent implements OnInit {
   }
 
   addProduct(){
-    const t = this.currtransaction;
+    console.log(this.currtransaction.producto);
+    this.errorMsgsCurTrns = [];
 
+    if(this.currtransaction.producto.id=="" ) this.errorMsgsCurTrns.push("El producto debe ser seleccionado");
+    if(this.currtransaction.cantidad===0) this.errorMsgsCurTrns.push("La cantidad es obligatoria y mayor a cero");
+
+    if(this.errorMsgsCurTrns.length>0) return;
+
+    const t = this.currtransaction;
     const monto = (t.cantidad * t.producto.precio) - t.descuento;
     const montoImpuestos = monto * (t.producto.tasaIVA/100);
 
-    const item = new CartItem("id",
+    const item = new CartItem(t.index, "",
       t.producto.id,
       t.producto.precio,
       t.cantidad,
@@ -196,28 +313,78 @@ export class CajaComponent implements OnInit {
       t.producto.code
     );
 
-    this.shoppingcart.push(item);
+    if(this.selectedIndex !== -1){
+      console.log("Actualizar la edicion el la posicion ", this.selectedIndex);
+      
+    } else{
+      this.shoppingcart.push(item);
+    }
 
     this.clearCurrTrans();
+    this.setfocus("producto");
   }
 
   clearCurrTrans(){
     // this.currtransaction = this.emptytranscaction;
+    this.currtransaction.index = 0;
     this.currtransaction.producto = {
       id: "",
       code: "",
       nombre: "",
       precio: 0,
       exentoIVA: false,
-      tasaIVA: 0
+      tasaIVA: 0,
     };
     this.currtransaction.cantidad = 0;
     this.currtransaction.descuento = 0;
 
+    this.errorMsgsCurTrns = [];
   }
 
   selectedItem(index:number){
-    console.log(index);
+    this.isSingleClick = true;
+
+    setTimeout(()=>{
+      if(this.isSingleClick){
+        console.log(index);
+        this.selectedIndex = index;
+      }
+    },500);
+  }
+
+  setEditCartItem(index:number){
+    this.isSingleClick = false;
+    
+    this.currtransaction = {
+      index: index,
+      cantidad: this.shoppingcart[index].cantidad,
+      producto: {
+        id: this.shoppingcart[index].productoId,
+        code: this.shoppingcart[index].productoCode||"",
+        nombre: this.shoppingcart[index].productoNombre||"",
+        precio: this.shoppingcart[index].precio,
+        exentoIVA: false,
+        tasaIVA: this.shoppingcart[index].tasaIVA
+      },
+      descuento: this.shoppingcart[index].descuento
+    };
+    
+    this.errorMsgsCurTrns = [];
+  }
+
+  deleteCartItem(index:number){
+    // console.log("delete data", index);
+
+    this.confirmationService.confirm({
+      message: '¿En verdad deseas eliminar este registro?',
+      accept: () => {
+        let scClon = [...this.shoppingcart];
+        this.shoppingcart = [ ...scClon.splice(0, index), 
+                              ...this.shoppingcart.splice(index+1)
+                            ];
+        this.selectedIndex = -1;
+        }
+    });
   }
 
   show() {
@@ -227,18 +394,27 @@ export class CajaComponent implements OnInit {
       data: {
         searchtext: this.currtransaction.producto.nombre
       }
-  });
+    });
 
-  ref.onClose.subscribe((producto: Producto) => {
-      console.log(producto);
-      this.currtransaction.producto = {
-                    ...producto,
-                    id: producto.id || "",
-                    code: producto.code
-                    };
-      if (producto) {
-          this.messageService.add({severity:'info', summary: 'Producto seleccionado', detail:'code:' + producto.code });
-      }
-  });
-}
+    ref.onClose.subscribe((producto: Producto) => {
+        // console.log("Producto seleccionado: ", producto);
+        if (!producto) return;
+
+        this.currtransaction.producto = {
+                      ...producto,
+                      id: producto?.id || "",
+                      code: producto?.code
+                      };
+        if (producto) {
+            this.messageService.add({severity:'info', summary: 'Producto seleccionado', detail:'code:' + producto.code });
+        }
+
+        this.setfocus("cantidad");
+    });
+  }
+
+  setfocus(controlname: string){
+    document.getElementsByName(controlname)[0].focus();
+  }
+
 }

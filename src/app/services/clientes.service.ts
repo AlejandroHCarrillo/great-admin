@@ -33,5 +33,8 @@ export class ClientesService {
     return fetchToken(`cliente/${id}`, {}, 'DELETE');
   }
 
+  getAlumnosCliente( clienteId: string ){
+    return fetchToken(`cliente/alumnos/${clienteId}`, {}, 'GET');
+  }
 
 }

@@ -42,9 +42,11 @@
                 </th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-producto>
-            <tr class="selected" (click)="selectItem(producto)">
-                <td class="col-small">
+        <ng-template pTemplate="body" let-producto let-i="rowIndex">
+            <tr class="selected" [tabindex]="i" 
+                (click)="selectItem(producto)"
+                (keyup.enter)="selectItem(producto)">
+                <td class="col-small" >
                     <img *ngIf="producto.img" [src]="producto.img" [alt]="producto.nombre" class="image-small-rounded">
                 </td>
                 <td>{{producto.code}}</td>
