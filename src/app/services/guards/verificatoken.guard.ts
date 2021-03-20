@@ -1,11 +1,11 @@
-import { UsuarioService } from "../usuario/usuario.service";
+import { AuthService } from "../auth/auth.service";
 import { Injectable } from "@angular/core";
 import { CanActivate, Router } from "@angular/router";
 
 @Injectable()
 export class VerificatokenGuard implements CanActivate {
   
-  constructor(public _usuarioService: UsuarioService,
+  constructor(public _usuarioService: AuthService,
               public router: Router) {}
   
   

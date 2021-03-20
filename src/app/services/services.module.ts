@@ -1,10 +1,8 @@
-  // import { ModalUploadService } from './../components/modal-upload/modal-upload.service';
-// import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
-    LoginGuardGuard,
+    LoginGuard,
     AdminGuard,
     VerificatokenGuard,
 
@@ -12,7 +10,7 @@ import {
     // SidebarService,
     // SharedService,
 
-    UsuarioService,
+    AuthService,
     // HospitalService,
     // MedicoService,
 
@@ -26,13 +24,13 @@ import {
       // HttpClientModule
     ],
     providers: [
-      LoginGuardGuard,
+      LoginGuard,
       AdminGuard,
       VerificatokenGuard,
       // SettingsService,
       // SidebarService,
       // SharedService,
-      UsuarioService,
+      AuthService,
       // HospitalService,
       // MedicoService,
       SubirArchivoService,

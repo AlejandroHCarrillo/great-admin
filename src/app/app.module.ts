@@ -40,7 +40,6 @@ import { ClientesService } from './services/clientes.service';
 import { ProductosComponent } from './components/productos/productos.component';
 import { ProductoComponent } from './components/productos/producto/producto.component';
 import { ProgressComponent } from './components/common/progress/progress.component';
-import { BargraphicComponent } from './components/graphics/bargraphic/bargraphic.component';
 import { NopagefoundComponent } from './components/common/nopagefound/nopagefound.component';
 import { PagesComponent } from './components/pages/pages.component';
 import { CatalogosComponent } from './components/catalogos/catalogos.component';
@@ -48,7 +47,6 @@ import { VentasComponent } from './components/ventas/ventas.component';
 import { AlumnosComponent } from './components/alumnos/alumnos.component';
 import { AlumnoComponent } from './components/alumnos/alumno/alumno.component';
 import { AlumnosService } from './services/alumnos.service';
-import { DireccionComponent } from './components/common/direccion/direccion.component';
 import { ModalImageComponent } from './components/common/modal-image/modal-image.component';
 import { UploadFilesComponent } from './components/common/upload-files/upload-files.component';
 import { UploadFilesService } from './shared/services/upload-files.service';
@@ -57,6 +55,8 @@ import { ImagesGalleryComponent } from './components/common/images-gallery/image
 import { CajaComponent } from './components/caja/caja.component';
 import { ButtonModule } from 'primeng/button';
 import { ProductosListComponent } from './components/productos/productos-list/productos-list.component';
+import { AlumnosListComponent } from './components/alumnos/alumnos-list/alumnos-list.component';
+import { AuthService, SubirArchivoService } from './services/services.index';
 @NgModule({
   declarations: [
     AppComponent,
@@ -73,14 +73,13 @@ import { ProductosListComponent } from './components/productos/productos-list/pr
     ProductosComponent,
     ProductoComponent,
     ProgressComponent,
-    BargraphicComponent,
     NopagefoundComponent,
     PagesComponent,
     CatalogosComponent,
     VentasComponent,
     AlumnosComponent,
     AlumnoComponent,
-    DireccionComponent,
+    AlumnosListComponent,
     ModalImageComponent,
     UploadFilesComponent,
     UploadFilesModalComponent,
@@ -116,10 +115,12 @@ import { ProductosListComponent } from './components/productos/productos-list/pr
   providers: [
     MessageService,
     ConfirmationService,
+    AuthService,
     SharedService,
     ClientesService,
     AlumnosService,
-    UploadFilesService
+    UploadFilesService,
+    SubirArchivoService
   ],
   bootstrap: [AppComponent]
 })

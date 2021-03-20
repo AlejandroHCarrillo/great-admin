@@ -16,7 +16,7 @@ import Swal from 'sweetalert2'
 import { fetchSimple, fetchToken } from "src/app/helpers/fetch";
 
 @Injectable()
-export class UsuarioService {
+export class AuthService {
   usuario: Usuario = new Usuario("", "", "");
 
   token: string = "";
@@ -161,67 +161,67 @@ export class UsuarioService {
     //       });
   }
 
-  crearUsuario(usuario: Usuario): any {
-    return fetchToken('usuario', usuario, 'POST')
-        .then((resp:any)=>{
-            if(!resp.ok){
-                console.log("Hubo un error creando el usuario");                
-            }
-            return resp.usuario;
-        });
+  // crearUsuario(usuario: Usuario): any {
+  //   return fetchToken('usuario', usuario, 'POST')
+  //       .then((resp:any)=>{
+  //           if(!resp.ok){
+  //               console.log("Hubo un error creando el usuario");                
+  //           }
+  //           return resp.usuario;
+  //       });
 
-    // let url = environment.baseUrl + "/usuario";
-    // return this.http.post(url, usuario)
-    //   .map((resp: any) => {
-    //     Swal.fire("Usuario creado", usuario.email, "success");
-    //   return resp.usuario;
-    // }).catch( err => {
-    //   Swal.fire(err.error.mensaje, err.error.errors.message, 'error');      
-    //   return throwError(err);
-    // });
+  //   // let url = environment.baseUrl + "/usuario";
+  //   // return this.http.post(url, usuario)
+  //   //   .map((resp: any) => {
+  //   //     Swal.fire("Usuario creado", usuario.email, "success");
+  //   //   return resp.usuario;
+  //   // }).catch( err => {
+  //   //   Swal.fire(err.error.mensaje, err.error.errors.message, 'error');      
+  //   //   return throwError(err);
+  //   // });
 
-  }
+  // }
 
-  actualizarUsuario(usuario: Usuario) {
+  // actualizarUsuario(usuario: Usuario) {
 
-    return fetchToken(`usuario/${usuario._id}`, usuario, 'PUT')
-                .then((resp: any)=>{
-                    if(usuario._id === this.usuario._id){
-                        let usuarioDB: Usuario = resp.usuario;
-                        console.log("usuarioDB: ", usuarioDB);
+  //   return fetchToken(`usuario/${usuario._id}`, usuario, 'PUT')
+  //               .then((resp: any)=>{
+  //                   if(usuario._id === this.usuario._id){
+  //                       let usuarioDB: Usuario = resp.usuario;
+  //                       console.log("usuarioDB: ", usuarioDB);
                         
-                        this.guardarStorage("usuarioDB._id", this.token, usuarioDB, this.menu);
-                      }
+  //                       this.guardarStorage("usuarioDB._id", this.token, usuarioDB, this.menu);
+  //                     }
               
-                      Swal.fire("Usuario actualizado", usuario.nombre, "success");
+  //                     Swal.fire("Usuario actualizado", usuario.nombre, "success");
               
-                      return true;              
-                })
-                .catch( err => {
-                    Swal.fire(err.error.mensaje, err.error.errors.message, 'error');      
-                    return throwError(err);
-                  });
+  //                     return true;              
+  //               })
+  //               .catch( err => {
+  //                   Swal.fire(err.error.mensaje, err.error.errors.message, 'error');      
+  //                   return throwError(err);
+  //                 });
 
-    // let url = environment.baseUrl + "/usuario/" + usuario._id;
-    // url += "?token=" + this.token;
+  //   // let url = environment.baseUrl + "/usuario/" + usuario._id;
+  //   // url += "?token=" + this.token;
 
-    // return this.http.put(url, usuario)
-    //   .map((resp: any) => {
-    //     // this.usuario = resp.usuario;
-    //     // Solo cuando actualizamos nuestro propio perfil actualiza el local storage
-    //     if(usuario._id === this.usuario._id){
-    //       let usuarioDB: Usuario = resp.usuario;
-    //       this.guardarStorage(usuarioDB._id, this.token, usuarioDB, this.menu);
-    //     }
+  //   // return this.http.put(url, usuario)
+  //   //   .map((resp: any) => {
+  //   //     // this.usuario = resp.usuario;
+  //   //     // Solo cuando actualizamos nuestro propio perfil actualiza el local storage
+  //   //     if(usuario._id === this.usuario._id){
+  //   //       let usuarioDB: Usuario = resp.usuario;
+  //   //       this.guardarStorage(usuarioDB._id, this.token, usuarioDB, this.menu);
+  //   //     }
 
-    //     Swal.fire("Usuario actualizado", usuario.nombre, "success");
+  //   //     Swal.fire("Usuario actualizado", usuario.nombre, "success");
 
-    //     return true;
-    // }).catch( err => {
-    //   Swal.fire(err.error.mensaje, err.error.errors.message, 'error');      
-    //   return throwError(err);
-    // });
-  }
+  //   //     return true;
+  //   // }).catch( err => {
+  //   //   Swal.fire(err.error.mensaje, err.error.errors.message, 'error');      
+  //   //   return throwError(err);
+  //   // });
+  // }
 
   cambiarImagen(archivo: File, id: string) {
     this._subirArchivoService
@@ -236,28 +236,28 @@ export class UsuarioService {
       });
   }
 
-  cargarUsuarios(desde: number = 0) {
-    let url = environment.baseUrl + "/usuario?desde=" + desde;
+  // cargarUsuarios(desde: number = 0) {
+  //   let url = environment.baseUrl + "/usuario?desde=" + desde;
 
-    return this.http.get(url);
-  }
+  //   return this.http.get(url);
+  // }
 
-  buscarUsuarios(termino: string) {
-    return fetchToken(`/busqueda/coleccion/usuario/${termino}`, null, 'GET');
+  // buscarUsuarios(termino: string) {
+  //   return fetchToken(`/busqueda/coleccion/usuario/${termino}`, null, 'GET');
     
-    // let url = environment.baseUrl + "/busqueda/coleccion/usuario/" + termino;
-    // return this.http.get(url).map((resp: any) => resp.usuario);
-  }
+  //   // let url = environment.baseUrl + "/busqueda/coleccion/usuario/" + termino;
+  //   // return this.http.get(url).map((resp: any) => resp.usuario);
+  // }
 
-  borrarUsuario(id: string) {
-    // console.log("borrando usuario");
-    return fetchToken(`usuario/${id}`, {}, 'DELETE');
+  // borrarUsuario(id: string) {
+  //   // console.log("borrando usuario");
+  //   return fetchToken(`usuario/${id}`, {}, 'DELETE');
 
-    // let url = environment.baseUrl + "/usuario/" + id;
-    // url += "?token=" + this.token;
-    // return this.http.delete(url).map(resp => {
-    //   Swal.fire("El usuario ha sido eliminado", "El usuario ha sido eliminado correctamente", "success");
-    //   return true;      
-    // });
-  }
+  //   // let url = environment.baseUrl + "/usuario/" + id;
+  //   // url += "?token=" + this.token;
+  //   // return this.http.delete(url).map(resp => {
+  //   //   Swal.fire("El usuario ha sido eliminado", "El usuario ha sido eliminado correctamente", "success");
+  //   //   return true;      
+  //   // });
+  // }
 }

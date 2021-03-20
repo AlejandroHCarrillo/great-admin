@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from 'src/app/services/services.index';
+import { AuthService } from 'src/app/services/services.index';
 // declare function init_plugins():any;
 // declare const gapi: any;
 @Component({
@@ -9,7 +9,7 @@ import { UsuarioService } from 'src/app/services/services.index';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor( private authService : UsuarioService ) { }
+  constructor( private authService : AuthService ) { }
 
   ngOnInit(): void {
   }

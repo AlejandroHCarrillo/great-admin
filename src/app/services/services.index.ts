@@ -2,7 +2,7 @@ export { LoginGuard } from './guards/login.guard';
 export { AdminGuard } from './guards/admin.guard';
 export { VerificatokenGuard } from './guards/verificatoken.guard';
 
-export { UsuarioService } from './usuario/usuario.service';
+export { AuthService } from './auth/auth.service';
 // export { HospitalService } from './hospital/hospital.service';
 // export { MedicoService } from './medico/medico.service';
 
