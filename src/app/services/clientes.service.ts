@@ -37,4 +37,12 @@ export class ClientesService {
     return fetchToken(`cliente/alumnos/${clienteId}`, {}, 'GET');
   }
 
+  saveAlumnoCliente( clienteId: string, alumnoId: string ){
+    return fetchToken(`cliente/alumnos/`, {cliente: clienteId, alumno: alumnoId}, 'POST');
+  }
+
+  delteAlumnoCliente( clienteId: string, alumnoId: string ){
+    return fetchToken(`cliente/alumnos/`, {cliente: clienteId, alumno: alumnoId}, 'DELETE');
+  }
+
 }

@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { PAGE_SIZE } from 'src/app/config/settings';
 
-import { Producto } from 'src/app/interfaces/producto';
-import { ProductosService } from 'src/app/services/productos.service';
+import { Alumno } from 'src/app/interfaces/alumno';
+import { AlumnosService } from 'src/app/services/alumnos.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-  
+    
 @Component({
-  selector: 'app-productos-list',
-  templateUrl: './productos-list.component.html',
-  styleUrls: ['./productos-list.component.css']
+  selector: 'app-alumnos-list',
+  templateUrl: './alumnos-list.component.html',
+  styleUrls: ['./alumnos-list.component.css']
 })
-export class ProductosListComponent implements OnInit {
+export class AlumnosListComponent implements OnInit {
   searchMode: boolean = false;
   txtbuscar: string = "";
   searchResultMsg = "";
@@ -27,9 +28,9 @@ export class ProductosListComponent implements OnInit {
 
   currentPage: number=0;
   totalRecords: number = 0;
-  productos: Producto[] = [];
+  alumnos: Alumno[] = [];
 
-  constructor(  private productosService: ProductosService,
+  constructor(  private alumnoService: AlumnosService,
                 public ref?: DynamicDialogRef, 
                 public config?: DynamicDialogConfig
                 ) { }
@@ -43,22 +44,22 @@ export class ProductosListComponent implements OnInit {
     let queryParams = `desde=${this.pageinfo.first}&records=${this.pageinfo.rows}&sort=${this.pageinfo.sort}`
 
     let prevScreen = localStorage.getItem("prevScreen") || '';
-    if (prevScreen == "producto"){
+    if (prevScreen == "alumno"){
       queryParams = localStorage.getItem("lastquery")||'';
       localStorage.setItem('prevScreen', '');
     }
 
-    // console.log(queryParams);
     localStorage.setItem('lastquery', queryParams);
     
-    this.productosService
-    .findProductos(queryParams, this.txtbuscar)
+    this.alumnoService
+    .findAlumnos(queryParams, this.txtbuscar)
     .then(async (resp)=>{
       const body = await resp.json();
-      this.productos = body.productos;
-      this.totalRecords = body.total;
+      this.alumnos = body.alumnos;
+      // this.totalRecords = body.total;
+      this.totalRecords = body.found;
       this.searchResultMsg = `Se encontraron ${body.found || 0 } registros.`
-
+      // console.log(body);
     })
     .catch((e)=>{
         console.log("error: ", e);            
@@ -68,6 +69,7 @@ export class ProductosListComponent implements OnInit {
   paginate(pageEvent:any){
     if(pageEvent.page != this.currentPage){
       this.currentPage = pageEvent.page;
+      // console.log("cambio de pagina", pageEvent);
       this.pageinfo = {
         ...this.pageinfo,
         ...pageEvent

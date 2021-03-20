@@ -47,9 +47,9 @@
                     <input type="text" class="form-control" id="producto" placeholder=""
                     name="producto" 
                     [(ngModel)]="currtransaction.producto.nombre"
-                    (keyup.enter)="show()"
+                    (keyup.enter)="showProductosList()"
                     >
-                    <button class="btn btn-primary" (click)="show()">
+                    <button class="btn btn-primary" (click)="showProductosList()">
                         <span class="icon"><i class="fas fa-search"></i></span>
                     </button>
                 </div>

@@ -14,8 +14,7 @@ import { ProductosListComponent } from '../productos/productos-list/productos-li
 @Component({
   selector: 'app-caja',
   templateUrl: './caja.component.html',
-  styleUrls: ['./caja.component.css'],
-  providers: [ DialogService ]
+  styleUrls: ['./caja.component.css']
 })
 
 export class CajaComponent implements OnInit {
@@ -368,7 +367,7 @@ export class CajaComponent implements OnInit {
       },
       descuento: this.shoppingcart[index].descuento
     };
-    
+
     this.errorMsgsCurTrns = [];
   }
 
@@ -387,7 +386,7 @@ export class CajaComponent implements OnInit {
     });
   }
 
-  show() {
+  showProductosList() {
     const ref = this.dialogService.open(ProductosListComponent, {
       header: 'Seleccione un producto',
       width: '70%',

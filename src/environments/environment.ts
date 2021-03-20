@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:4000/api'
+  baseUrl: 'http://localhost:4000/api',
+  cloudUrl: 'https://api.cloudinary.com/v1_1/alexthegreat/upload'
 };
 
 /*

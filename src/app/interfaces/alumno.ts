@@ -20,7 +20,7 @@ export class Alumno {
         public ttrabajo: string = "", 
         public email: string = "", 
         public notas: string = "", 
-        public urlFoto: string = ""
+        public img: string = ""
         )
     {}
 

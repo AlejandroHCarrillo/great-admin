@@ -7,6 +7,11 @@ import Swal from 'sweetalert2'
 import { REGEXP_EMAIL, REGEXP_RFC, REGEXP_CURP } from '../../../config/settings'
 import { SharedService } from 'src/app/services/shared.service';
 import { ClientesService } from 'src/app/services/clientes.service';
+import { DialogService } from 'primeng/dynamicdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { AlumnosListComponent } from '../../alumnos/alumnos-list/alumnos-list.component';
+import { Alumno } from 'src/app/interfaces/alumno';
+import { AlumnoViewComponent } from '../../alumnos/alumno-view/alumno-view.component';
 @Component({
   selector: 'app-cliente',
   templateUrl: './cliente.component.html',
@@ -29,11 +34,29 @@ export class ClienteComponent implements OnInit {
     matricula: string,
     id: string
   }[] = [];
+
+  selectedIndex: number = -1;
+
+  private emptyalumno = { 
+    index: 0,
+    activo: true,
+    nombre: "",
+    apaterno: "",
+    amaterno: "",
+    email: "",
+    id: "",
+    img: "",
+  };
+
+  curralumno = this.emptyalumno;
   
   constructor(  private fb: FormBuilder,
                 private route: ActivatedRoute,
                 private myService :  SharedService,
-                private clientesService :  ClientesService  ){}
+                private clientesService :  ClientesService,
+                private dialogService: DialogService,
+                private confirmationService: ConfirmationService,
+                private messageService: MessageService  ){}
 
   ngOnInit() {
     this.clientId = this.route.snapshot.paramMap.get("id") || "";
@@ -305,5 +328,70 @@ export class ClienteComponent implements OnInit {
       // console.log(this.alumnoscliente);      
     });
   }
-  
+
+  deleteCartItem(index:number){
+    // console.log("delete data", index);
+
+    this.confirmationService.confirm({
+      message: '¿En verdad deseas eliminar este registro?',
+      accept: () => {
+        let scClon = [...this.alumnoscliente];
+        this.alumnoscliente = [ ...scClon.splice(0, index), 
+                              ...this.alumnoscliente.splice(index+1)
+                            ];
+        this.selectedIndex = -1;
+        }
+    });
+  }
+
+
+  showAlumnosList() {
+    const ref = this.dialogService.open(AlumnosListComponent, {
+      header: 'Seleccione un alumno',
+      width: '70%',
+      data: {
+        searchtext: this.form.value.apaterno
+      }
+    });
+
+    ref.onClose.subscribe((alumno: Alumno) => {
+        // console.log("Alumno seleccionado: ", alumno);
+        if (!alumno) return;
+
+        this.curralumno = { ...alumno, index:0 };
+        if (alumno) {
+            this.messageService.add({severity:'info', summary: 'Alumno seleccionado', detail:'matricula:' + alumno.matricula });
+        }
+        
+        console.log("Iniciando save alumno cliente");        
+        this.clientesService.saveAlumnoCliente( this.clientId, alumno.id )
+        .then(async(resp)=>{
+          
+          const body = await resp.json();
+          
+          if(!body.ok){
+            Swal.fire({
+              title: 'Error guardando el alumno relacionado al cliente!',
+              text:  body.msg,
+              icon: 'error',
+              confirmButtonText: 'Continuar'
+            });            
+            return;
+          }
+          this.alumnoscliente.push({ ...alumno });
+        });
+    });
+  }
+
+  showAlumnoView(alumnoId:string=""){
+    // console.log("alumnoId: ", alumnoId);    
+    const ref = this.dialogService.open(AlumnoViewComponent, {
+      header: 'Perfil del alumno',
+      width: '70%',
+      data: {
+        searchtext: alumnoId
+      }
+    });
+  }
+
 }

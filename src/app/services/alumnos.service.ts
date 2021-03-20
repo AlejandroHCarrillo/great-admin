@@ -18,7 +18,7 @@ export class AlumnosService {
   }
 
   getAlumnoById(id:string) {
-    return fetchToken(`alumno/${id}`, {}, 'GET');
+    return fetchToken(`alumno/${id}`, null, 'GET');
   }
 
   save(alumno:any){
