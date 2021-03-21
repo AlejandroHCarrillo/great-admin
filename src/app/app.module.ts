@@ -14,7 +14,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { PaginatorModule } from 'primeng/paginator';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
@@ -115,6 +115,7 @@ import { AuthService, SubirArchivoService } from './services/services.index';
   providers: [
     MessageService,
     ConfirmationService,
+    DialogService,
     AuthService,
     SharedService,
     ClientesService,

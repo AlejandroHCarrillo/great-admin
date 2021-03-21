@@ -3,8 +3,6 @@
 
 /* You can add global styles to this file, and also import other style files */
 
-
-
 .main-container{
     margin: 0;
 }
@@ -130,6 +128,18 @@ button{
     width: auto;
     border-radius: 10px;
   }
+
+.image-large{
+    height: 200px;
+    width: auto;
+}
+
+.image-large-rounded{
+    height: 200px;
+    width: auto;
+    border-radius: 30px;
+}
+
 
 @media screen and (max-width:992px){
     .fab{

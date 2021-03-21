@@ -1,5 +1,4 @@
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
-
 <div class="container">
     <h1>Caja</h1> 
     <hr>
@@ -96,12 +95,11 @@
         </div>
     </div>
 
-
     <div class="shadow p-3 mb-2 bg-body rounded">
 
         <p-table [value]="shoppingcart" >
             <ng-template pTemplate="header">
-                <tr>
+                <tr (click)="selectedIndex=-1">
                     <th class="col-small">Cant</th>
                     <th class="col-medium">Code</th>
                     <th>Producto</th>
@@ -133,27 +131,13 @@
             </ng-template>
             <ng-template pTemplate="footer">
                 <tr>
-                    <td colspan="6"></td>
-                    <td class="text-end">Subtotal:</td>
-                    <td class="text-end">{{ subtotal | currency }}</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="6"></td>
-                    <td class="text-end">Descuentos:</td>
-                    <td class="text-end">{{ sumaDescuentos | currency }}</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="6"></td>
-                    <td class="text-end">IVA:</td>
-                    <td class="text-end">{{ sumaIVA | currency }}</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="6"></td>
-                    <td class="text-end">Total:</td>
-                    <td class="text-end">{{ total | currency }}</td>
+                    <td colspan="5"></td>
+                    <td colspan="3" style="text-align: right;">
+                        Subtotal: <span style="min-width: 300px; background: white;">&nbsp;{{ subtotal | currency }}</span><br>
+                        Descuentos: <span style="min-width: 300px; background: white;">&nbsp;{{ sumaDescuentos | currency }} </span> <br>
+                        IVA: <span style="min-width: 300px; background: white;">&nbsp;{{ sumaIVA | currency }} </span> <br>
+                        Total: <span style="min-width: 300px; background: white;">&nbsp;{{ total | currency }} </span> <br>
+                    </td>
                     <td></td>
                 </tr>
             </ng-template>
@@ -161,8 +145,4 @@
 
     </div>
     
-    <pre>
-        shoppingcart: {{ shoppingcart | json }}
-    </pre>
-
 </div>
