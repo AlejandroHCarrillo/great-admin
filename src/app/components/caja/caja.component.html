@@ -26,16 +26,32 @@
         </div>
         </div>
         <div class="row">
-        <label for="producto" class="form-label" >Alumno:</label>
-        <div class="col">
-            <p-dropdown [options]="alumnoslist"
-            optionLabel="name"
-            name="alumnoslist"
-            [(ngModel)]="alumnoSelected"
-            >
-        </p-dropdown>
-    </div>
+            <label for="producto" class="form-label" >Alumno:</label>
+            <div class="col">
+                <p-dropdown [options]="alumnoslist"
+                            optionLabel="name"
+                            name="alumnoslist"
+                            [(ngModel)]="alumnoSelected"
+                            (onChange)="alumnochanged($event)"
+                            [disabled]="!alumnosdrdwnenabled || shoppingcart.length !== 0 "
+                            >
+                </p-dropdown>
+            </div>
         </div>
+        <div class="grid-cards">
+            <!-- [ngClass]="{ 'cargo-danger' : daysToExpire(cargo.fechavencimiento) < 0, 'cargo-warning' : daysToExpire(cargo.fechavencimiento)>0 && daysToExpire(cargo.fechavencimiento) < 15 } " > -->
+            <div *ngFor="let cargo of cargosalumno; let i = index" 
+                [class]="setClassPago(cargo.fechavencimiento, cargo.estatus)" 
+                (click)="setCargo(i)"
+                >
+                <div class="">
+                    {{ cargo.concepto }}<br>
+                    Monto: <strong>{{ cargo.monto | currency}}</strong><br>
+                    {{ cargo.fechavencimiento | date }}<br>
+                    <small>{{ cargo.estatus }}</small><br>
+                </div>
+            </div>
+        </div>    
     </div>
 
     <div class="shadow p-3 mb-2 bg-body rounded">
@@ -88,6 +104,7 @@
             <div class="col">
                 <label for="producto" class="form-label" >&nbsp;</label>
                 <button class="btn btn-primary" (click)="addProduct()">+</button>
+                <button class="btn btn-primary" (click)="cleanShoppingCart()">x</button>
             </div>
         </div>
         <div *ngIf="errorMsgsCurTrns.length>0">

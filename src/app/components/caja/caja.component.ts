@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PAGE_SIZE } from '../../config/settings'
+import { DIA_MILLISECONDS, PAGE_SIZE } from '../../config/settings'
+import * as moment from 'moment';
 
 import { Alumno } from 'src/app/interfaces/alumno';
 import { AlumnosService } from 'src/app/services/alumnos.service';
@@ -10,6 +11,8 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { Producto } from 'src/app/interfaces/producto';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProductosListComponent } from '../productos/productos-list/productos-list.component';
+import { CargoItem } from 'src/app/interfaces/cargo-item';
+import { CargosService } from 'src/app/services/cargos.service';
 
 @Component({
   selector: 'app-caja',
@@ -54,117 +57,17 @@ export class CajaComponent implements OnInit {
 
   currentPage: number=0;
   totalRecords: number = 0;
-  alumnos: Alumno[] = [];
 
-  shoppingcart: CartItem[]= [
-    {
-      "index": 0,
-      "id": "",
-      "productoId": "604fcf2da3eaca46e8296845",
-      "precio": 25,
-      "cantidad": 1,
-      "tasaIVA": 10,
-      "impuestos": 2.5,
-      "descuento": 2,
-      "monto": 25,
-      "productoNombre": "1Manzana amarilla GOLDEN",
-      "productoCode": "MZNGLDN"
-    },
-    {
-      "index": 0,
-      "id": "",
-      "productoId": "604fb5b939009a2fc0e2f750",
-      "precio": 50,
-      "cantidad": 0,
-      "tasaIVA": 100,
-      "impuestos": 0,
-      "descuento": 10,
-      "monto": 0,
-      "productoNombre": "2Manzana roja ",
-      "productoCode": "MZNAWSHRDL"
-    },
-    {
-      "index": 0,
-      "id": "",
-      "productoId": "604fcf2da3eaca46e8296845",
-      "precio": 25,
-      "cantidad": 1,
-      "tasaIVA": 10,
-      "impuestos": 2.5,
-      "descuento": 2,
-      "monto": 25,
-      "productoNombre": "3Manzana amarilla GOLDEN",
-      "productoCode": "MZNGLDN"
-    },
-    {
-      "index": 0,
-      "id": "",
-      "productoId": "604fb5b939009a2fc0e2f750",
-      "precio": 50,
-      "cantidad": 0,
-      "tasaIVA": 100,
-      "impuestos": 0,
-      "descuento": 10,
-      "monto": 0,
-      "productoNombre": "4Manzana roja ",
-      "productoCode": "MZNAWSHRDL"
-    },
-    {
-      "index": 0,
-      "id": "",
-      "productoId": "604fcf2da3eaca46e8296845",
-      "precio": 25,
-      "cantidad": 1,
-      "tasaIVA": 10,
-      "impuestos": 2.5,
-      "descuento": 2,
-      "monto": 25,
-      "productoNombre": "5Manzana amarilla GOLDEN",
-      "productoCode": "MZNGLDN"
-    },
-    {
-      "index": 0,
-      "id": "",
-      "productoId": "604fb5b939009a2fc0e2f750",
-      "precio": 50,
-      "cantidad": 0,
-      "tasaIVA": 100,
-      "impuestos": 0,
-      "descuento": 10,
-      "monto": 0,
-      "productoNombre": "6Manzana roja ",
-      "productoCode": "MZNAWSHRDL"
-    },
-    {
-      "index": 0,
-      "id": "",
-      "productoId": "604fcf2da3eaca46e8296845",
-      "precio": 25,
-      "cantidad": 1,
-      "tasaIVA": 10,
-      "impuestos": 2.5,
-      "descuento": 2,
-      "monto": 25,
-      "productoNombre": "7Manzana amarilla GOLDEN",
-      "productoCode": "MZNGLDN"
-    },
-    {
-      "index": 0,
-      "id": "",
-      "productoId": "604fb5b939009a2fc0e2f750",
-      "precio": 50,
-      "cantidad": 0,
-      "tasaIVA": 100,
-      "impuestos": 0,
-      "descuento": 10,
-      "monto": 0,
-      "productoNombre": "8Manzana roja ",
-      "productoCode": "MZNAWSHRDL"
-    },            
-  ];
+  alumnos: Alumno[] = [];
+  cargosalumno: CargoItem[] = [];
+
+  shoppingcart: CartItem[]= [];
+
+  alumnosdrdwnenabled = true;
 
   constructor(  private router: Router,
                 private alumnosService: AlumnosService,
+                private cargosService: CargosService,
                 private dialogService: DialogService,
                 private confirmationService: ConfirmationService,
                 private messageService: MessageService
@@ -173,41 +76,10 @@ export class CajaComponent implements OnInit {
 
   ngOnInit(): void {
     // this.loadAlumnos()
-  }
-
-  loadAlumnos(){
-    console.log("Cargando alumnos");
-    
-    let queryParams = `desde=${this.pageinfo.first}&records=${this.pageinfo.rows}&sort=${this.pageinfo.sort}`
-
-    let prevScreen = localStorage.getItem("prevScreen") || '';
-    if (prevScreen == "caja"){
-      queryParams = localStorage.getItem("lastquery")||'';
-      localStorage.setItem('prevScreen', '');
-    }
-
-    // console.log(queryParams);
-    localStorage.setItem('lastquery', queryParams);
-    
-    this.alumnosService
-    .getAlumnos(queryParams)
-    .then(async (resp:any)=>{
-      const body = await resp.json();
-      this.alumnos = body.alumnos;
-      this.totalRecords = body.total;
-      this.searchResultMsg = "";
-    })
-    .catch((e:any)=>{
-        console.log("error: ", e);            
-    });
+    this.alumnochanged({ value: { code: "605018e1ab32bf465014d1a4"}});
   }
 
   buscar(){
-    // if (!this.txtbuscar || this.txtbuscar===""){
-    //   this.loadAlumnos();
-    //   return;
-    // }
-
     let queryParams = `desde=${this.pageinfo.first}&records=${this.pageinfo.rows}&sort=${this.pageinfo.sort}`
 
     let prevScreen = localStorage.getItem("prevScreen") || '';
@@ -234,33 +106,27 @@ export class CajaComponent implements OnInit {
       }
 
       this.searchResultMsg = `Se encontraron ${body.found} registros.`
+      this.setfocus("alumnoslist");
     })
     .catch((e)=>{
         console.log("error: ", e);            
     });
   }
 
+  async alumnochanged(event: any){
+    this.alumnosdrdwnenabled = false;
+    console.log("alumnochanged", event.value.code);
+    if (event.value.code !== -1 && event.value.code.length >= 24 ) {
+      this.cargosalumno = await this.cargosService.findCargos(event.value.code);
+    } else {
+      this.cargosalumno = [];
+    }
+    this.alumnosdrdwnenabled = true;
+    this.setfocus("producto");
+  }
+
   edit(id?:string){
     this.router.navigate([`caja/${id}`]);
-  }
-
-  paginate(pageEvent:any){
-    // if(pageEvent.page != this.currentPage){
-      this.currentPage = pageEvent.page;
-      console.log("cambio de pagina", pageEvent);
-      this.pageinfo = {
-        ...this.pageinfo,
-        ...pageEvent
-      };
-
-      this.loadAlumnos();
-    // }
-  }
-
-  setOrder(colname:string){
-    this.pageinfo.sort = colname;
-    this.pageinfo.first = 0;    
-    this.loadAlumnos();
   }
 
   get subtotal(){
@@ -414,6 +280,54 @@ export class CajaComponent implements OnInit {
 
   setfocus(controlname: string){
     document.getElementsByName(controlname)[0].focus();
+    
   }
 
+  daysToExpire(fecha:string){
+    return moment(fecha).diff(new Date().getTime())/( DIA_MILLISECONDS );
+  }
+
+  setClassPago(fecha: string, estatus: string){
+    let diff = this.daysToExpire(fecha);
+    let classCargo = "card cargo ";
+
+    if( estatus === "PAGADO" ) 
+      return `${ classCargo } cargo-success`;
+
+    if( estatus === "NO_PAGADO" && diff < 0 ) 
+      return `${ classCargo } cargo-danger`;
+
+    if( estatus === "NO_PAGADO" && diff > 0 && diff < 15 ) 
+      return `${ classCargo } cargo-warning`;
+
+    return classCargo;
+  }
+
+  setCargo(index:number){
+    let cargo = this.cargosalumno[index];
+    console.log("index: ", cargo );
+
+    const item = new CartItem(0, "",
+                      cargo.producto.id || "",
+                      cargo.producto.precio,
+                      cargo.cantidad,
+                      cargo.tasaIVA,
+                      cargo.impuestos,
+                      cargo.descuento,
+                      cargo.monto,
+                      `${cargo.producto.descripcion} ${ cargo.concepto }` ,
+                      cargo.producto.code
+                    );
+  this.shoppingcart.push(item);
+  }
+
+  cleanShoppingCart(){
+    this.confirmationService.confirm({
+      message: '¿En verdad deseas limpiar las transacciones?',
+      accept: () => {
+        this.shoppingcart = [];
+        this.selectedIndex = -1;
+        }
+    });   
+  }
 }

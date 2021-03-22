@@ -1,3 +1,31 @@
 .icon:hover{
     color:red;
 }
+
+.cargo{
+    height: auto;
+    width: 150px;
+    cursor: pointer;
+    padding-left: 5px;
+    font-size: 13px;
+}
+
+.cargo:hover{
+    transform: translate(1px) translateY(-2px);
+    box-shadow: -4px 4px 2px #979797;
+    transition: box-shadow .5s;
+}
+
+.cargo-warning{
+    background-color: rgb(250, 200, 100);
+}
+
+.cargo-danger{
+    background-color: rgb(210, 60, 60);
+    color: white;
+}
+
+.cargo-success{
+    background-color: rgb(100, 200, 100);
+    color: white;
+}
