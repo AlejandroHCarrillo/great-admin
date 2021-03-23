@@ -43,12 +43,16 @@
             <div *ngFor="let cargo of cargosalumno; let i = index" 
                 [class]="setClassPago(cargo.fechavencimiento, cargo.estatus)" 
                 (click)="setCargo(i)"
+                [ngClass]="{'cargo-added': cargo.isAddedSC}"
                 >
                 <div class="">
                     {{ cargo.concepto }}<br>
                     Monto: <strong>{{ cargo.monto | currency}}</strong><br>
                     {{ cargo.fechavencimiento | date }}<br>
                     <small>{{ cargo.estatus }}</small><br>
+                    <div class="corner-right-top" *ngIf="cargo.isAddedSC" (click)="removeCargo(i)">
+                        <span class="icon"><i class="fas fa-trash-alt"></i></span>
+                    </div>
                 </div>
             </div>
         </div>    
@@ -131,8 +135,8 @@
             <ng-template pTemplate="body" let-p let-i="rowIndex">
                 <tr (click)="selectedItem(i)" (dblclick)="setEditCartItem(i)" >
                     <td style="text-align: center;">{{p.cantidad}}</td>
-                    <td class="col-medium text-start mr-10" >{{p.productoCode}}</td>
-                    <td class="col-extra-large text-start" >{{p.productoNombre}}</td>
+                    <td class="col-medium text-start mr-10" >{{p.producto.code}}</td>
+                    <td class="col-extra-large text-start" >{{p.producto.nombre}}</td>
                     <td style="text-align: right;">{{p.precio | currency }}</td>
                     <td style="text-align: center;">{{p.descuento | currency }}</td>
                     <td style="text-align: center;">{{p.tasaIVA}}%</td>
@@ -156,6 +160,10 @@
                         Total: <span style="min-width: 300px; background: white;">&nbsp;{{ total | currency }} </span> <br>
                     </td>
                     <td></td>
+                </tr>
+                <tr>
+                    <td colspan="7"></td>
+                    <td><button class="btn btn-primary">Pago</button></td>
                 </tr>
             </ng-template>
         </p-table>

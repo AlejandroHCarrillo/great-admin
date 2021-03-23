@@ -14,7 +14,8 @@ export class CargoItem {
         public descuento: number = 0,
         public monto: number = 0,
         public estatus: string,
-        public producto: Producto,
+        public producto: { id:string, code: string, nombre: string, precio: number, tasaIVA: number },
+        public isAddedSC: boolean = false,
         public productoNombre?: string,
         public productoCode?: string,
         )

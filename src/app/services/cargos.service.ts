@@ -19,7 +19,7 @@ export class CargosService {
     await fetchToken(`cargo/find/${buscar}`, "", 'GET')
       .then( async (resp) => {
         const body = await resp.json();
-  console.log(body);
+  // console.log(body);
         retCargos = body.cargos;
       } );
     return retCargos;

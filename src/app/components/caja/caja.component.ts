@@ -13,6 +13,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProductosListComponent } from '../productos/productos-list/productos-list.component';
 import { CargoItem } from 'src/app/interfaces/cargo-item';
 import { CargosService } from 'src/app/services/cargos.service';
+import { eEstatusPagos } from 'src/app/config/enums';
 
 @Component({
   selector: 'app-caja',
@@ -46,18 +47,6 @@ export class CajaComponent implements OnInit {
   isSingleClick: Boolean = true;
   errorMsgsCurTrns: string[] = [];
 
-  pagesize = PAGE_SIZE;
-  pageinfo = {
-                first : 0,
-                rows : this.pagesize,
-                page : 0,
-                pageCount : 0,
-                sort: 'nombre'
-          };
-
-  currentPage: number=0;
-  totalRecords: number = 0;
-
   alumnos: Alumno[] = [];
   cargosalumno: CargoItem[] = [];
 
@@ -80,7 +69,7 @@ export class CajaComponent implements OnInit {
   }
 
   buscar(){
-    let queryParams = `desde=${this.pageinfo.first}&records=${this.pageinfo.rows}&sort=${this.pageinfo.sort}`
+    let queryParams = `desde=${""}&records=${""}&sort=${""}`
 
     let prevScreen = localStorage.getItem("prevScreen") || '';
     if (prevScreen == "caja"){
@@ -96,7 +85,7 @@ export class CajaComponent implements OnInit {
     .then(async (resp:any)=>{
       const body = await resp.json();
       this.alumnos = body.alumnos;
-      this.totalRecords = body.total;
+      // this.totalRecords = body.total;
 
       if(this.alumnos){
         // console.log("Alumnos: ", this.alumnos );
@@ -115,7 +104,7 @@ export class CajaComponent implements OnInit {
 
   async alumnochanged(event: any){
     this.alumnosdrdwnenabled = false;
-    console.log("alumnochanged", event.value.code);
+
     if (event.value.code !== -1 && event.value.code.length >= 24 ) {
       this.cargosalumno = await this.cargosService.findCargos(event.value.code);
     } else {
@@ -167,20 +156,18 @@ export class CajaComponent implements OnInit {
     const montoImpuestos = monto * (t.producto.tasaIVA/100);
 
     const item = new CartItem(t.index, "",
-      t.producto.id,
       t.producto.precio,
       t.cantidad,
       t.producto.tasaIVA,
       montoImpuestos,
       t.descuento,
       monto,
-      t.producto.nombre,
-      t.producto.code
+      t.producto
     );
 
-    if(this.selectedIndex !== -1){
-      console.log("Actualizar la edicion el la posicion ", this.selectedIndex);
-      
+    if(this.selectedIndex > -1){
+      // console.log("Actualizar la edicion el la posicion ", this.selectedIndex);
+      this.shoppingcart[this.selectedIndex] = item;
     } else{
       this.shoppingcart.push(item);
     }
@@ -224,9 +211,9 @@ export class CajaComponent implements OnInit {
       index: index,
       cantidad: this.shoppingcart[index].cantidad,
       producto: {
-        id: this.shoppingcart[index].productoId,
-        code: this.shoppingcart[index].productoCode||"",
-        nombre: this.shoppingcart[index].productoNombre||"",
+        id: this.shoppingcart[index].producto.id,
+        code: this.shoppingcart[index].producto.code||"",
+        nombre: this.shoppingcart[index].producto.nombre||"",
         precio: this.shoppingcart[index].precio,
         exentoIVA: false,
         tasaIVA: this.shoppingcart[index].tasaIVA
@@ -238,16 +225,17 @@ export class CajaComponent implements OnInit {
   }
 
   deleteCartItem(index:number){
-    // console.log("delete data", index);
+    let cargoIndex = this.shoppingcart[index].cargoindex || -1;
 
     this.confirmationService.confirm({
-      message: '¿En verdad deseas eliminar este registro?',
+      message: '¿En verdad deseas eliminar este cargo de la lista?',
       accept: () => {
         let scClon = [...this.shoppingcart];
         this.shoppingcart = [ ...scClon.splice(0, index), 
                               ...this.shoppingcart.splice(index+1)
                             ];
         this.selectedIndex = -1;
+        this.cargosalumno[cargoIndex].isAddedSC = false;
         }
     });
   }
@@ -291,34 +279,62 @@ export class CajaComponent implements OnInit {
     let diff = this.daysToExpire(fecha);
     let classCargo = "card cargo ";
 
-    if( estatus === "PAGADO" ) 
+    if( estatus === eEstatusPagos.PAGADO ) 
       return `${ classCargo } cargo-success`;
 
-    if( estatus === "NO_PAGADO" && diff < 0 ) 
+    if( estatus === eEstatusPagos.CANCELADO ) 
+      return `${ classCargo } cargo-canceled`;
+
+    if( estatus === eEstatusPagos.NO_PAGADO && diff < 0 ) 
       return `${ classCargo } cargo-danger`;
 
-    if( estatus === "NO_PAGADO" && diff > 0 && diff < 15 ) 
+    if( estatus === eEstatusPagos.NO_PAGADO && diff > 0 && diff < 15 ) 
       return `${ classCargo } cargo-warning`;
 
     return classCargo;
   }
 
-  setCargo(index:number){
-    let cargo = this.cargosalumno[index];
-    console.log("index: ", cargo );
+  setCargo(cargoIndex:number){
+    let cargo = this.cargosalumno[cargoIndex];
+    // console.log(cargo);
+    if( !!cargo.isAddedSC ){
+      // console.log("El cargo ya habia sido agregado.");
+      return;
+    }
+    
+    if( cargo.estatus === eEstatusPagos.PAGADO ||
+        cargo.estatus === eEstatusPagos.CANCELADO 
+        ) 
+      { 
+        // console.log("Cargos Pagados y cancelados no se pueden agregar");
+          return;
+      }
 
+    console.log("index: ", cargo.producto );
+    cargo.producto.nombre += " / " + cargo.concepto;
     const item = new CartItem(0, "",
-                      cargo.producto.id || "",
+                      // cargo.producto.id || "",
                       cargo.producto.precio,
                       cargo.cantidad,
                       cargo.tasaIVA,
                       cargo.impuestos,
                       cargo.descuento,
                       cargo.monto,
-                      `${cargo.producto.descripcion} ${ cargo.concepto }` ,
-                      cargo.producto.code
+                      cargo.producto,
+                      cargoIndex
                     );
-  this.shoppingcart.push(item);
+
+    console.log("cart item: ", item);
+    
+    this.shoppingcart.push(item);
+    this.cargosalumno[cargoIndex].isAddedSC = true;
+  }
+
+  removeCargo(index: number){
+    // console.log("remover cargo: ", index);
+    let CargoInCartIndex = this.shoppingcart.findIndex((scItem) =>( scItem.cargoindex === index) );
+    // console.log("shoppinchart position: ", CargoInCartIndex);
+    this.deleteCartItem(CargoInCartIndex);
   }
 
   cleanShoppingCart(){
@@ -327,6 +343,10 @@ export class CajaComponent implements OnInit {
       accept: () => {
         this.shoppingcart = [];
         this.selectedIndex = -1;
+
+        this.cargosalumno.forEach( (c) => {
+          c.isAddedSC = false;
+        });
         }
     });   
   }
