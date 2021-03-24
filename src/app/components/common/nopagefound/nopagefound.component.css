@@ -1,0 +1,12 @@
+.in-the-middle{
+    margin: auto;
+    margin-top: 10%;
+    width: 50%;
+    height: 50%;
+    border: 3px solid green;
+    padding: 10px;        
+    color: blue;    
+
+    text-align: center;
+    padding-top: 10%;
+}

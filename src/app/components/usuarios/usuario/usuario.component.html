@@ -1,178 +1,147 @@
 <div class="container">
+    
+    <div style="float: right;">
+        <span class="icon"><i class="fas fa-pencil-alt"></i></span>
+
+        <p-checkbox #editcheck
+            name="edit" 
+            value="editMode" 
+            label=""
+            (click)="toggleEdit()"
+        >
+        </p-checkbox>
+    </div>
+    
     <h1><small>Usuario</small></h1>
     <hr>
-    
-    <!-- <form [formGroup]="usuarioForm" (ngSubmit)="guardar()" > -->
-        <div class="row form-group"  >
+    <!-- Roles: {{ roles | json }} -->
+    <!-- Rol seleccionado: {{ form.selectedRol | json }} -->
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-group row col">
             <div class="row mt-3 ">
                 <div class="col"> 
                     <div class="mb-3 form-group form">
                         <label for="nombre" class="form-label">Nombre:</label>
                         <input type="text" class="form-control" id="nombre" placeholder="Escriba el nombre" maxlength="30"
-                        name="nombre"    
+                        name="nombre" 
                         formControlName="nombre"
+                        [class.is-invalid]="isInvalidControl('nombre')"
                         >
-                    </div>        
-                </div>
-                <div class="col"> 
-                    <div class="mb-3 form">
-                        <label for="apaterno" class="form-label">Apellido paterno:</label>
-                        <input type="text" class="form-control" id="apaterno" placeholder="Escriba el apellido paterno" maxlength="30">
-                    </div>        
-                </div>
-                <div class="col"> 
-                    <div class="mb-3 form">
-                        <label for="amaterno" class="form-label">Apellido materno:</label>
-                        <input type="text" class="form-control" id="amaterno" placeholder="Escriba el apellido materno" maxlength="30">
-                    </div>        
-                </div>
-            </div>
-        
-            <div class="row">
-                <div class="col"> 
-                    <div class="mb-3 form">
-                        <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
-                        <p-calendar [(ngModel)]="fechaNacimiento"></p-calendar>
-                    </div>        
-                </div>
-                <div class="col"> 
-                    <div class="mb-3 form">
-                        <label for="rfc" class="form-label">RFC:</label>
-                        <input type="text" class="form-control" id="rfc" placeholder="Escriba el RFC" maxlength="25">
-                    </div>        
-                </div>
-                <div class="col"> 
-                    <div class="mb-3 form">
-                        <label for="fechaIngreso" class="form-label">Fecha de Ingreso:</label>
-                        <p-calendar [(ngModel)]="fechaIngreso" ></p-calendar>
-                    </div>        
-                </div>        
-            </div>
-            
-            <div class="row">
-                <div class="col"> 
-                    <label for="matricula" class="form-label">Matricula:</label>
-                    <input type="text" class="form-control" id="matricula" placeholder="Escriba la matricula" maxlength="15">
-                </div>
-                <div class="col">
-                    <label for="curp" class="form-label">CURP:</label>
-                    <input type="text" class="form-control" id="curp" placeholder="Escriba la CURP" maxlength="18">
-                </div>
-                <div class="col"> 
-                    <div class="mb-3 form">
-                        <label for="sexo" class="form-label">Sexo:</label>
-                        <div class="form-check">
-                            <p-radioButton name="sexo" value="M" [(ngModel)]="sexo"></p-radioButton>
-                            <label class="form-check-label" for="flexRadioDefault1">
-                                &nbsp;Masculino
-                            </label>
-                        </div>
-                        <div class="form-check">
-
-                            <p-radioButton name="sexo" value="F" [(ngModel)]="sexo"></p-radioButton>
-                            <label class="form-check-label" for="flexRadioDefault1">
-                                &nbsp;Femenino
-                            </label>
-                        </div>
-                    </div>        
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col"> 
-                    Direccion:            
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-6"> 
-                    <div class="mb-3 form">
-                        <label for="callenumero" class="form-label">Calle y numero:</label>
-                        <input type="text" class="form-control" id="callenumero" placeholder="Escriba la calle y el numero" maxlength="100">
-                    </div>        
-                </div>
-                <div class="col-6" >
-                    <div class="mb-3 form">
-                        <label for="colonia" class="form-label">Colonia:</label>
-                        <br>
-                        <!-- <input type="text" class="form-control" id="colonia" placeholder="Escriba la colonia" maxlength="100"> -->
-                        <p-autoComplete 
-                            class="p-autocomplete" 
-                            [minLength]="3" [delay]="200"
-                            [forceSelection]="true"
-                            [(ngModel)]="colonia" 
-                            [suggestions]="results" 
-                            (completeMethod)="search($event)" 
-                            ></p-autoComplete>
-                    </div>        
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-5"> 
-                    <div class="mb-3 form">
-                        <label for="Municipio" class="form-label">Municipio o Alcaldia:</label>
-                        <input type="text" class="form-control" id="Municipio" placeholder="Municipio" maxlength="50">
-                    </div>        
-                </div>
-                <div class="col-5"> 
-                    <div class="mb-3 form">
-                        <label for="Estado" class="form-label">Estado:</label>
-                        <br>
-                        <p-dropdown [options]="states" [(ngModel)]="selectedState" optionLabel="name"></p-dropdown>
-                    </div>        
-                </div>
-                <div class="col-2"> 
-                    <div class="mb-3 form">
-                        <label for="CP" class="form-label">Codigo Postal:</label>
-                        <input type="text" class="form-control" id="CP" placeholder="CP"  maxlength="5" style="width: 70px;">
-                    </div>        
-                </div>
-            </div>
-        
-            <div class="row">
-                <div class="col"> 
-                    <div class="mb-3 form">
-                        <label for="tCelular" class="form-label">Telefono Celular:</label>
-                        <p-inputMask [(ngModel)]="tCelular" mask="(999) 999-9999" characterPattern="[А-Яа-я]"></p-inputMask>
-                    </div>        
-                </div>
-                <div class="col"> 
-                    <div class="mb-3 form">
-                        <label for="tCasa" class="form-label">Telefono Casa:</label>
-                        <p-inputMask [(ngModel)]="tCasa" mask="(999) 999-9999" characterPattern="[А-Яа-я]"></p-inputMask>
-                    </div>        
-                </div>
-                <div class="col"> 
-                    <div class="mb-3 form">
-                        <label for="tTrabajo" class="form-label">Telefono Trabajo:</label>
-                        <p-inputMask [(ngModel)]="tTrabajo" mask="(999) 999-9999? x99999" characterPattern="[А-Яа-я]"></p-inputMask>
-                    </div>        
-                </div>
-            </div>
-        
-            <div class="row">
-                <div class="col-8"> 
-                    <div class="mb-3 form">
-                        <label for="email" class="form-label">Email:</label>
-                        <input type="email" name="email" id="email" class="form-control" maxlength="100">
-                    </div>        
-                </div>
-                <div class="col"> 
-                    <button type="submit" class="btn btn-warning position-relative top-50 start-50 translate-middle">Guardar</button>
-                    <button type="button" class="btn btn-secondary position-relative top-50 start-50 translate-middle" [routerLink]="['/usuarios']">Cancelar</button>
-                </div>
-            </div>
-        
-            <div class="row">
-                <div class="col"> 
-                    <div class="mb-3">
-                        <label for="observaciones" class="form-label">Notas:</label>
-                        <textarea class="form-control" id="observaciones" rows="3"></textarea>
+                        <small *ngIf="isInvalidControl('nombre')" class="text-danger">El nombre es obligatorio </small>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col"> 
+                    <div class="mb-3 form-group form">
+                        <label for="username" class="form-label">Nombre de usuario:</label>
+                        <input type="text" class="form-control" id="username" placeholder="Escriba el nombre de usuario" maxlength="30"
+                        name="username" 
+                        formControlName="username"
+                        [class.is-invalid]="isInvalidControl('username')"
+                        >
+                        <small *ngIf="isInvalidControl('username')" class="text-danger">El nombre de usuario es obligatorio </small>
+                    </div>        
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" maxlength="100"
+                        name="email" 
+                        formControlName="email"
+                        [class.is-invalid]="isInvalidControl('email')">
+                        <small *ngIf="isInvalidControl('email')" class="text-danger">El email es obligatorio </small>
+                    </div>        
+                </div>
+            </div>
             
+            <div class="row">
+                <div class="col col-6"> 
+                    <div class="mb-3 form">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="password" class="form-control" id="password" placeholder="Escriba el password" maxlength="30"
+                        name="password" 
+                        formControlName="password"
+                        [class.is-invalid]="isInvalidControl('password')"
+                        >
+                        <small *ngIf="isInvalidControl('password')" class="text-danger">El password es obligatorio </small>
+                    </div>
+                    Password: {{ this.form.value.password }}
+                </div>
+
+                <div class="col col-6"> 
+                    <div class="mb-3 form">
+                        <label for="password2" class="form-label">Confirmar password:</label>
+                        <input type="password" class="form-control" id="password2" placeholder="Escriba la confirmacion del password" maxlength="30"
+                        name="password2" 
+                        formControlName="password2"
+                        [class.is-invalid]="isInvalidControl('password2')"
+                        autocomplete="false"
+                        >
+                        <small *ngIf="isInvalidControl('password2')" class="text-danger">La confirmacion del password es obligatoria. </small>
+                        <small *ngIf="(this.form.value.password != this.form.value.password2) " class="text-danger">La confirmacion y el password no conhinciden</small>
+                    </div>        
+                </div>
+
+
+            </div>
+        
+            <div class="row">
+                <div class="col-10">
+                    <p-dropdown [options]="roles" 
+                                optionLabel="name"
+                                name="selectedRol"
+                                formControlName="selectedRol"></p-dropdown>
+                </div>
+                <div class="col-2">
+                    <div >
+                        <p-inputSwitch name="activo" formControlName="activo"></p-inputSwitch>
+                    </div>
+                    <label class="form-label">Activo</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-8">
+
+                </div>
+                <div class="col">
+                    <button type="submit"  class="btn btn-primary">save</button>
+                    <button type="submit" 
+                            class="btn btn-warning position-relative top-50 start-50 translate-middle" 
+                            [disabled]="form.pristine || form.invalid">Guardar</button>
+                    <button type="button" 
+                            class="btn btn-secondary position-relative top-50 start-50 translate-middle" 
+                            [routerLink]="['/usuarios']">Cancelar</button>
+                </div>
+            </div>
+
         </div>
-    <!-- </form> -->
+
+      </form>
+      
+
+TODO: 
+<ul>
+    <li>
+        Crear un metodo de resetear el password del usuario, que le mande uno temporal y que le pida resetarlo la proxima vez
+    </li>
+    <li>
+        Crear un ventana para que el usuario ponga un password nuevo usando el password temporal que le envio el sistema
+    </li>
+    <li>
+        Si ya existe un password de usuario valido no actualizarlo con todo lo demas datos, solo se puede resetar cuando el punto 1
+    </li>
+</ul>
+<!-- <pre>
+    Estado formulario: {{ form.valid }}
+    Status: {{ form.status }}
+</pre>
+<pre>
+{{ form.value | json }}
+</pre> -->
+    
 </div>

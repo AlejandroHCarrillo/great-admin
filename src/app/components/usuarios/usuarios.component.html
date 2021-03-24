@@ -1,17 +1,120 @@
 <div class="container">
-    <h1>Usuarios</h1>
-    <hr>
-
-    <button class="btn btn-primary" [routerLink]="['/usuario']" routerLinkActive="active" >
-        <span class="icon"><i class="fas fa-user"></i></span>
-        <span class="title">Usuario</span>
-    </button>
-
-    <div class="btn btn-primary fab">
-        <span class="icon"><i class="fas fa-plus"></i></span>
-    </div>
-
-    <div class="btn btn-danger fab fab-danger">
+    <div style="float: right;">
         <span class="icon"><i class="fas fa-trash"></i></span>
+
+        <p-checkbox #editcheck
+            name="edit" 
+            value="editMode" 
+            label=""
+            (click)="toggleDelete()"
+        >
+        </p-checkbox>
     </div>
+
+    <h1>Usuarios</h1> 
+
+    <hr>
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-1">
+            <label for="buscar">Buscar:</label>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" id="buscar" placeholder="texto a buscar..." 
+                maxlength="30" name="buscar"
+                [(ngModel)]="txtbuscar"
+                (keyup.enter)="buscar()"
+                (keyup)="searchResultMsg = ''"
+                >
+            <div *ngIf="searchResultMsg">
+                <small>{{searchResultMsg}}</small>
+            </div>            
+        </div>
+        <div class="col-2">
+            <button class="btn btn-primary" (click)="buscar()" routerLinkActive="active" >
+                <span class="icon"><i class="fas fa-user"></i></span>
+                <span class="title">&nbsp;Buscar</span>
+            </button>
+        </div>
+    </div>
+    
+    <p-table [value]="usuarios" >
+        <ng-template pTemplate="header">
+            <tr>
+                <th (click)="setOrder('nombre')">
+                    <div [ngClass]="{'header-sort': pageinfo.sort==='nombre'}">
+                        Nombre&nbsp;
+                    <span class="icon" *ngIf="pageinfo.sort==='nombre'" ><i class="fas fa-sort-alpha-down"></i></span>
+                    </div>
+                </th>
+                <th (click)="setOrder('username')"  class="col-large">
+                    <div [ngClass]="{'header-sort': pageinfo.sort==='username'}">
+                        Username&nbsp;
+                        <span class="icon" *ngIf="pageinfo.sort==='username'" ><i class="fas fa-sort-alpha-down"></i></span>
+                    </div>    
+                </th>
+                <th (click)="setOrder('email')">
+                    <div [ngClass]="{'header-sort': pageinfo.sort==='email'}">
+                        Email&nbsp;
+                        <span class="icon" *ngIf="pageinfo.sort==='email'" ><i class="fas fa-sort-alpha-down"></i></span>
+                    </div>    
+                </th>
+                <th (click)="setOrder('rol')"  class="col-small">
+                    <div [ngClass]="{'header-sort': pageinfo.sort==='rol'}">
+                        ROL&nbsp;
+                        <span class="icon" *ngIf="pageinfo.sort==='rol'" ><i class="fas fa-sort-alpha-down"></i></span>
+                    </div>    
+                </th>
+                <th (click)="setOrder('activo')"  class="col-small">
+                    <div [ngClass]="{'header-sort': pageinfo.sort==='activo'}">
+                        Activo&nbsp;
+                        <span class="icon" *ngIf="pageinfo.sort==='activo'" ><i class="fas fa-sort-alpha-down"></i></span>
+                    </div>    
+                </th>
+                <th class="col-medium"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-usuario>
+            <tr>
+                <td>{{usuario.nombre}}</td>
+                <td>{{usuario.username}}</td>
+                <td >{{usuario.email}}</td>
+                <td class="text-center">
+                    <span class="icon" *ngIf="usuario.role==='ADMIN_ROLE'" ><i class="fas fa-users-cog"></i></span> 
+                    <span class="icon" *ngIf="usuario.role!=='ADMIN_ROLE'" ><i class="fas fa-user"></i></span> 
+                    <!-- {{usuario.role}} -->
+                </td>
+                <td class="text-center">{{!!usuario.activo}}</td>
+                <td >
+                    <button class="btn btn-warning btn-sm" (click)="edit(usuario._id)">
+                        <span class="icon"><i class="fas fa-pencil-alt"></i></span>    
+                    </button>
+                    <button *ngIf="showDeleteButtons" type="button" class="btn btn-danger btn-sm" (click)="delete(usuario)">
+                        <span class="icon"><i class="fas fa-trash"></i></span>
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <div class="row">
+        <div class="col text-center">
+            <p-paginator #paginador
+                        [rows]="pagesize"
+                        [totalRecords]="totalRecords" 
+                        [rowsPerPageOptions]="[3,5,10,20,30]"
+                        (onPageChange)="paginate($event)"
+                        [showCurrentPageReport]="true"
+                        currentPageReportTemplate = "Pagina {currentPage} de {totalPages}"
+
+            ></p-paginator>
+            Registros del {{ pageinfo.first + 1 }} al {{ ((pageinfo.first + pageinfo.rows) < totalRecords ? ( pageinfo.first + pageinfo.rows): totalRecords ) }} de un total de {{ totalRecords }}
+        </div>
+    </div>
+
+    <br>
+
+    <div class="btn btn-primary fab" (click)="edit('new')">
+        <span class="icon"><i class="fas fa-user-plus"></i></span>
+    </div>
+
 </div>

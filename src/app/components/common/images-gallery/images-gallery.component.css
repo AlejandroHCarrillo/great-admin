@@ -1,0 +1,40 @@
+.section-gallery{
+    padding: 0;
+  }
+  
+  .gallery-showcase{
+    list-style: none;
+    width: 100%;
+  }
+  
+  .gallery-showcase li{
+    display: inline-block;
+    float: left;
+    width: 25%;
+  }              
+  
+  .gallery-photo{
+    width:100%;
+    margin: 0;
+    overflow: hidden;
+    background-color: #000;
+    cursor: pointer;
+  }
+  
+  .gallery-photo img{
+    opacity: 0.7;
+    /* width: 100%;
+    height: auto; */
+    transform: scale(1.15);
+    transition: transform 0.5s;
+  
+    height: 10rem; 
+    width: 100%;
+  }
+  
+  .gallery-photo img:hover{
+    opacity: 1;
+    transform: scale(1.04);
+    transition: opacity .5s;
+  }
+  

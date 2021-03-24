@@ -1,0 +1,8 @@
+.big-icon{
+    font-size: 2.5rem
+}
+
+.big-icon:hover{
+    color: red;
+    cursor: pointer;
+}

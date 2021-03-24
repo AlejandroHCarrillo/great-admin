@@ -20,6 +20,24 @@
     </li>
 
     <li>
+        <a [routerLink]="['/productos']" routerLinkActive="active" >
+            <span class="icon"><i class="fas fa-boxes"></i></span>
+            <span class="title">Productos</span>
+        </a>
+    </li>
+    <li>
+        <a [routerLink]="['/catalogos']" routerLinkActive="active" >
+            <span class="icon"><i class="fas fa-award"></i></span>
+            <span class="title">Catalogos</span>
+        </a>
+    </li>
+    <li>
+        <a [routerLink]="['/caja']" routerLinkActive="active" >
+            <span class="icon"><i class="fas fa-cash-register"></i></span>
+            <span class="title">Caja</span>
+        </a>
+    </li>
+    <li>
         <a href="#">
             <span class="icon"><i class="fas fa-envelope"></i></span>
             <span class="title">Messages</span>
@@ -42,6 +60,6 @@
 </div>
 <div class="toggle" (click)="toggleMenu()">
     <span *ngIf="!isCollapsed" class="icon"><i class="fas fa-bars"></i></span>    
-    <span *ngIf="isCollapsed" class="icon"><i class="fas fa-times"></i></span>    
+    <span *ngIf="isCollapsed" class="icon"><i class="fas fa-thumbtack"></i></span>    
 </div>
 

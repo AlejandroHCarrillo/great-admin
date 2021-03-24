@@ -1,0 +1,159 @@
+<!-- {{alumno | json}} -->
+<div class="container">    
+
+        <div class="row">
+            <div class="row mt-3 ">
+                <div class="col-2" >
+                    <div style="display: flex; direction: row; ;">
+                        <div *ngIf="alumno.img" style="width: 18rem;" >
+                            <img *ngIf="alumno && alumno.img" 
+                            [src]="alumno.img" 
+                            [alt]="alumno.nombre" 
+                            class="card-img-top image-medium-rounded"
+                            style="z-index: index 1; top: 0px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-3"> 
+                    <div class="mb-3 form">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        {{alumno.nombre}}
+                    </div>
+                </div>
+                <div class="col col-3"> 
+                    <div class="mb-3 form">
+                        <label for="apaterno" class="form-label">Apellido paterno:</label>
+                        {{alumno.apaterno}}
+                    </div>        
+                </div>
+                <div class="col col-3"> 
+                    <div class="mb-3 form">
+                        <label for="amaterno" class="form-label">Apellido materno:</label>
+                        {{alumno.amaterno}}
+                    </div>        
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
+                        {{alumno.fechaNacimiento}}
+                    </div>        
+                </div>
+                <div class="col"> 
+                </div>
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="fechaIngreso" class="form-label">Fecha de Ingreso:</label>
+                        {{alumno.fechaIngreso}}
+                    </div>        
+                </div>
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label class="form-label">Activo:</label>
+                        {{alumno.activo}}
+                    </div>
+                </div>    
+            </div>
+
+            <div class="row">
+                <div class="col col-4"> 
+                    <label for="matricula" class="form-label">Matricula:</label>
+                                                {{alumno.matricula}}
+                </div>
+                <div class="col col-4">
+                    <label for="curp" class="form-label">CURP:</label>
+                                        {{alumno.curp}}
+                </div>
+                <div class="col col-4"> 
+                    <div class="mb-3 form">
+                        <label class="form-label">Sexo:</label>
+                            {{alumno.sexo}}
+                    </div>        
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-8"> 
+                    <div class="mb-3 form">
+                        <label for="email" class="form-label">Email:</label>
+                        {{alumno.email}}
+                    </div>        
+                </div>
+                <div class="col">
+                </div>
+            </div>
+                    
+            <div class="row">
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="tCelular" class="form-label">Telefono Celular:</label>
+                        {{alumno.tcelular}}
+                    </div>        
+                </div>
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="tCasa" class="form-label">Telefono Casa:</label>
+                        {{alumno.tcasa}}>
+                    </div>        
+                </div>
+                <div class="col"> 
+                    <div class="mb-3 form">
+                        <label for="tTrabajo" class="form-label">Telefono Trabajo:</label>
+                        {{alumno.ttrabajo}}
+                    </div>        
+                </div>
+            </div>
+
+            <div class="row" >
+                <div class="col"> 
+                    Direccion:
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6"> 
+                    <div class="mb-3 form">
+                        <label for="callenumero" class="form-label">Calle y numero:</label>
+                        {{alumno.callenumero}}
+                    </div>        
+                </div>
+                <div class="col-6" >
+                    <div class="mb-3 form">
+                        <label for="colonia" class="form-label">Colonia:</label>
+                            {{alumno.colonia}}
+                    </div>        
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-5"> 
+                    <div class="mb-3 form">
+                        <label for="Municipio" class="form-label">Municipio o Alcaldia:</label>
+                        {{alumno.municipio}}
+                    </div>        
+                </div>
+                <div class="col-5"> 
+                    <div class="mb-3 form">
+                        <label for="Estado" class="form-label">Estado:</label>
+                        {{alumno.estado}}
+                    </div>        
+                </div>
+                <div class="col-2"> 
+                    <div class="mb-3 form">
+                        <label for="CP" class="form-label">CP:</label>
+                            {{alumno.codigopostal}}
+                    </div>        
+                </div>
+            </div>        
+            <div class="row">
+                <div class="col mb-3">
+                    <label for="observaciones" class="form-label">Notas:</label>
+                    {{alumno.notas}}
+                </div>
+            </div>
+
+        </div>
+
+</div>

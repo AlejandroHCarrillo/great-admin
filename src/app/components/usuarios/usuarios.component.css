@@ -1,7 +1,4 @@
-.row{
-    background-color: whitesmoke;
+.container{
+    margin-bottom: 30px;
 }
 
-.container{
-    padding-bottom: 80px;
-}

@@ -1,0 +1,124 @@
+<div class="container">
+    <h1>Inscripciones</h1>
+    <hr>
+    <div class="shadow p-3 mb-2 bg-body rounded">
+        <div class="row">
+            <div class="col-1 title">
+                Buscar:
+            </div>
+            <div class="col">
+                <div class="mb-3 form-group form">
+                    <input type="text" class="form-control" id="busqueda" 
+                    placeholder="Escriba el nombre, apellido o matricula del alumno" maxlength="30"
+                    [(ngModel)]="searchtext"
+                    (keyup.enter)="showAlumnosList()"
+                    >
+                </div>
+            </div>
+            <div class="col-2">    
+                <button class="btn btn-primary" 
+                (click)="showAlumnosList()" >
+                Buscar <span class="icon"><i class="fas fa-user"></i></span>
+            </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-1 title">
+                <strong>Curso:</strong>
+            </div>
+            <div class="col">
+                <p-dropdown [options]="cursos" 
+                    optionLabel="nombre"
+                    name="selectedRol"
+                    [(ngModel)]="selectedCurso"
+                    >
+                </p-dropdown>
+            </div>
+            <div class="col-2 title">
+                <strong>Fecha prmer pago:</strong>
+            </div>
+            <div class="col-2">
+                {{ selectedCurso.fechaprimerpago }}
+            </div>
+            <!-- <div class="col-2"></div> -->
+        </div>
+    </div>
+
+    <div class="shadow p-3 mb-2 bg-body rounded">
+        <div class="row">
+            <div *ngIf="alumnoSelected" class="row mb-3">
+                <div class="col-1"></div>
+                <div class="col">
+                    <table>
+                        <tr>
+                            <td>
+                                <img class="image-small-rounded" 
+                                [src]="alumnoSelected.img" 
+                                [alt]="alumnoSelected.nombre">
+                            </td>
+                            <td class="title">Alumno:</td>
+                            <td>{{ alumnoSelected.nombre }} {{ alumnoSelected.apaterno }} {{ alumnoSelected.amaterno }}</td>
+                            <td class="title">Matricula:</td>
+                            <td>{{ alumnoSelected.matricula }}</td>
+                            <td class="title">Nivel:</td>
+                            <td>{{ alumnoSelected.nivel }}</td>
+                            <td class="title">Grado:</td>
+                            <td>{{ alumnoSelected.grado }}</td>
+                            <td class="title">Grupo:</td>
+                            <td>{{ alumnoSelected.grupo }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-1"></div>
+            </div>
+    
+        </div>
+        <div class="row">
+            <table>
+                <tr>
+                    <td class="title">Clave curso:</td>
+                    <td>{{ selectedCurso.code }}</td>
+                    <td class="title">Nombre:</td>
+                    <td>{{ selectedCurso.nombre }}</td>
+                    <td class="title">Costo:</td>
+                    <td>{{ selectedCurso.costo | currency }}</td>
+                    <td class="title">Mensualidades:</td>
+                    <td>{{ selectedCurso.numpagos }}</td>
+                </tr>
+                <tr>
+                    <td class="title">Decripcion:</td>
+                    <td colspan="7">{{selectedCurso.descripcion}}</td>
+                </tr>
+            </table>
+        </div>
+        <hr>
+        <div class="row" *ngFor="let cargo of selectedCurso.cargos">
+            <div class="col-2">
+                <strong>Cargos:&nbsp;</strong>{{ cargo.nombre }} <br>
+                <strong>Pagos:&nbsp;</strong>{{ cargo.numpagos }}<br>
+                <strong>Total:&nbsp;</strong>{{ cargo.costo * cargo.numpagos | currency }}
+            </div>
+            <div class="col">
+                <div class="grid-cards">
+                    <div *ngFor="let item of counter( cargo.numpagos ); let i = index" >
+                        <div class="card cargo">
+                            <div><strong>Concepto:&nbsp;</strong>{{ buildConcepto( cargo, i ) }}</div>
+                            <div><strong>Monto:&nbsp;</strong>{{ cargo.costo | currency}}</div>
+                            <div><strong>Fecha:&nbsp;</strong>{{ calculaFechaVencimiento(i) }}</div>
+                            <small *ngIf="cargo.numpagos>1" >Pago {{i+1}} de {{ cargo.numpagos }}</small>
+                        </div>
+                    </div>
+                </div>        
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-end">
+                <button class="btn btn-warning" (click)="continuarInscripcion()" >Continuar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<pre>
+    curso seleccionado: {{ selectedCurso | json }}
+</pre>

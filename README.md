@@ -1,3 +1,8 @@
+
+
+
+https://iconarchive.com/show/office-icons-by-thalita-torres/color-catalog-icon.html
+
 # GreatAdmin
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.2.

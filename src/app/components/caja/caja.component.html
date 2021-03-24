@@ -1,0 +1,173 @@
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<div class="container">
+    <h1>Caja</h1> 
+    <hr>
+    <div class="shadow p-3 mb-2 bg-body rounded">
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-1">
+            <label for="buscar">Buscar:</label>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" id="buscar" placeholder="texto a buscar..." 
+            maxlength="30" name="buscar"
+            [(ngModel)]="txtbuscar"
+            (keyup.enter)="buscar()"
+            (keyup)="searchResultMsg = ''"
+            >
+            <div *ngIf="searchResultMsg">
+                <small>{{searchResultMsg}}</small>
+            </div>            
+        </div>
+        <div class="col-2">
+            <button class="btn btn-primary" (click)="buscar()" routerLinkActive="active" >
+                <span class="icon"><i class="fas fa-user"></i></span>
+                <span class="title">&nbsp;Buscar</span>
+            </button>
+        </div>
+        </div>
+        <div class="row">
+            <label for="producto" class="form-label" >Alumno:</label>
+            <div class="col">
+                <p-dropdown [options]="alumnoslist"
+                            optionLabel="name"
+                            name="alumnoslist"
+                            [(ngModel)]="alumnoSelected"
+                            (onChange)="alumnochanged($event)"
+                            [disabled]="!alumnosdrdwnenabled || shoppingcart.length !== 0 "
+                            >
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="grid-cards">
+            <!-- [ngClass]="{ 'cargo-danger' : daysToExpire(cargo.fechavencimiento) < 0, 'cargo-warning' : daysToExpire(cargo.fechavencimiento)>0 && daysToExpire(cargo.fechavencimiento) < 15 } " > -->
+            <div *ngFor="let cargo of cargosalumno; let i = index" 
+                [class]="setClassPago(cargo.fechavencimiento, cargo.estatus)" 
+                (click)="setCargo(i)"
+                [ngClass]="{'cargo-added': cargo.isAddedSC}"
+                >
+                <div class="">
+                    {{ cargo.concepto }}<br>
+                    Monto: <strong>{{ cargo.monto | currency}}</strong><br>
+                    {{ cargo.fechavencimiento | date }}<br>
+                    <small>{{ cargo.estatus }}</small><br>
+                    <div class="corner-right-top" *ngIf="cargo.isAddedSC" (click)="removeCargo(i)">
+                        <span class="icon"><i class="fas fa-trash-alt"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="shadow p-3 mb-2 bg-body rounded">
+        <div class="row mb-3 mt-3">
+            <div class="col-6">            
+                <label for="producto" class="form-label" >Producto:</label>
+                <div style="display: flex; direction: row;">
+                    <input type="text" class="form-control" id="producto" placeholder=""
+                    name="producto" 
+                    [(ngModel)]="currtransaction.producto.nombre"
+                    (keyup.enter)="showProductosList()"
+                    >
+                    <button class="btn btn-primary" (click)="showProductosList()">
+                        <span class="icon"><i class="fas fa-search"></i></span>
+                    </button>
+                </div>
+            </div>
+            <div class="col">
+                <label for="cantidad" class="form-label" >Cantidad:</label>
+                <input type="text" class="form-control text-numeric" id="cantidad" placeholder=""
+                name="cantidad" 
+                [(ngModel)]="currtransaction.cantidad"
+                (keyup.enter)="addProduct()"
+                >
+            </div>
+            <div class="col">
+                <label for="producto" class="form-label" >Descuento:</label>
+                <input type="text" class="form-control text-numeric" id="descuento" placeholder=""
+                name="descuento" 
+                [(ngModel)]="currtransaction.descuento"
+                (keyup.enter)="addProduct()"
+                >
+            </div>
+            <div class="col">
+                <label for="producto" class="form-label" >Precio:</label>
+                <input type="text" class="form-control text-numeric" id="precio" placeholder=""
+                name="precio" 
+                [(ngModel)]="currtransaction.producto.precio"
+                >
+            </div>
+            <div class="col">
+                <label for="producto" class="form-label" >Monto:</label>
+                <input type="text" class="form-control text-numeric" id="monto" placeholder=""
+                name="descuento" 
+                [value]="((currtransaction.cantidad * currtransaction.producto.precio)-currtransaction.descuento)"
+                >
+            </div>
+            <div class="col">
+            </div>
+            <div class="col">
+                <label for="producto" class="form-label" >&nbsp;</label>
+                <button class="btn btn-primary" (click)="addProduct()">+</button>
+                <button class="btn btn-primary" (click)="cleanShoppingCart()">x</button>
+            </div>
+        </div>
+        <div *ngIf="errorMsgsCurTrns.length>0">
+            <p *ngFor="let msg of errorMsgsCurTrns"  class="text-danger">{{msg}}</p>
+        </div>
+    </div>
+
+    <div class="shadow p-3 mb-2 bg-body rounded">
+
+        <p-table [value]="shoppingcart" >
+            <ng-template pTemplate="header">
+                <tr (click)="selectedIndex=-1">
+                    <th class="col-small">Cant</th>
+                    <th class="col-medium">Code</th>
+                    <th>Producto</th>
+                    <th class="col-medium">$ unit</th>
+                    <th class="col-medium">Desc</th>
+                    <th class="col-medium">% IVA</th>
+                    <th class="col-medium">$ IVA</th>
+                    <th class="col-medium">Monto</th>
+                    <th class="col-extra-small"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-p let-i="rowIndex">
+                <tr (click)="selectedItem(i)" (dblclick)="setEditCartItem(i)" >
+                    <td style="text-align: center;">{{p.cantidad}}</td>
+                    <td class="col-medium text-start mr-10" >{{p.producto.code}}</td>
+                    <td class="col-extra-large text-start" >{{p.producto.nombre}}</td>
+                    <td style="text-align: right;">{{p.precio | currency }}</td>
+                    <td style="text-align: center;">{{p.descuento | currency }}</td>
+                    <td style="text-align: center;">{{p.tasaIVA}}%</td>
+                    <td style="text-align: right;">{{p.impuestos | currency }}</td>
+                    <td style="text-align: right;">{{p.monto | currency }}</td>
+                    <td>
+                        <div *ngIf="(selectedIndex==i)">
+                            <span class="icon" (click)="deleteCartItem(i)"><i class="fas fa-times"></i></span>
+                            <span class="icon" (click)="setEditCartItem(i)"><i class="far fa-edit"></i></span>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <tr>
+                    <td colspan="5"></td>
+                    <td colspan="3" style="text-align: right;">
+                        Subtotal: <span style="min-width: 300px; background: white;">&nbsp;{{ subtotal | currency }}</span><br>
+                        Descuentos: <span style="min-width: 300px; background: white;">&nbsp;{{ sumaDescuentos | currency }} </span> <br>
+                        IVA: <span style="min-width: 300px; background: white;">&nbsp;{{ sumaIVA | currency }} </span> <br>
+                        Total: <span style="min-width: 300px; background: white;">&nbsp;{{ total | currency }} </span> <br>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="7"></td>
+                    <td><button class="btn btn-primary">Pago</button></td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </div>
+    
+</div>

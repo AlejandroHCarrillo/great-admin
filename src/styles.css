@@ -2,6 +2,91 @@
 @import '~open-iconic/font/css/open-iconic-bootstrap.css';  */
 
 /* You can add global styles to this file, and also import other style files */
+
+.main-container{
+    margin: 0;
+}
+
+.container{
+    margin-bottom: 70px;
+    /* background-color: grey; */
+}
+
+.p-component, .p-component {
+    width: 100%;
+}
+
+.grid-cards{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.card{
+    width: 180px;
+    height: auto;
+    margin-top: 1rem;
+    margin-right: 1rem;
+    border-radius: 30;
+    min-width: 160px;
+    background-color: whitesmoke;
+}
+
+.cargo{
+    height: auto;
+    width: 150px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-right: .5rem;
+    margin-bottom: .3rem;
+    padding-left: .5rem;
+    padding-bottom: .5rem;
+    font-size: 13px;
+}
+
+.cargo:hover {
+    transform: translate(1px) translateY(-2px);
+    box-shadow: -6px 6px 2px #979797;
+    transition: box-shadow .5s;
+}
+
+.cargo-success:hover, .cargo-canceled:hover {
+    transform: translate(0px) translateY(0px);
+    box-shadow: 0px 0px 0px;
+    cursor: not-allowed;
+}
+
+.cargo-warning{
+    background-color: rgb(250, 200, 100);
+}
+
+.cargo-danger{
+    background-color: rgb(210, 60, 60);
+    color: white;
+}
+
+.cargo-success{
+    background-color: rgb(100, 200, 100);
+    color: white;
+}
+
+.cargo-canceled{
+    background-color: rgb(100, 100, 100);
+    color: white;
+}
+
+.cargo-added{
+    border: black solid 2px;
+    transform: translate(1px) translateY(-2px);
+    box-shadow: -6px 6px 2px #979797;
+}
+
+.corner-right-top{
+    position: absolute;
+    top: 0px;
+    right: 5px;
+}
+
 /** FAB Floating Action Button  **/
 .fab{
     border-radius: 100%;
@@ -21,6 +106,117 @@
     right: 25px;
 }
 
-.p-component, .p-component * {
+.side-bar-area{
+    /* background-color: gray; */
+    width: .8rem;
+}
+
+.hide-bar-area{
+    /* background-color: grey; */
+}
+/* Columnas de los listados */
+.col-extra-small{
+    width: 25px;
+}
+
+.col-small{
+    width: 60px;
+}
+
+.col-medium{
+    width: 100px;
+}
+
+.col-large{
+    width: 150px;
+}
+
+.col-extra-large{
+    width: 250px;
+}
+
+.col-gigant{
+    width: 350px;
+}
+
+/* estilas forma */
+button{
+    margin-right: 10px;
+}
+
+.form-group{
+    background-color: whitesmoke;
+}
+
+.p-autocomplete{
     width: 100%;
+}
+
+.ui-autocomplete{
+    width: 100% !important;
+}
+
+.ui-autocomplete-input{
+    width: 90% !important;
+}
+
+
+.text-numeric{
+    text-align: right;
+}
+
+/* images */
+.image-small-circle{
+  height: 50px;
+  width: 50px;
+  border-radius: 50px;
+}
+
+.image-small-rounded{
+  height: 50px;
+  width: 50px;
+  border-radius: 10px;
+}
+
+.image-medium-rounded{
+    height: 75px;
+    width: auto;
+    border-radius: 10px;
+  }
+
+.image-large{
+    height: 200px;
+    width: auto;
+}
+
+.image-large-rounded{
+    height: 200px;
+    width: auto;
+    border-radius: 30px;
+}
+
+
+@media screen and (max-width:992px){
+    .fab{
+        font-size: 15px;
+        padding: 20px;
+    } 
+}
+
+@media (max-width:922px){
+    .side-bar-area .hide-bar-area{
+        width: .5rem;
+        /* background-color: teal; */
+    }
+}
+
+@media (max-width:576px){
+    .side-bar-area{
+        width: .0001rem;
+        /* background-color: turquoise; */
+        flex: 0 0 0%;
+    }
+    .col.hide-bar-area{
+        display: none;
+    }
 }

@@ -1,0 +1,10 @@
+<div *ngIf="showModal" 
+    id="image-modal" [ngClass]="{modal: showModal}" 
+    (click)="closeModal()">
+    <!-- The Close Button -->
+    <span class="close" (click)="closeModal()">&times;</span>
+    <!-- Modal Content (The Image) -->
+    <img class="modal-content" id="img01" [src]="urlImage">
+    <!-- Modal Caption (Image Text) -->
+    <div id="caption">{{description}}</div>
+</div>

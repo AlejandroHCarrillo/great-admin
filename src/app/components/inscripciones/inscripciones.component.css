@@ -1,0 +1,10 @@
+table{
+    width: 100%;
+}
+td{
+    padding-right: 5px;
+}
+.title{
+    font-weight: bold;
+    text-align: right;
+}
