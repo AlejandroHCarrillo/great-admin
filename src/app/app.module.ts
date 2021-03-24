@@ -57,6 +57,7 @@ import { ButtonModule } from 'primeng/button';
 import { ProductosListComponent } from './components/productos/productos-list/productos-list.component';
 import { AlumnosListComponent } from './components/alumnos/alumnos-list/alumnos-list.component';
 import { AuthService, SubirArchivoService } from './services/services.index';
+import { InscripcionesComponent } from './components/inscripciones/inscripciones.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -85,7 +86,8 @@ import { AuthService, SubirArchivoService } from './services/services.index';
     UploadFilesModalComponent,
     ImagesGalleryComponent,
     CajaComponent,
-    ProductosListComponent
+    ProductosListComponent,
+    InscripcionesComponent
   ],
   imports: [
     BrowserModule,

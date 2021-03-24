@@ -13,7 +13,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProductosListComponent } from '../productos/productos-list/productos-list.component';
 import { CargoItem } from 'src/app/interfaces/cargo-item';
 import { CargosService } from 'src/app/services/cargos.service';
-import { eEstatusPagos } from 'src/app/config/enums';
+import { eEstatusCargos } from 'src/app/config/enums';
 
 @Component({
   selector: 'app-caja',
@@ -279,16 +279,16 @@ export class CajaComponent implements OnInit {
     let diff = this.daysToExpire(fecha);
     let classCargo = "card cargo ";
 
-    if( estatus === eEstatusPagos.PAGADO ) 
+    if( estatus === eEstatusCargos.PAGADO ) 
       return `${ classCargo } cargo-success`;
 
-    if( estatus === eEstatusPagos.CANCELADO ) 
+    if( estatus === eEstatusCargos.CANCELADO ) 
       return `${ classCargo } cargo-canceled`;
 
-    if( estatus === eEstatusPagos.NO_PAGADO && diff < 0 ) 
+    if( estatus === eEstatusCargos.NO_PAGADO && diff < 0 ) 
       return `${ classCargo } cargo-danger`;
 
-    if( estatus === eEstatusPagos.NO_PAGADO && diff > 0 && diff < 15 ) 
+    if( estatus === eEstatusCargos.NO_PAGADO && diff > 0 && diff < 15 ) 
       return `${ classCargo } cargo-warning`;
 
     return classCargo;
@@ -302,8 +302,8 @@ export class CajaComponent implements OnInit {
       return;
     }
     
-    if( cargo.estatus === eEstatusPagos.PAGADO ||
-        cargo.estatus === eEstatusPagos.CANCELADO 
+    if( cargo.estatus === eEstatusCargos.PAGADO ||
+        cargo.estatus === eEstatusCargos.CANCELADO 
         ) 
       { 
         // console.log("Cargos Pagados y cancelados no se pueden agregar");

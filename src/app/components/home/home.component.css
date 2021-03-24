@@ -1,0 +1,10 @@
+.icon{
+    font-size: 50px;
+}
+
+.icon:hover{
+    font-size: 55px;
+}
+span:hover{
+    color: red;
+}

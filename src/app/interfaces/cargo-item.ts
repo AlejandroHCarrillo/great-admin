@@ -1,5 +1,4 @@
 import { Producto } from "./producto";
-
 export class CargoItem {
     constructor( 
         public id: string,
