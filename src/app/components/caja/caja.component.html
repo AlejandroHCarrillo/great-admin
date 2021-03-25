@@ -5,27 +5,63 @@
     <div class="shadow p-3 mb-2 bg-body rounded">
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-1">
-            <label for="buscar">Buscar:</label>
+            <label for="buscar" class="title">Buscar:</label>
         </div>
         <div class="col">
-            <input type="text" class="form-control" id="buscar" placeholder="texto a buscar..." 
-            maxlength="30" name="buscar"
-            [(ngModel)]="txtbuscar"
-            (keyup.enter)="buscar()"
+            <input type="text" class="form-control" maxlength="30" 
+            placeholder="Escriba el nombre, apellido o matricula del alumno"
+            id="alumnSearch" 
+            name="alumnSearch"
+            [(ngModel)]="searchtext"
+            (keyup.enter)="showAlumnosList()"
             (keyup)="searchResultMsg = ''"
             >
             <div *ngIf="searchResultMsg">
                 <small>{{searchResultMsg}}</small>
             </div>            
         </div>
-        <div class="col-2">
-            <button class="btn btn-primary" (click)="buscar()" routerLinkActive="active" >
+        
+        <!-- <pre> {{ alumnoSelected | json }} </pre> -->
+
+        <div class="col-2 text-end">
+            <button class="btn btn-primary" (click)="showAlumnosList()">
                 <span class="icon"><i class="fas fa-user"></i></span>
                 <span class="title">&nbsp;Buscar</span>
             </button>
         </div>
         </div>
         <div class="row">
+            <div class="row">
+                <div *ngIf="alumnoSelected" class="row mb-3">
+                    <div class="col-1"></div>
+                    <div class="col">
+                        <table style="width: 100%; border: 1px;;">
+                            <tr>
+                                <td>
+                                    <img class="image-small-rounded" 
+                                    [src]="alumnoSelected.img" 
+                                    [alt]="alumnoSelected.nombre">
+                                </td>
+                                <td class="title">Alumno:</td>
+                                <td>{{ alumnoSelected.nombre }} {{ alumnoSelected.apaterno }} {{ alumnoSelected.amaterno }}</td>
+                                <td class="title">Matricula:</td>
+                                <td>{{ alumnoSelected.matricula }}</td>
+                                <td class="title">Nivel:</td>
+                                <td>{{ alumnoSelected.nivel }}</td>
+                                <td class="title">Grado:</td>
+                                <td>{{ alumnoSelected.grado }}</td>
+                                <td class="title">Grupo:</td>
+                                <td>{{ alumnoSelected.grupo }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+        
+            </div>
+    
+        </div>
+        <!-- <div class="row">
             <label for="producto" class="form-label" >Alumno:</label>
             <div class="col">
                 <p-dropdown [options]="alumnoslist"
@@ -37,7 +73,7 @@
                             >
                 </p-dropdown>
             </div>
-        </div>
+        </div> -->
         <div class="grid-cards">
             <!-- [ngClass]="{ 'cargo-danger' : daysToExpire(cargo.fechavencimiento) < 0, 'cargo-warning' : daysToExpire(cargo.fechavencimiento)>0 && daysToExpire(cargo.fechavencimiento) < 15 } " > -->
             <div *ngFor="let cargo of cargosalumno; let i = index" 

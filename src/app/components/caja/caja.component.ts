@@ -14,6 +14,7 @@ import { ProductosListComponent } from '../productos/productos-list/productos-li
 import { CargoItem } from 'src/app/interfaces/cargo-item';
 import { CargosService } from 'src/app/services/cargos.service';
 import { eEstatusCargos } from 'src/app/config/enums';
+import { AlumnosListComponent } from '../alumnos/alumnos-list/alumnos-list.component';
 
 @Component({
   selector: 'app-caja',
@@ -22,11 +23,11 @@ import { eEstatusCargos } from 'src/app/config/enums';
 })
 
 export class CajaComponent implements OnInit {
-  txtbuscar: string = "";
+  searchtext: string = "";
   searchResultMsg = "";
 
   alumnoslist : DropDownItem[] = [];
-  alumnoSelected: DropDownItem = { name:"Seleccione un alumno", code:"-1" };
+  alumnoSelected: any; // DropDownItem = { name:"Seleccione un alumno", code:"-1" };
 
   private emptytranscaction = { 
     index: 0,
@@ -53,9 +54,9 @@ export class CajaComponent implements OnInit {
   shoppingcart: CartItem[]= [];
 
   alumnosdrdwnenabled = true;
-
+  
+  // private alumnosService: AlumnosService,
   constructor(  private router: Router,
-                private alumnosService: AlumnosService,
                 private cargosService: CargosService,
                 private dialogService: DialogService,
                 private confirmationService: ConfirmationService,
@@ -65,54 +66,54 @@ export class CajaComponent implements OnInit {
 
   ngOnInit(): void {
     // this.loadAlumnos()
-    this.alumnochanged({ value: { code: "605018e1ab32bf465014d1a4"}});
+    // this.alumnochanged({ value: { code: "605018e1ab32bf465014d1a4"}});
   }
 
-  buscar(){
-    let queryParams = `desde=${""}&records=${""}&sort=${""}`
+  // buscar(){
+  //   let queryParams = `desde=${""}&records=${""}&sort=${""}`
 
-    let prevScreen = localStorage.getItem("prevScreen") || '';
-    if (prevScreen == "caja"){
-      queryParams = localStorage.getItem("lastquery")||'';
-      localStorage.setItem('prevScreen', '');
-    }
+  //   let prevScreen = localStorage.getItem("prevScreen") || '';
+  //   if (prevScreen == "caja"){
+  //     queryParams = localStorage.getItem("lastquery")||'';
+  //     localStorage.setItem('prevScreen', '');
+  //   }
 
-    // console.log(queryParams);
-    localStorage.setItem('lastquery', queryParams);
+  //   // console.log(queryParams);
+  //   localStorage.setItem('lastquery', queryParams);
     
-    this.alumnosService
-    .findAlumnos(queryParams, this.txtbuscar)
-    .then(async (resp:any)=>{
-      const body = await resp.json();
-      this.alumnos = body.alumnos;
-      // this.totalRecords = body.total;
+  //   this.alumnosService
+  //   .findAlumnos(queryParams, this.searchtext)
+  //   .then(async (resp:any)=>{
+  //     const body = await resp.json();
+  //     this.alumnos = body.alumnos;
+  //     // this.totalRecords = body.total;
 
-      if(this.alumnos){
-        // console.log("Alumnos: ", this.alumnos );
-        this.alumnoslist =  [ { name:"Seleccione un alumno", code:"-1" },
-                              ...this.alumnos.map((a)=>({ name: `${a.nombre} ${a.apaterno || ""} ${a.amaterno || ""} - ${ a.matricula || "" }` , code: a.id }))
-                            ];
-      }
+  //     if(this.alumnos){
+  //       // console.log("Alumnos: ", this.alumnos );
+  //       this.alumnoslist =  [ { name:"Seleccione un alumno", code:"-1" },
+  //                             ...this.alumnos.map((a)=>({ name: `${a.nombre} ${a.apaterno || ""} ${a.amaterno || ""} - ${ a.matricula || "" }` , code: a.id }))
+  //                           ];
+  //     }
 
-      this.searchResultMsg = `Se encontraron ${body.found} registros.`
-      this.setfocus("alumnoslist");
-    })
-    .catch((e)=>{
-        console.log("error: ", e);            
-    });
-  }
+  //     this.searchResultMsg = `Se encontraron ${body.found} registros.`
+      
+  //   })
+  //   .catch((e)=>{
+  //       console.log("error: ", e);            
+  //   });
+  // }
 
-  async alumnochanged(event: any){
-    this.alumnosdrdwnenabled = false;
+  // async alumnochanged(event: any){
+  //   this.alumnosdrdwnenabled = false;
 
-    if (event.value.code !== -1 && event.value.code.length >= 24 ) {
-      this.cargosalumno = await this.cargosService.findCargos(event.value.code);
-    } else {
-      this.cargosalumno = [];
-    }
-    this.alumnosdrdwnenabled = true;
-    this.setfocus("producto");
-  }
+  //   if (event.value.code !== -1 && event.value.code.length >= 24 ) {
+  //     this.cargosalumno = await this.cargosService.findCargos(event.value.code);
+  //   } else {
+  //     this.cargosalumno = [];
+  //   }
+  //   this.alumnosdrdwnenabled = true;
+  //   this.setfocus("producto");
+  // }
 
   edit(id?:string){
     this.router.navigate([`caja/${id}`]);
@@ -267,8 +268,7 @@ export class CajaComponent implements OnInit {
   }
 
   setfocus(controlname: string){
-    document.getElementsByName(controlname)[0].focus();
-    
+    document.getElementsByName(controlname)[0].focus();  
   }
 
   daysToExpire(fecha:string){
@@ -350,4 +350,28 @@ export class CajaComponent implements OnInit {
         }
     });   
   }
+
+  showAlumnosList() {
+    const ref = this.dialogService.open(AlumnosListComponent, {
+      header: 'Seleccione un alumno',
+      width: '70%',
+      data: {
+        searchtext: this.searchtext
+      }
+    });
+
+    ref.onClose.subscribe(async(alumno: Alumno) => {
+        // console.log("Alumno seleccionado: ", alumno);
+        if (!alumno) {
+          this.cargosalumno = [];
+          return
+        };
+
+        this.alumnoSelected = { ...alumno };
+        this.messageService.add({severity:'info', summary: 'Alumno seleccionado', detail:'matricula:' + alumno.matricula });
+        this.cargosalumno = await this.cargosService.findCargos( alumno.id );
+
+    });
+  }
+
 }

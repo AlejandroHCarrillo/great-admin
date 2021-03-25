@@ -33,6 +33,10 @@ export class CargosService {
     return fetchToken('cargo', cargo, 'POST');
   }  
 
+  savecargos(cargos:CargoItem[]){
+    return fetchToken('cargo/cargos', cargos, 'POST');
+  }  
+
   update(cargo:any){
     return fetchToken(`cargo/${cargo.id}`, cargo, 'PUT');
   }  

@@ -1,3 +1,5 @@
+<p-toast key="tmKey" position="top-right"></p-toast>
+
 <div class="container">
     <h1>Inscripciones</h1>
     <hr>
@@ -8,7 +10,9 @@
             </div>
             <div class="col">
                 <div class="mb-3 form-group form">
-                    <input type="text" class="form-control" id="busqueda" 
+                    <input type="text" class="form-control" 
+                    id="alumnSearch" 
+                    name="alumnSearch"
                     placeholder="Escriba el nombre, apellido o matricula del alumno" maxlength="30"
                     [(ngModel)]="searchtext"
                     (keyup.enter)="showAlumnosList()"
@@ -31,16 +35,27 @@
                 <p-dropdown [options]="cursos" 
                     optionLabel="nombre"
                     name="selectedRol"
-                    [(ngModel)]="selectedCurso"
+                    [(ngModel)]="cursoSelected"
+                    (onChange) ="cursosOnChange($event)"
                     >
                 </p-dropdown>
             </div>
+            <!-- 
             <div class="col-2 title">
                 <strong>Fecha prmer pago:</strong>
             </div>
             <div class="col-2">
-                {{ selectedCurso.fechaprimerpago }}
+                {{ cursoSelected?.fechaprimerpago }}
+                <div class="mb-3 form">
+                    <label for="fechaprimerpago" class="form-label">Fecha primer pago:</label>
+                    <p-calendar 
+                    name="fechaprimerpago" 
+                    [(ngModel)]="fechaprimerpago">
+                    </p-calendar> 
+                </div>        
+                <button class="btn btn-danger" (click)="showToastMessage('ok', 'choro lorem', 'error')">toast</button>
             </div>
+        -->
             <!-- <div class="col-2"></div> -->
         </div>
     </div>
@@ -74,26 +89,28 @@
             </div>
     
         </div>
-        <div class="row">
+        <div class="row" *ngIf="cursoSelected">
             <table>
                 <tr>
                     <td class="title">Clave curso:</td>
-                    <td>{{ selectedCurso.code }}</td>
-                    <td class="title">Nombre:</td>
-                    <td>{{ selectedCurso.nombre }}</td>
+                    <td>{{ cursoSelected.code }}</td>
+                    <td class="title">Curso:</td>
+                    <td>{{ cursoSelected.nombre }}</td>
                     <td class="title">Costo:</td>
-                    <td>{{ selectedCurso.costo | currency }}</td>
-                    <td class="title">Mensualidades:</td>
-                    <td>{{ selectedCurso.numpagos }}</td>
+                    <td>{{ cursoSelected.costo | currency }}</td>
+                    <td class="title">Parcialidades:</td>
+                    <td>{{ cursoSelected.numpagos }}</td>
                 </tr>
                 <tr>
                     <td class="title">Decripcion:</td>
-                    <td colspan="7">{{selectedCurso.descripcion}}</td>
+                    <td colspan="6">{{cursoSelected.descripcion}}</td>
+                    <td class="title">Fecha pago inicial:</td>
+                    <td>{{ cursoSelected?.fechaprimerpago }}</td>
                 </tr>
             </table>
         </div>
         <hr>
-        <div class="row" *ngFor="let cargo of selectedCurso.cargos">
+        <div class="row" *ngFor="let cargo of cursoSelected?.cargos">
             <div class="col-2">
                 <strong>Cargos:&nbsp;</strong>{{ cargo.nombre }} <br>
                 <strong>Pagos:&nbsp;</strong>{{ cargo.numpagos }}<br>
@@ -105,20 +122,19 @@
                         <div class="card cargo">
                             <div><strong>Concepto:&nbsp;</strong>{{ buildConcepto( cargo, i ) }}</div>
                             <div><strong>Monto:&nbsp;</strong>{{ cargo.costo | currency}}</div>
-                            <div><strong>Fecha:&nbsp;</strong>{{ calculaFechaVencimiento(i) }}</div>
+                            <div><strong>Fecha:&nbsp;</strong>{{ calculaFechaVencimiento(i) | date: 'dd/MMM/yyyy' }}</div>
                             <small *ngIf="cargo.numpagos>1" >Pago {{i+1}} de {{ cargo.numpagos }}</small>
                         </div>
                     </div>
                 </div>        
             </div>
         </div>
-        <div class="row">
+        <hr>
+        <div class="row" *ngIf="alumnoSelected && cursoSelected">
             <div class="col text-end">
                 <button class="btn btn-warning" (click)="continuarInscripcion()" >Continuar</button>
             </div>
         </div>
     </div>
 </div>
-<pre>
-    curso seleccionado: {{ selectedCurso | json }}
-</pre>
+<!-- <pre> curso seleccionado: {{ cursoSelected | json }} </pre> -->
