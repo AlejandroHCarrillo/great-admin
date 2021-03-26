@@ -16,10 +16,12 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
+import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -112,7 +114,8 @@ import { InscripcionesComponent } from './components/inscripciones/inscripciones
     DynamicDialogModule,
     ToastModule,
     ButtonModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ConfirmPopupModule
   ],
   providers: [
     MessageService,

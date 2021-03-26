@@ -38,8 +38,8 @@
     <p-table [value]="productos" >
         <ng-template pTemplate="header">
             <tr>
-                <th></th>
-                <th (click)="setOrder('code')" class="col-large">
+                <th class="col-small"></th>
+                <th (click)="setOrder('code')" class="col-medium">
                     <div [ngClass]="{'header-sort': pageinfo.sort==='code'}">
                         Code&nbsp;
                         <span class="icon" *ngIf="pageinfo.sort==='code'" ><i class="fas fa-sort-alpha-down"></i></span>
@@ -57,6 +57,7 @@
                         <span class="icon" *ngIf="pageinfo.sort==='descripcion'" ><i class="fas fa-sort-alpha-down"></i></span>
                     </div>    
                 </th>
+                <th class="col-medium"><div> Precio</div></th>
                 <th (click)="setOrder('activo')"  class="col-small">
                     <div [ngClass]="{'header-sort': pageinfo.sort==='activo'}">
                         Activo&nbsp;
@@ -74,9 +75,10 @@
                 <td>{{producto.code}}</td>
                 <td>{{producto.nombre}}</td>
                 <td >{{producto.descripcion}}</td>
+                <td >{{producto.precio | currency }}</td>
                 <td class="text-center">{{!!producto.activo}}</td>
                 <td >
-                    <button class="btn btn-warning btn-sm" (click)="edit(producto._id)">
+                    <button class="btn btn-warning btn-sm" (click)="edit(producto.id)">
                         <span class="icon"><i class="fas fa-pencil-alt"></i></span>    
                     </button>
                     <button *ngIf="showDeleteButtons" type="button" class="btn btn-danger btn-sm" (click)="delete(producto)">

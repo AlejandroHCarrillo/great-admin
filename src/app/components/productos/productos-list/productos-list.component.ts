@@ -4,6 +4,7 @@ import { PAGE_SIZE } from 'src/app/config/settings';
 import { Producto } from 'src/app/interfaces/producto';
 import { ProductosService } from 'src/app/services/productos.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { setfocus } from 'src/app/helpers/tools';
   
 @Component({
   selector: 'app-productos-list',
@@ -59,6 +60,7 @@ export class ProductosListComponent implements OnInit {
       this.totalRecords = body.total;
       this.searchResultMsg = `Se encontraron ${body.found || 0 } registros.`
 
+      setfocus("buscar");
     })
     .catch((e)=>{
         console.log("error: ", e);            

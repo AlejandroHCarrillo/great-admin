@@ -37,6 +37,7 @@
                     name="selectedRol"
                     [(ngModel)]="cursoSelected"
                     (onChange) ="cursosOnChange($event)"
+                    [disabled] = "!alumnoSelected"
                     >
                 </p-dropdown>
             </div>

@@ -2,3 +2,9 @@
     color:red;
 }
 
+.fab-l {
+    font-size: 30px;    
+    position: relative;
+    top: 0px;
+    right: 0px;
+}

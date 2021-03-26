@@ -1,33 +1,36 @@
+<p-toast key="tmKey" position="top-right"></p-toast>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
 <div class="container">
     <h1>Caja</h1> 
     <hr>
     <div class="shadow p-3 mb-2 bg-body rounded">
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-1">
-            <label for="buscar" class="title">Buscar:</label>
-        </div>
-        <div class="col">
-            <input type="text" class="form-control" maxlength="30" 
-            placeholder="Escriba el nombre, apellido o matricula del alumno"
-            id="alumnSearch" 
-            name="alumnSearch"
-            [(ngModel)]="searchtext"
-            (keyup.enter)="showAlumnosList()"
-            (keyup)="searchResultMsg = ''"
-            >
-            <div *ngIf="searchResultMsg">
-                <small>{{searchResultMsg}}</small>
-            </div>            
-        </div>
-        
+                <label for="buscar" class="title">Buscar:</label>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" maxlength="30" 
+                placeholder="Escriba el nombre, apellido o matricula del alumno"
+                id="alumnSearch" 
+                name="alumnSearch" 
+                [(ngModel)]="searchtext" 
+                (keyup.enter)="showAlumnosList()" 
+                (keyup)="searchResultMsg = ''"
+                >
+                <div *ngIf="searchResultMsg">
+                    <small>{{searchResultMsg}}</small>
+                </div>            
+            </div>        
         <!-- <pre> {{ alumnoSelected | json }} </pre> -->
-
-        <div class="col-2 text-end">
-            <button class="btn btn-primary" (click)="showAlumnosList()">
-                <span class="icon"><i class="fas fa-user"></i></span>
-                <span class="title">&nbsp;Buscar</span>
-            </button>
+        <div class="col-3 text-end">
+            <div>
+                <button class="btn btn-primary" (click)="showAlumnosList()">
+                    <span class="icon"><i class="fas fa-user"></i></span>
+                    <span class="title">&nbsp;Buscar</span>
+                </button>
+                <button class="btn btn-warning" (click)="reset()">Reset</button>
+            </div>
         </div>
         </div>
         <div class="row">
@@ -78,8 +81,10 @@
             <!-- [ngClass]="{ 'cargo-danger' : daysToExpire(cargo.fechavencimiento) < 0, 'cargo-warning' : daysToExpire(cargo.fechavencimiento)>0 && daysToExpire(cargo.fechavencimiento) < 15 } " > -->
             <div *ngFor="let cargo of cargosalumno; let i = index" 
                 [class]="setClassPago(cargo.fechavencimiento, cargo.estatus)" 
-                (click)="setCargo(i)"
+                (click)="addCargo(i)"
+                (keyup.enter)="addCargo(i)"
                 [ngClass]="{'cargo-added': cargo.isAddedSC}"
+                [tabindex]="i+1"
                 >
                 <div class="">
                     {{ cargo.concepto }}<br>
@@ -87,24 +92,26 @@
                     {{ cargo.fechavencimiento | date }}<br>
                     <small>{{ cargo.estatus }}</small><br>
                     <div class="corner-right-top" *ngIf="cargo.isAddedSC" (click)="removeCargo(i)">
-                        <span class="icon"><i class="fas fa-trash-alt"></i></span>
+                        <span class="icon"><i class="fas fa-times"></i></span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Currtransaction : <pre>{{ currtransaction | json}}</pre> -->
     <div class="shadow p-3 mb-2 bg-body rounded">
         <div class="row mb-3 mt-3">
-            <div class="col-6">            
-                <label for="producto" class="form-label" >Producto:</label>
+            <div class="col-6">
+                <label for="producto" class="form-label" >Buscar producto o servicio:</label>
                 <div style="display: flex; direction: row;">
-                    <input type="text" class="form-control" id="producto" placeholder=""
+                    <input type="text" class="form-control" id="producto" placeholder="Escriba el nombre o clave del producto"
                     name="producto" 
                     [(ngModel)]="currtransaction.producto.nombre"
                     (keyup.enter)="showProductosList()"
-                    >
-                    <button class="btn btn-primary" (click)="showProductosList()">
+                    [disabled]="!alumnoSelected"
+                    >                    
+                    <button class="btn btn-primary" (click)="showProductosList()" [disabled]="!alumnoSelected" >
                         <span class="icon"><i class="fas fa-search"></i></span>
                     </button>
                 </div>
@@ -113,6 +120,7 @@
                 <label for="cantidad" class="form-label" >Cantidad:</label>
                 <input type="text" class="form-control text-numeric" id="cantidad" placeholder=""
                 name="cantidad" 
+                [disabled]="!currtransaction.producto.id"
                 [(ngModel)]="currtransaction.cantidad"
                 (keyup.enter)="addProduct()"
                 >
@@ -121,30 +129,35 @@
                 <label for="producto" class="form-label" >Descuento:</label>
                 <input type="text" class="form-control text-numeric" id="descuento" placeholder=""
                 name="descuento" 
+                [disabled]="!currtransaction.producto.id"
                 [(ngModel)]="currtransaction.descuento"
                 (keyup.enter)="addProduct()"
                 >
             </div>
-            <div class="col">
+            <div class="col text-end">
                 <label for="producto" class="form-label" >Precio:</label>
-                <input type="text" class="form-control text-numeric" id="precio" placeholder=""
-                name="precio" 
-                [(ngModel)]="currtransaction.producto.precio"
-                >
+                <label  class="title text-end" >{{currtransaction.producto.precio | currency }}</label>
             </div>
-            <div class="col">
+            <div class="col text-end">
                 <label for="producto" class="form-label" >Monto:</label>
+                <label  class="title" >{{ getPrecio | currency }}</label>
+<!-- 
                 <input type="text" class="form-control text-numeric" id="monto" placeholder=""
                 name="descuento" 
                 [value]="((currtransaction.cantidad * currtransaction.producto.precio)-currtransaction.descuento)"
-                >
+                > -->
             </div>
             <div class="col">
             </div>
             <div class="col">
+                <!-- *ngIf="currtransaction.producto && currtransaction.producto.id!==''" -->
                 <label for="producto" class="form-label" >&nbsp;</label>
-                <button class="btn btn-primary" (click)="addProduct()">+</button>
-                <button class="btn btn-primary" (click)="cleanShoppingCart()">x</button>
+                <span *ngIf="currtransaction.producto.id!==''" class="icon fab-l" (click)="addProduct()" >
+                    <i class="fas fa-cart-arrow-down" ></i>
+                </span>
+                <!-- <button class="btn btn-primary" (click)="addProduct()">
+                </button> -->
+                <!-- <button class="btn btn-primary" (click)="cleanShoppingCart()">x</button> -->
             </div>
         </div>
         <div *ngIf="errorMsgsCurTrns.length>0">
@@ -165,7 +178,9 @@
                     <th class="col-medium">% IVA</th>
                     <th class="col-medium">$ IVA</th>
                     <th class="col-medium">Monto</th>
-                    <th class="col-extra-small"></th>
+                    <th class="col-small">
+                        <span *ngIf="shoppingcart.length>0" class="icon" (click)="cleanShoppingCart()"><i class="fas fa-trash-alt"></i></span>
+                    </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-p let-i="rowIndex">
@@ -199,7 +214,10 @@
                 </tr>
                 <tr>
                     <td colspan="7"></td>
-                    <td><button class="btn btn-primary">Pago</button></td>
+                    <td>
+                        <button *ngIf="shoppingcart.length>0" class="btn btn-primary" (click)="generarPago()">Pagar</button>
+                    </td>
+                    <td></td>
                 </tr>
             </ng-template>
         </p-table>
@@ -207,3 +225,5 @@
     </div>
     
 </div>
+
+<!-- <pre>{{ shoppingcart | json}}</pre> -->

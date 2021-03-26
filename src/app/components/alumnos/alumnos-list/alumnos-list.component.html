@@ -4,8 +4,9 @@
             <label for="buscar">Buscar:</label>
         </div>
         <div class="col">
-            <input type="text" class="form-control" id="buscar" placeholder="texto a buscar..." 
-                maxlength="30" name="buscar"
+            <input type="text" class="form-control" 
+                placeholder="texto a buscar..." maxlength="30" 
+                id="txtbuscaralumno" name="txtbuscaralumno"
                 [(ngModel)]="txtbuscar"
                 (keyup.enter)="buscar()"
                 (keyup)="searchResultMsg = ''"

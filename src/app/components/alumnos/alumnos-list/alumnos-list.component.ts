@@ -5,6 +5,7 @@ import { PAGE_SIZE } from 'src/app/config/settings';
 import { Alumno } from 'src/app/interfaces/alumno';
 import { AlumnosService } from 'src/app/services/alumnos.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { setfocus } from 'src/app/helpers/tools';
     
 @Component({
   selector: 'app-alumnos-list',
@@ -56,9 +57,9 @@ export class AlumnosListComponent implements OnInit {
     .then(async (resp)=>{
       const body = await resp.json();
       this.alumnos = body.alumnos;
-      // this.totalRecords = body.total;
       this.totalRecords = body.found;
       this.searchResultMsg = `Se encontraron ${body.found || 0 } registros.`
+      setfocus("txtbuscaralumno");
       // console.log(body);
     })
     .catch((e)=>{
