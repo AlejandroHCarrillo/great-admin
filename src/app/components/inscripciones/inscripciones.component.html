@@ -29,12 +29,24 @@
 
         <div class="row">
             <div class="col-1 title">
+                <strong>Ciclo:</strong>
+            </div>
+            <div class="col">
+                <p-dropdown [options]="ciclosEscolares" 
+                    optionLabel="nombre"
+                    name="cicloSelected"
+                    [(ngModel)]="cicloSelected"
+                    [disabled] = "!alumnoSelected"
+                    >
+                </p-dropdown>
+            </div>
+            <div class="col-1 title">
                 <strong>Curso:</strong>
             </div>
             <div class="col">
                 <p-dropdown [options]="cursos" 
                     optionLabel="nombre"
-                    name="selectedRol"
+                    name="cursoSelected"
                     [(ngModel)]="cursoSelected"
                     (onChange) ="cursosOnChange($event)"
                     [disabled] = "!alumnoSelected"
@@ -59,6 +71,7 @@
         -->
             <!-- <div class="col-2"></div> -->
         </div>
+
     </div>
 
     <div class="shadow p-3 mb-2 bg-body rounded">

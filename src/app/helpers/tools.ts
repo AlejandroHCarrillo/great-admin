@@ -26,3 +26,7 @@ export const isDate = ( value: string ) => {
         return false;
     }
 }
+
+export const arraycounter = function (i: number) {
+    return new Array(i);
+  }

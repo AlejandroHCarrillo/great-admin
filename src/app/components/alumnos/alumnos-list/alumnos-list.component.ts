@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { PAGE_SIZE } from 'src/app/config/settings';
 
 import { Alumno } from 'src/app/interfaces/alumno';

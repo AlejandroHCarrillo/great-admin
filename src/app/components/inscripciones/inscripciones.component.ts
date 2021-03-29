@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Alumno } from 'src/app/interfaces/alumno';
 import { CargoItem } from 'src/app/interfaces/cargo-item';
 import { CargosService } from 'src/app/services/cargos.service';
+import { CiclosescolaresService } from 'src/app/services/ciclosescolares.service';
+import { InscripcionesService } from 'src/app/services/inscripciones.service';
 import { aMeses, eEstatusCargos, eSeverityMessages } from '../../config/enums';
 import { AlumnosListComponent } from '../alumnos/alumnos-list/alumnos-list.component';
+import { arraycounter } from 'src/app/helpers/tools'
 
 @Component({
   selector: 'app-inscripciones',
@@ -14,10 +17,16 @@ import { AlumnosListComponent } from '../alumnos/alumnos-list/alumnos-list.compo
   styleUrls: ['./inscripciones.component.css']
 })
 export class InscripcionesComponent implements OnInit {
+  counter = arraycounter;
+
   searchtext: string = "";
   alumnoSelected: any;
+  inscripcionesAlumno: any[] = [];
   meses = aMeses;
   cursoSelected: any = null;
+
+  ciclosEscolares: any[] = [];
+  cicloSelected: any;
 
   cursos: any[] =  [
     {
@@ -109,13 +118,33 @@ export class InscripcionesComponent implements OnInit {
   constructor(
     private dialogService: DialogService,
     private messageService: MessageService,
-    private cargosService: CargosService
+    private cargosService: CargosService,
+    private ciclosService: CiclosescolaresService,
+    private inscripcionesService: InscripcionesService
   ) { }
 
   ngOnInit(): void {
     // this.selectedCurso = this.cursos[1];
     // this.setfocus("alumnSearch");
     // this.fechaprimerpago = "03/03/2021"
+    this.loadCiclosEscolares();
+  }
+
+  loadCiclosEscolares(){
+    this.ciclosService.getCiclosEscolares()
+    .then(async (resp)=>{
+      console.log(resp);
+      const body = await resp.json();
+      console.log(body);
+
+      if(!body.ok){
+        console.log("No hay ciclos escolares");
+        this.showToastMessage("Ciclos escolares", "No hay ciclos escolares para realizar inscripciones", eSeverityMessages.error);
+        return;        
+      }
+      this.ciclosEscolares = body.ciclosescolares;
+      this.cicloSelected = body.ciclosescolares[0];
+    });
   }
 
   buildConcepto( cargo: any, index: number=0 ){
@@ -157,10 +186,18 @@ export class InscripcionesComponent implements OnInit {
     //  this.messageService.add({severity:'info', summary: 'Alumno seleccionado', detail:'matricula:' + alumno.matricula });
         let nombrecompleto = `${alumno.matricula || "" }  - ${alumno.nombre} ${alumno.apaterno}`
         this.showToastMessage("Alumno seleccionado", nombrecompleto, eSeverityMessages.info);
+        this.buscarInscripciones(alumno.id);
     });
   }
 
   continuarInscripcion(){
+    
+    if( this.isEnrolled(this.cicloSelected.id) ){
+      console.log("El alumno ya esta inscrito en este ciclo escolar");
+      this.showToastMessage("Error", "El alumno ya esta inscrito en este ciclo escolar.", eSeverityMessages.error);     
+      return;
+    }
+
     let cargos : any[] = []; 
     cargos = this.generarCargos();
     // console.log("cargos a guardar", cargos);
@@ -219,10 +256,6 @@ export class InscripcionesComponent implements OnInit {
     return cargos;
   }
 
-  counter(i: number) {
-    return new Array(i);
-  }
-
   setfocus(controlname: string){
     document.getElementsByName(controlname)[0].focus();  
   }
@@ -237,6 +270,18 @@ export class InscripcionesComponent implements OnInit {
             severity: tipo || 'success', 
             summary: title || 'Titulo', 
             detail: `${text}` || 'Texto'});
+  }
+
+  buscarInscripciones(id:string){
+    this.inscripcionesService.findInscripciones("", id)
+        .then(async (resp)=>{
+          const body = await resp.json();
+          this.inscripcionesAlumno = body.inscripciones;          
+        });
+  }
+
+  isEnrolled(cicloId: string): boolean{
+    return !!this.inscripcionesAlumno.find((x) => ( x.cicloescolar.id === cicloId ) );
   }
 
 }
