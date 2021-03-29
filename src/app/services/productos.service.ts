@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { fetchToken } from '../helpers/fetch';
 
@@ -6,8 +5,6 @@ import { fetchToken } from '../helpers/fetch';
   providedIn: 'root'
 })
 export class ProductosService {
-
-  constructor(private http: HttpClient) { }
 
   getProductos(urlQueryParams?:string) {
     return fetchToken(`producto`, urlQueryParams, 'GET');

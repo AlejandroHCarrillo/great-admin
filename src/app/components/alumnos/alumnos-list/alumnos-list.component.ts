@@ -6,6 +6,7 @@ import { Alumno } from 'src/app/interfaces/alumno';
 import { AlumnosService } from 'src/app/services/alumnos.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { setfocus } from 'src/app/helpers/tools';
+import { PageInfo } from 'src/app/interfaces/pageinfo.model';
     
 @Component({
   selector: 'app-alumnos-list',
@@ -17,15 +18,7 @@ export class AlumnosListComponent implements OnInit {
   txtbuscar: string = "";
   searchResultMsg = "";
 
-  pagesize = PAGE_SIZE;
-
-  pageinfo = {
-                first : 0,
-                rows : this.pagesize,
-                page : 0,
-                pageCount : 0,
-                sort: 'nombre'
-          };
+  pageinfo : PageInfo = new PageInfo(0, PAGE_SIZE, 0, 0, "nombre");
 
   currentPage: number=0;
   totalRecords: number = 0;
@@ -37,6 +30,8 @@ export class AlumnosListComponent implements OnInit {
                 ) { }
 
   ngOnInit(): void {
+    console.log("pageinfo; ", this.pageinfo);
+    
     this.txtbuscar = this.config?.data.searchtext;
     this.buscar();
   }

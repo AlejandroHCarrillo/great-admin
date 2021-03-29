@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { fetchToken } from '../helpers/fetch';
 
@@ -7,7 +6,7 @@ import { fetchToken } from '../helpers/fetch';
 })
 export class AlumnosService {
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
   getAlumnos(urlQueryParams?:string) {
     return fetchToken(`alumno`, urlQueryParams, 'GET');

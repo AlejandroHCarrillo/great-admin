@@ -18,6 +18,7 @@ import { AlumnosComponent } from './components/alumnos/alumnos.component';
 import { AlumnoComponent } from './components/alumnos/alumno/alumno.component';
 import { CajaComponent } from './components/caja/caja.component';
 import { InscripcionesComponent } from './components/inscripciones/inscripciones.component';
+import { CiclosEscolaresComponent } from './components/ciclos-escolares/ciclos-escolares.component';
 
 const routes: Routes = [
   // Rutas protegidas
@@ -31,6 +32,7 @@ const routes: Routes = [
       {path: 'formaspago', component: NopagefoundComponent },
 
       {path: 'caja', component: CajaComponent },
+      {path: 'ciclos', component: CiclosEscolaresComponent },
       {path: 'inscripciones', component: InscripcionesComponent },
       {path: 'ventas', component: VentasComponent },
       {path: 'usuarios', component: UsuariosComponent},
