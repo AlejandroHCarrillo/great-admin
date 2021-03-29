@@ -5,7 +5,7 @@ export class CargoItem {
         public alumno: string,
         public productoId: string = "", 
         public concepto: string = "",
-        public fechavencimiento: string = "",
+        public fechavencimiento: string,
         public precio: number = 0, 
         public cantidad: number = 1,
         public tasaIVA: number = 0, 

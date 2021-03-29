@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { fetchToken } from '../helpers/fetch';
 import { CargoItem } from '../interfaces/cargo-item';
@@ -8,7 +7,7 @@ import { CargoItem } from '../interfaces/cargo-item';
 })
 export class CargosService {
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
   getCargos(urlQueryParams?:string) {
     return fetchToken(`cargo`, urlQueryParams, 'GET');
@@ -31,6 +30,10 @@ export class CargosService {
 
   save(cargo:any){
     return fetchToken('cargo', cargo, 'POST');
+  }  
+
+  savecargos(cargos:CargoItem[]){
+    return fetchToken('cargo/cargos', cargos, 'POST');
   }  
 
   update(cargo:any){

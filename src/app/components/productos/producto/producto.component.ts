@@ -230,7 +230,7 @@ export class ProductoComponent implements OnInit {
 
         console.log("body: ", body);
         this.router.navigate([`producto/${body.id}`]);
-      }         
+      }
     });
   }
 

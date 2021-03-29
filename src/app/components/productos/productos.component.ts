@@ -5,6 +5,7 @@ import { PAGE_SIZE } from 'src/app/config/settings';
 
 import { Producto } from 'src/app/interfaces/producto';
 import { ProductosService } from 'src/app/services/productos.service';
+import { PageInfo } from 'src/app/interfaces/pageinfo.model';
 
 @Component({
   selector: 'app-productos',
@@ -16,15 +17,8 @@ export class ProductosComponent implements OnInit {
   searchResultMsg = "";
 
   showDeleteButtons: boolean = false;
-  pagesize = PAGE_SIZE;
 
-  pageinfo = {
-                first : 0,
-                rows : this.pagesize,
-                page : 0,
-                pageCount : 0,
-                sort: 'nombre'
-          };
+  pageinfo : PageInfo = new PageInfo(0, PAGE_SIZE, 0, 0, "nombre");
 
   currentPage: number=0;
   totalRecords: number = 0;

@@ -5,6 +5,20 @@ export const eEstatusCargos = {
     CANCELADO: "CANCELADO"
 }
 
+export const eTiposPago = {
+    CONTADO: "CONTADO",
+    TCREDITO: "TARJETA DE CREDITO",
+    TDEBITO: "TARJETA DE DEBITO",
+    CHEQUE: "CHEQUE"
+}
+
+export const eSeverityMessages = {
+        success: "success",
+        info: "info",
+        warn: "warn",
+        error: "error",
+}
+
 export const aMeses = [
     "Enero",
     "Febrero",

@@ -59,7 +59,7 @@
     <div class="row">
         <div class="col text-center">
             <p-paginator #paginador
-                        [rows]="pagesize"
+                        [rows]="pageinfo.rows"
                         [totalRecords]="totalRecords" 
                         [rowsPerPageOptions]="[3,5,10,20,30]"
                         (onPageChange)="paginate($event)"

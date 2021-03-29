@@ -16,10 +16,15 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToolbarModule } from 'primeng/toolbar';
+import { RatingModule } from 'primeng/rating';
+import { DialogModule } from 'primeng/dialog';
+
+import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -58,6 +63,7 @@ import { ProductosListComponent } from './components/productos/productos-list/pr
 import { AlumnosListComponent } from './components/alumnos/alumnos-list/alumnos-list.component';
 import { AuthService, SubirArchivoService } from './services/services.index';
 import { InscripcionesComponent } from './components/inscripciones/inscripciones.component';
+import { CiclosEscolaresComponent } from './components/ciclos-escolares/ciclos-escolares.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -87,7 +93,8 @@ import { InscripcionesComponent } from './components/inscripciones/inscripciones
     ImagesGalleryComponent,
     CajaComponent,
     ProductosListComponent,
-    InscripcionesComponent
+    InscripcionesComponent,
+    CiclosEscolaresComponent
   ],
   imports: [
     BrowserModule,
@@ -109,10 +116,14 @@ import { InscripcionesComponent } from './components/inscripciones/inscripciones
     PaginatorModule,
     InputSwitchModule,
     InputNumberModule,
+    DialogModule,
     DynamicDialogModule,
     ToastModule,
     ButtonModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ConfirmPopupModule,
+    ToolbarModule,
+    RatingModule
   ],
   providers: [
     MessageService,
