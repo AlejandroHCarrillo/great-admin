@@ -14,7 +14,10 @@ import {
     // HospitalService,
     // MedicoService,
 
-    SubirArchivoService
+    SubirArchivoService,
+
+    ClientesService,
+    AlumnosService
     
    } from './services.index';
   
@@ -35,6 +38,9 @@ import {
       // MedicoService,
       SubirArchivoService,
       // ModalUploadService
+      ClientesService,
+      AlumnosService,
+  
     ],
     declarations: []
   })

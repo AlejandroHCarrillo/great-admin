@@ -1,17 +1,17 @@
 <p-toast></p-toast>
 
 <div class="card card-full-wide">
-    <p-toolbar styleClass="p-mb-4">
+    <!-- <p-toolbar styleClass="p-mb-4"> -->
         <ng-template pTemplate="left">
-            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="openNew()"></button>
+            <!-- <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="openNew()"></button> -->
             <button pButton pRipple label="Eliminar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedItems()" [disabled]="!ciclosescolaresSelected || !ciclosescolaresSelected.length"></button>
         </ng-template>
 
-        <ng-template pTemplate="right">
+        <!-- <ng-template pTemplate="right"> -->
             <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-d-inline-block"></p-fileUpload> -->
-            <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help"></button>
-        </ng-template>
-    </p-toolbar>
+            <!-- <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help"></button> -->
+        <!-- </ng-template> -->
+    <!-- </p-toolbar> -->
 
     <p-table #dt [value]="ciclosescolares" [rows]="10" [paginator]="true" [globalFilterFields]="['nombre','country.nombre','representative.nombre','status']"
         [(selection)]="ciclosescolaresSelected" [rowHover]="true" dataKey="id"
@@ -127,6 +127,14 @@
 </p-dialog>
 
 <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+<div *ngIf="!cicloescolarDialog" class="btn btn-primary fab" (click)="openNew()">
+    <span class="icon"><i class="fas fa-plus"></i></span>
+</div>
+
+<div class="btn btn-danger fab" style="top: 160px;" (click)="deleteSelectedItems()" *ngIf="ciclosescolaresSelected && ciclosescolaresSelected.length>0">
+    <span class="icon"><i class="fas fa-minus"></i></span>
+</div>
 
 TODO: 
 <ul>

@@ -135,7 +135,7 @@
                     <div *ngFor="let item of counter( cargo.numpagos ); let i = index" >
                         <div class="card cargo">
                             <div><strong>Concepto:&nbsp;</strong>{{ buildConcepto( cargo, i ) }}</div>
-                            <div><strong>Monto:&nbsp;</strong>{{ cargo.costo | currency}}</div>
+                            <div><strong>Monto:&nbsp;</strong>{{ cargo.monto | currency}}</div>
                             <div><strong>Fecha:&nbsp;</strong>{{ calculaFechaVencimiento(i) | date: 'dd/MMM/yyyy' }}</div>
                             <small *ngIf="cargo.numpagos>1" >Pago {{i+1}} de {{ cargo.numpagos }}</small>
                         </div>
@@ -150,5 +150,6 @@
             </div>
         </div>
     </div>
+
 </div>
-<!-- <pre> curso seleccionado: {{ cursoSelected | json }} </pre> -->
+<pre> cursos: {{ cursos | json }} </pre>

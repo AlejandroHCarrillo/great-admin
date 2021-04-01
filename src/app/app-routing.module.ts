@@ -19,6 +19,8 @@ import { AlumnoComponent } from './components/alumnos/alumno/alumno.component';
 import { CajaComponent } from './components/caja/caja.component';
 import { InscripcionesComponent } from './components/inscripciones/inscripciones.component';
 import { CiclosEscolaresComponent } from './components/ciclos-escolares/ciclos-escolares.component';
+import { CursosComponent } from './components/cursos/cursos.component';
+import { CursoComponent } from './components/cursos/curso/curso.component';
 
 const routes: Routes = [
   // Rutas protegidas
@@ -31,6 +33,9 @@ const routes: Routes = [
       {path: 'cuentas', component: NopagefoundComponent },
       {path: 'formaspago', component: NopagefoundComponent },
 
+      {path: 'cursos', component: CursosComponent },
+      {path: 'curso', component: CursoComponent },
+      {path: 'curso/:id', component: CursoComponent },
       {path: 'caja', component: CajaComponent },
       {path: 'ciclos', component: CiclosEscolaresComponent },
       {path: 'inscripciones', component: InscripcionesComponent },

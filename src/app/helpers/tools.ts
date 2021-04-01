@@ -1,6 +1,6 @@
 import * as moment from "moment";
 
-export const isInvalidControl = function (name: any, form:any){
+export const isInvalidControl = (name: any, form:any) => {
     const control = form.get(name);
     return (!control?.valid && control?.touched);
 }

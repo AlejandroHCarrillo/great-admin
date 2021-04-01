@@ -1,0 +1,117 @@
+<div class="container">
+    <h1><small>Cursos</small></h1>
+    <hr>
+    <form #f="ngForm" (ngSubmit)="save(f.value)" *ngIf="curso">
+
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col-3">
+                        <label for="code" class="form-label">Codigo:</label>
+                        <input type="text" class="form-control" 
+                        id="code" name="code" 
+                        placeholder="Escriba el code del curso" maxlength="10"
+                        [(ngModel)]="curso.code"
+                        [class.is-invalid]="isInvalid('curso.code')"
+                        >
+                        <small *ngIf="isInvalid('curso.code')" class="text-danger">El nombre del curso es obligatorio </small>    
+                    </div>
+
+                    <div class="col">
+                        <label for="nombre" class="form-label">Nombre del Curso:</label>
+                        <input type="text" class="form-control" 
+                        id="nombre" name="nombre" 
+                        placeholder="Escriba el nombre del curso" maxlength="30"
+                        [(ngModel)]="curso.nombre"
+                        [class.is-invalid]="isInvalid('curso.nombre')"
+                        >
+                        <small *ngIf="isInvalid('curso.nombre')" class="text-danger">El nombre del curso es obligatorio </small>        
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col">
+
+                        <label for="descripcion" class="form-label">Descripcion del Curso:</label>
+                        <input type="text" class="form-control" 
+                        id="descripcion" name="descripcion" 
+                        placeholder="Escriba el descripcion del curso" maxlength="30"
+                        [(ngModel)]="curso.descripcion"
+                        [class.is-invalid]="isInvalid('curso.descripcion')"
+                        >
+                        <small *ngIf="isInvalid('curso.descripcion')" class="text-danger">El nombre del curso es obligatorio </small>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col">
+                        <label for="fechaprimerpago" class="form-label">Fecha primer pago:</label>
+                        <p-calendar 
+                        name="fechaprimerpago" 
+                        [(ngModel)]="curso.fechaprimerpago"
+                        class="col-large"
+                        [class.is-invalid]="isInvalid('curso.fechaprimerpago')"></p-calendar>
+                        
+                        <small *ngIf="isInvalid('curso.fechaprimerpago')" class="text-danger">El nombre del curso es obligatorio </small>
+                    </div>
+
+                    <div class="col">
+                        <label for="nivel" class="form-label">Nivel:</label>
+                        <p-dropdown [options]="niveles"
+                        class="col-large"
+                        optionLabel="name"
+                        name="nivelSelected"
+                        (onChange) ="onChangeNivel($event)"
+                        [(ngModel)]="nivelSelected"></p-dropdown>
+
+                        {{ nivelSelected.code }}
+                        <!-- <input type="text" class="form-control" 
+                        id="nivel" name="nivel" 
+                        placeholder="Escriba el nivel del curso" maxlength="30"
+                        [(ngModel)]="curso.nivel"
+                        [class.is-invalid]="isInvalid('curso.nivel')"
+                        > -->
+                        <small *ngIf="isInvalid('curso.nivel')" class="text-danger">El nombre del curso es obligatorio </small>
+                    </div>
+
+                    <div class="col">
+                        <label for="grado" class="form-label">Grado:</label>
+
+                        <p-inputNumber [min]="1" [max]="6"
+                            class="col-medium"
+                            [showButtons]="true"
+                            id="grado" name="grado" placeholder="Escriba el grado del curso"
+                            [(ngModel)]="curso.grado" 
+
+                        ></p-inputNumber>
+
+                        <!-- <input type="number" class="form-control" 
+                        id="grado" name="grado" 
+                        placeholder="Escriba el grado del curso" maxlength="30"
+                        [(ngModel)]="curso.grado"
+                        [class.is-invalid]="isInvalid('curso.grado')"
+                        > -->
+
+                        <small *ngIf="isInvalid('curso.grado')" class="text-danger">El nombre del curso es obligatorio </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <h3>Cargos:</h3>
+                <hr>
+                {{ curso.cargos | json }}
+            </div>
+        </div>
+
+
+        <button type="submit" [disabled]="!f.valid">
+            Save
+        </button>
+    </form>
+
+</div>
+
+<pre>
+{{curso|json}}
+</pre>

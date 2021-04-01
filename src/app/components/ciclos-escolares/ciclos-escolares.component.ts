@@ -30,16 +30,15 @@ export class CiclosEscolaresComponent implements OnInit {
               private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
-    console.log("ciclos init");
+    // console.log("ciclos init");
     this.loaddata();
-
   }
 
 loaddata(){
     let queryParams = `desde=${this.pageinfo.first}&records=${this.pageinfo.rows}&sort=${this.pageinfo.sort}`
     this.ciclosService.getCiclosEscolares(queryParams)    
         .then(async (resp)=>{
-            console.log("resp: ", resp);
+            // console.log("resp: ", resp);
             const body = await resp.json();
             this.ciclosescolares = body.ciclosescolares;
             this.totalRecords = body.total;

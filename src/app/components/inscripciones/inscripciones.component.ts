@@ -10,6 +10,7 @@ import { InscripcionesService } from 'src/app/services/inscripciones.service';
 import { aMeses, eEstatusCargos, eSeverityMessages } from '../../config/enums';
 import { AlumnosListComponent } from '../alumnos/alumnos-list/alumnos-list.component';
 import { arraycounter } from 'src/app/helpers/tools'
+import { CursosService } from 'src/app/services/cursos.service';
 
 @Component({
   selector: 'app-inscripciones',
@@ -120,7 +121,8 @@ export class InscripcionesComponent implements OnInit {
     private messageService: MessageService,
     private cargosService: CargosService,
     private ciclosService: CiclosescolaresService,
-    private inscripcionesService: InscripcionesService
+    private inscripcionesService: InscripcionesService,
+    private cursosService: CursosService
   ) { }
 
   ngOnInit(): void {
@@ -128,17 +130,36 @@ export class InscripcionesComponent implements OnInit {
     // this.setfocus("alumnSearch");
     // this.fechaprimerpago = "03/03/2021"
     this.loadCiclosEscolares();
+    this.loadCursos();
+  }
+
+
+  loadCursos(){
+    this.cursosService.getCursos()
+    .then(async (resp)=>{
+      // console.log(resp);
+      const body = await resp.json();
+      // console.log(body);
+
+      if(!body.ok){
+        // console.log("No hay cursos");
+        this.showToastMessage("Cursos", "No hay cursos", eSeverityMessages.error);
+        return;        
+      }
+      this.cursos = body.cursos;
+      this.cursoSelected = body.cursos[0];
+    });
   }
 
   loadCiclosEscolares(){
     this.ciclosService.getCiclosEscolares()
     .then(async (resp)=>{
-      console.log(resp);
+      // console.log(resp);
       const body = await resp.json();
-      console.log(body);
+      // console.log(body);
 
       if(!body.ok){
-        console.log("No hay ciclos escolares");
+        // console.log("No hay ciclos escolares");
         this.showToastMessage("Ciclos escolares", "No hay ciclos escolares para realizar inscripciones", eSeverityMessages.error);
         return;        
       }
@@ -149,8 +170,11 @@ export class InscripcionesComponent implements OnInit {
 
   buildConcepto( cargo: any, index: number=0 ){
     // console.log(cargo);
-    let intevalopagos = this.cursoSelected.intevalopagos;
-    let fechaInicio = new Date(this.cursoSelected.fechaprimerpago);
+    // console.log(this.cicloSelected);
+    
+
+    let intevalopagos = this.cursoSelected.intevalopagos || 1;
+    let fechaInicio = new Date(this.cicloSelected.fechaInicio);
 
     let mesini = fechaInicio.getMonth() + (index * intevalopagos);
     if (mesini>11) mesini -= 12;
@@ -193,38 +217,49 @@ export class InscripcionesComponent implements OnInit {
   continuarInscripcion(){
     
     if( this.isEnrolled(this.cicloSelected.id) ){
-      console.log("El alumno ya esta inscrito en este ciclo escolar");
+      // console.log("El alumno ya esta inscrito en este ciclo escolar");
       this.showToastMessage("Error", "El alumno ya esta inscrito en este ciclo escolar.", eSeverityMessages.error);     
       return;
     }
 
-    let cargos : any[] = []; 
-    cargos = this.generarCargos();
-    // console.log("cargos a guardar", cargos);
-    // return;
-    if(cargos.length>0) {
-      this.cargosService.savecargos(cargos)
-          .then((resp)=>{
-            if(!resp.ok){
-              // console.log("Hubo un error al guardar los cargos.");
+    this.inscripcionesService.save({  alumno: this.alumnoSelected.id,
+                                      cicloescolar: this.cicloSelected.id
+    }).then(()=>{
+
+      // console.log("Inscripcion realizada con exito");
+      this.showToastMessage("Inscripcion", "Inscripcion realizada con exito.", eSeverityMessages.success);
+
+      let cargos : any[] = [];
+      cargos = this.generarCargos();
+      // console.log("cargos a guardar", cargos);
+      // return;
+      if(cargos.length>0) {
+        this.cargosService.savecargos(cargos)
+            .then((resp)=>{
+              if(!resp.ok){
+                // console.log("Hubo un error al guardar los cargos.");
+                this.showToastMessage("Error", "Hubo un error al guardar los cargos.", eSeverityMessages.error);
+                return;
+              }
+              // console.log("Los cargos fueron guardados.", resp);
+              this.showToastMessage("Cargos guardados", 
+                                    `Los ${ cargos.length } cargos a ${ this.alumnoSelected.nombre } fueron guardados con exito`, 
+                                    eSeverityMessages.success);
+              
+              this.alumnoSelected = null;
+              this.cursoSelected = null;
+              this.searchtext = "";
+              this.setfocus("alumnSearch");
+              
+            }).catch((err)=>{
+              // console.log("Hubo un error al guardar los cargos", err);
               this.showToastMessage("Error", "Hubo un error al guardar los cargos.", eSeverityMessages.error);
-              return;
-            }
-            // console.log("Los cargos fueron guardados.", resp);
-            this.showToastMessage("Cargos guardados con exitoso.", 
-                                  `${ cargos.length } cargos a ${ this.alumnoSelected.nombre } fueron guardados con exito`, 
-                                  eSeverityMessages.success);
-            
-            this.alumnoSelected = null;
-            this.cursoSelected = null;
-            this.searchtext = "";
-            this.setfocus("alumnSearch");
-            
-          }).catch((err)=>{
-            // console.log("Hubo un error al guardar los cargos", err);
-            this.showToastMessage("Error", "Hubo un error al guardar los cargos.", eSeverityMessages.error);
-          });
-    }
+            });
+      }
+
+    });
+
+
   }
 
   generarCargos(): any[]{
