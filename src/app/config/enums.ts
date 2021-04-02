@@ -58,3 +58,21 @@ export const ddNiveles = [
     { code: "MAESTRIA", name: "MAESTRIA" },
     { code: "DOCTORADO", name: "DOCTORADO" }
 ]
+
+export const ddTiposCargos = [
+    { code: "COL", name: "COLEGIATURAS" },
+    { code: "INSC", name: "INSCRIPCION" },
+    { code: "CTAFAM", name: "CUOTA FAMILIAR" },
+    { code: "TRANSP", name: "TRANSPORTE" },
+    { code: "SEGACC", name: "SEGURO ACCIDENTES" },
+    { code: "COMIDA", name: "COMIDAS" },
+    { code: "AFTERKDS", name: "AFTER NIÑOS" },
+    { code: "AFTERADLT", name: "AFTER ADULTOS" },
+    { code: "MATESC", name: "MATERIALES ESCOLARES" },
+    { code: "HOREXT", name: "HORARIO EXTENDIDO" },
+    { code: "PASSAL", name: "PASEOS Y SALIDAS" },
+    { code: "CURSOS", name: "CURSOS" },
+    { code: "CONF", name: "CONFERENCIAS" },
+    { code: "OTROS", name: "OTROS" }
+]
+

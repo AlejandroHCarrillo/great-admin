@@ -40,7 +40,7 @@ export class InscripcionesComponent implements OnInit {
       nombre: "Kinder pago mensual",
       descripcion: "Choro de la descripcion del curso y las facilidades de pago",
       costo: 10000,
-      intevalopagos: 1,
+      intervalopagos: 1,
       numpagos: 12,
       fechaprimerpago: "08/01/2021",
       cargos:[
@@ -55,7 +55,7 @@ export class InscripcionesComponent implements OnInit {
       nombre: "Kinder pago bimestral",
       descripcion: "Choro de la descripcion del curso y el X% de descuento y las facilidades de pago",
       costo: 9500,
-      intevalopagos: 2,
+      intervalopagos: 2,
       numpagos: 6,
       fechaprimerpago: "08/02/2021",
       cargos:[
@@ -70,7 +70,7 @@ export class InscripcionesComponent implements OnInit {
       nombre: "Kinder pago trimestral",
       descripcion: "Choro de la descripcion del curso y el MAYOR % de descuento Y las facilidades de pago",
       costo: 9000,
-      intevalopagos: 3,
+      intervalopagos: 3,
       numpagos: 4,
       fechaprimerpago: "08/03/2021",
       cargos:[
@@ -85,7 +85,7 @@ export class InscripcionesComponent implements OnInit {
       nombre: "Kinder pago semestral",
       descripcion: "Choro de la descripcion del curso y el MUCHO MEJO % de descuento",
       costo: 8500,
-      intevalopagos: 6,
+      intervalopagos: 6,
       numpagos: 2,
       fechaprimerpago: "08/04/2021",
       cargos:[
@@ -100,7 +100,7 @@ export class InscripcionesComponent implements OnInit {
       nombre: "Kinder pago anual",
       descripcion: "Choro de la descripcion del curso y MEJOR PORCENTAJE DE DESCUENTO",
       costo: 8000,
-      intevalopagos: 1,
+      intervalopagos: 1,
       numpagos: 4,
       fechaprimerpago: "08/05/2021",
       cargos:[
@@ -173,22 +173,22 @@ export class InscripcionesComponent implements OnInit {
     // console.log(this.cicloSelected);
     
 
-    let intevalopagos = this.cursoSelected.intevalopagos || 1;
+    let intervalopagos = this.cursoSelected.intervalopagos || 1;
     let fechaInicio = new Date(this.cicloSelected.fechaInicio);
 
-    let mesini = fechaInicio.getMonth() + (index * intevalopagos);
+    let mesini = fechaInicio.getMonth() + (index * intervalopagos);
     if (mesini>11) mesini -= 12;
-    let mesfin = mesini + this.cursoSelected.intevalopagos - 1;
+    let mesfin = mesini + this.cursoSelected.intervalopagos - 1;
     if (mesfin>11) mesfin -= 12;
 
-    let periodo = intevalopagos===1? this.meses[index] : ` ${this.meses[mesini]} - ${this.meses[mesfin]}`
+    let periodo = intervalopagos===1? this.meses[index] : ` ${this.meses[mesini]} - ${this.meses[mesfin]}`
 
     return cargo.numpagos===1? cargo.nombre : `${cargo.nombre} ${ periodo }`
 
   }
 
   calculaFechaVencimiento(index: number){    
-    let mes = index * this.cursoSelected.intevalopagos;
+    let mes = index * this.cursoSelected.intervalopagos;
     return moment(this.cursoSelected.fechaprimerpago).add(mes, "month").format("MM/DD/YYYY");
   }
 

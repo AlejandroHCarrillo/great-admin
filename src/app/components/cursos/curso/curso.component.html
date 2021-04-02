@@ -1,10 +1,9 @@
 <div class="container">
-    <h1><small>Cursos</small></h1>
-    <hr>
-    <form #f="ngForm" (ngSubmit)="save(f.value)" *ngIf="curso">
-
-        <div class="row">
-            <div class="col">
+    <div class="row">
+        <div class="col">
+            <h1><small>Curso</small></h1>
+            <hr>    
+            <form #f="ngForm" (ngSubmit)="save(f.value)" *ngIf="curso">
                 <div class="row">
                     <div class="col-3">
                         <label for="code" class="form-label">Codigo:</label>
@@ -63,14 +62,6 @@
                         name="nivelSelected"
                         (onChange) ="onChangeNivel($event)"
                         [(ngModel)]="nivelSelected"></p-dropdown>
-
-                        {{ nivelSelected.code }}
-                        <!-- <input type="text" class="form-control" 
-                        id="nivel" name="nivel" 
-                        placeholder="Escriba el nivel del curso" maxlength="30"
-                        [(ngModel)]="curso.nivel"
-                        [class.is-invalid]="isInvalid('curso.nivel')"
-                        > -->
                         <small *ngIf="isInvalid('curso.nivel')" class="text-danger">El nombre del curso es obligatorio </small>
                     </div>
 
@@ -79,36 +70,205 @@
 
                         <p-inputNumber [min]="1" [max]="6"
                             class="col-medium"
-                            [showButtons]="true"
-                            id="grado" name="grado" placeholder="Escriba el grado del curso"
+                            [showButtons]="false"
+                            id="grado" name="grado" placeholder="1"
                             [(ngModel)]="curso.grado" 
 
                         ></p-inputNumber>
-
-                        <!-- <input type="number" class="form-control" 
-                        id="grado" name="grado" 
-                        placeholder="Escriba el grado del curso" maxlength="30"
-                        [(ngModel)]="curso.grado"
-                        [class.is-invalid]="isInvalid('curso.grado')"
-                        > -->
-
                         <small *ngIf="isInvalid('curso.grado')" class="text-danger">El nombre del curso es obligatorio </small>
                     </div>
                 </div>
-            </div>
 
-            <div class="col">
-                <h3>Cargos:</h3>
                 <hr>
-                {{ curso.cargos | json }}
-            </div>
+                selectedCargoIndex: {{cargoSelectedIndex}}
+                <div class="shadow p-3 mb-2 bg-body rounded">
+                    <div class="row"></div>
+
+                    <div class="row">
+                        <div class="col-3 title mt-4">Tipo Cargo:</div>
+                        <div class="col  mt-4">
+                            <p-dropdown [options]="tiposCargos"
+                                optionLabel="name"
+                                name="tipocargo"
+                                [(ngModel)]="tipocargoSelected"
+                                (onChange)="onChangeTipocargo($event)"
+                                class="col-extra-large"
+                                >
+                            </p-dropdown>
+                            <!-- <pre> {{ tipocargoSelected | json}} </pre> -->
+                        </div>
+                        <!-- <div class="col title"></div> -->
+                        <div class="col">
+                            <small>Buscar producto:&nbsp;</small>
+                            <input type="text" class="form-control" maxlength="30" 
+                            placeholder="Escriba el nombre o el codigo del producto"
+                            id="producto" 
+                            name="producto" 
+                            [(ngModel)]="productoSearch" 
+                            (keyup.enter)="showProductosList()" 
+                            (keyup)="searchResultMsg = ''"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-3 title">Nombre cargo:</div>
+                        <div class="col">
+                            <input type="text" class="form-control" maxlength="30" 
+                            placeholder="Nombre del cargo"
+                            id="cargonombre" 
+                            name="cargonombre" 
+                            [(ngModel)]="cargoSelected.nombre" 
+                            >
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-3 title">Precio:</div>
+                        <div class="col"> 
+                            <p-inputNumber [min]="0" [max]="9999999"
+                                id="precio" name="precio" placeholder="$0.00"
+                                class="col-medium" [maxlength]="15"
+                                inputStyleClass="text-numeric"
+                                prefix="$" locale="es-MX"
+                                mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"
+                                [showButtons]="false"
+                                [(ngModel)]="cargoSelected.precio" 
+                            ></p-inputNumber>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col"></div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-3 title">Monto IVA:</div>
+                        <div class="col-4 text-numeric">$ {{ (cargoSelected.precio || 0) * (cargoSelected.tasaIVA || 0 ) }} </div>
+                        <div class="col-5 title">Tasa IVA: {{ (cargoSelected.tasaIVA || 0 ) * 100 }} %</div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-3 title">Moto cargo:</div>
+                        <div class="col-4 text-numeric">{{ cargoSelected.precio * ( 1 + cargoSelected.tasaIVA) | currency }} </div>
+                        <div class="col-5"></div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-3
+                         title">Numero pagos:</div>
+                        <div class="col">
+                            <p-inputNumber [min]="0" [max]="60"
+                                id="numpagos" name="numpagos" placeholder="0"
+                                class="col-medium" [maxlength]="10"
+                                [showButtons]="false"
+                                inputStyleClass="text-numeric"
+                                [(ngModel)]="cargoSelected.numpagos"
+                                suffix=" pago(s)"
+                            ></p-inputNumber>
+                        </div>
+                        <div class="col-3 title">Intervalo:</div>
+                        <div class="col">
+                            <p-inputNumber [min]="1" [max]="12"
+                                id="intervalopagos" name="intervalopagos" placeholder="0"
+                                class="col-medium" [maxlength]="11"
+                                inputStyleClass="text-numeric"
+                                [showButtons]="false"
+                                [(ngModel)]="cargoSelected.intervalopagos"
+                                suffix=" mes(es)."
+                            ></p-inputNumber>
+                            </div>
+                    </div>
+                    <!-- <div class="row">
+                        <div class="col"></div>
+                        <div class="col"></div>
+                    </div> -->
+                </div>
+
+                <pre>
+                    {{ cargoSelected | json }}
+                </pre>
+
+                <button type="submit" [disabled]="!f.valid">
+                    Save
+                </button>
+            </form>
         </div>
 
+        <div class="col mt-3">
+            <h4>Cargos:</h4>
+            <hr>
+            <div class="row" *ngFor="let cargo of curso.cargos; let i = index">
+                <div class="col">
 
-        <button type="submit" [disabled]="!f.valid">
-            Save
-        </button>
-    </form>
+                    <div class="row" (click)="setCurrentCargo(i)">
+                        <div class="col title-header text-align">
+                            {{ cargo.nombre }} 
+                            {{ cargo.monto * cargo.numpagos | currency }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 title">Producto:&nbsp;</div>
+                        <div class="col">{{ cargo.producto?.nombre }}</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 title">Precio:&nbsp;</div>
+                        <div class="col text-numeric">{{ cargo.precio | currency }} </div>
+                        <div class="col"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 title">Tasa IVA:&nbsp;</div>
+                        <div class="col">{{ (cargo.tasaIVA || 0) * 100 }}% </div>
+                        <div class="col"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 title">Monto IVA:&nbsp;</div>
+                        <div class="col text-numeric">{{ cargo.precio * cargo.tasaIVA | currency }} </div>
+                        <div class="col"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 title">Monto cargo:&nbsp;</div>
+                        <div class="col text-numeric">{{ cargo.monto | currency }}</div>
+                        <div class="col"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 title">Numero de cargos:&nbsp;</div>
+                        <div class="col">{{ cargo.numpagos }}</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 title">Intervalo pagos:&nbsp;</div>
+                        <div class="col">{{ cargo.intervalopagos }} mes(es)</div>
+                    </div>
+
+                    <!-- <div class="row">
+                        <div class="col-4 title">Total:&nbsp;</div>
+                        <div class="col text-numeric"><strong>{{ cargo.monto * cargo.numpagos | currency }}</strong></div>
+                        <div class="col"></div>
+                    </div> -->
+                </div>
+
+                <hr>
+                <!-- <pre>
+                    {{cargo | json}}
+                </pre> -->
+
+            </div>
+    
+            <hr>
+            <pre>
+                {{ curso.cargos | json }}
+            </pre>
+
+        </div>
+
+    </div>
+
+
+
 
 </div>
 
