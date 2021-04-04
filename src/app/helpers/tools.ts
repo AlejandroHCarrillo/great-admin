@@ -29,4 +29,14 @@ export const isDate = ( value: string ) => {
 
 export const arraycounter = function (i: number) {
     return new Array(i);
-  }
+}
+
+export const arrRemoveAt = (arr: any[], index:number) => {
+    if(index < 0 || index > arr.length-1 ) { return arr }
+
+    let arrClon = [...arr];
+    return [ ...arrClon.splice(0, index), 
+             ...arr.splice(index+1)
+           ];
+
+}

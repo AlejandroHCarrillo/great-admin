@@ -175,6 +175,10 @@ button{
     text-align: right;
 }
 
+.text-center{
+    text-align: center;
+}
+
 /* images */
 .image-small-circle{
   height: 50px;

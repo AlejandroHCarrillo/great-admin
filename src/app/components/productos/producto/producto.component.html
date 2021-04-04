@@ -34,6 +34,7 @@
                 <div class="col"> 
                     <div class="mb-3 form-group form">
                         <label for="nombre" class="form-label">Nombre:</label>
+
                         <input type="text" class="form-control" id="nombre" placeholder="Escriba el nombre" maxlength="30"
                         name="nombre" 
                         formControlName="nombre"
@@ -88,7 +89,7 @@
                     <div class="mb-3 form-group form">
                         <label for="tasaIVA" class="form-label" >Excenta IVA: {{ (!!form.value.exentoIVA)?"Si":"No" }}</label>
                         <div style="display: flex; flex-direction: row;;" >
-                            <p-inputSwitch name="exentoIVA" formControlName="exentoIVA" ></p-inputSwitch>
+                            <p-inputSwitch name="exentoIVA" formControlName="exentoIVA" (onChange)="toggleTax($event)" ></p-inputSwitch>
                         </div>
                     </div>
                 </div>
@@ -97,11 +98,22 @@
                     <div class="mb-3 form-group form">
                         <label for="tasaIVA" class="form-label" >% Tasa IVA:</label>
                         <div  style="display: flex; flex-direction: row;" >
-                            <input type="text" class="form-control text-numeric" id="tasaIVA" placeholder="0.00" maxlength="3"
+
+                            <!-- <input type="text" class="form-control text-numeric" id="tasaIVA" placeholder="0.00" maxlength="3"
                             name="tasaIVA" 
                             formControlName="tasaIVA"
                             [class.is-invalid]="isInvalidControl('tasaIVA')"
-                            ><span>%</span>
+                            ><span>%</span> -->
+
+                            <p-inputNumber [min]="0" [max]="99"
+                                id="tasaIVA" name="tasaIVA" placeholder="0"
+                                class="col-medium" [maxlength]="5"
+                                inputStyleClass="text-numeric"
+                                [showButtons]="false"
+                                formControlName="tasaIVA"
+                                suffix="%"
+                            ></p-inputNumber>
+
                             <small *ngIf="isInvalidControl('tasaIVA')" class="text-danger">El tasa IVA es obligatorio </small>
                         </div>
                     </div>

@@ -9,7 +9,7 @@ export class Alumno {
         public fechaIngreso: boolean = true, 
         public matricula: string = "", 
         public nivel: string = "", 
-        public grado: string = "", 
+        public grado: number = 1, 
         public grupo: string = "", 
         public curp: string = "", 
         public sexo: string = "", 

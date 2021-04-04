@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { TASA_IVA } from 'src/app/config/settings'
 import * as moment from 'moment';
 import Swal from 'sweetalert2'
 
@@ -45,9 +46,10 @@ export class ProductoComponent implements OnInit {
     this.editMode = (this.productoId==="");
     this.productoId = this.route.snapshot.paramMap.get("id") || "";
 
-    if(this.productoId==="new"){
+    if(this.productoId === "" || this.productoId==="new"){
       this.productoId = "";
       this.editMode = true;
+      
     } else {
       this.getImages(this.productoId);
     }
@@ -137,7 +139,7 @@ export class ProductoComponent implements OnInit {
       costo: "0.0",
       precio: "0.0",
       cantidad: "",
-      tasaIVA: "0",
+      tasaIVA: TASA_IVA*100,
       exentoIVA: false,
       clasificacion: "P",
       img: "",
@@ -214,6 +216,7 @@ export class ProductoComponent implements OnInit {
   private saveProducto() {
     let obj = {...this.form.value};
     obj.clasificacion = this.form.value.selectedClasificacion.code;
+    obj.tasaIVA = obj.tasaIVA === 0 ? 0: (obj.tasaIVA / 100);
 
     this.productosService.save(obj)
     .then(async (resp) => {
@@ -335,5 +338,18 @@ export class ProductoComponent implements OnInit {
         this.imagesUrls = body.imagenes.map((x:any)=>(x.url));
       }
     });
+  }
+
+  toggleTax(event: any ){
+    let taxControl = this.form.controls["tasaIVA"];
+    
+    console.log(taxControl.value);
+    if(event.checked){
+      taxControl.setValue(0);
+      taxControl.disable();
+    } else {
+      taxControl.setValue(TASA_IVA * 100);
+      taxControl.enable();
+    }
   }
 }
