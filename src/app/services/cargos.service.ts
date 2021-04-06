@@ -43,5 +43,5 @@ export class CargosService {
   delete(id:string){
     return fetchToken(`cargo/${id}`, {}, 'DELETE');
   }
-  
+    
 }

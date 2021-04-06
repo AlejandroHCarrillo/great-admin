@@ -110,12 +110,12 @@
             <h4>Cargos: <button class="btn btn-success" (click)="openNew()">+</button> </h4>
             <hr>
             <div class="row" *ngFor="let cargo of curso.cargos; let i = index">
+                <span class="icon" (click)="removeCargo(i)"><i class="fas fa-times"></i></span>
                 <div class="col">
                     <div class="row" (click)="editCargo(i)">
                         <div class="col title-header text-align">
                             {{ cargo.nombre }} 
                             {{ cargo.monto * cargo.numpagos | currency }}
-                            <span class="icon" (click)="removeCargo(i)"><i class="fas fa-times"></i></span>
                         </div>
                     </div>
 
@@ -179,10 +179,11 @@
 
     </div>
 
-    cargoDialog: {{cargoDialog}}
-    <p-dialog [(visible)]="cargoDialog" [style]="{width: '750px'}" header="Ciclo escolar" [modal]="true" styleClass="p-fluid">
+    <!-- cargoDialog: {{cargoDialog}} -->
+    <p-dialog [(visible)]="cargoDialog" [style]="{width: '750px'}" header="Cargo" [modal]="true" styleClass="p-fluid">
         <ng-template pTemplate="content">
             selectedCargoIndex: {{cargoSelectedIndex}}
+            cursoId: {{ curso.id }}
             <div class="shadow p-3 mb-2 bg-body rounded">
                 <div class="row"></div>
 
@@ -280,7 +281,7 @@
         
         <ng-template pTemplate="footer">
             <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-            <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="save()"></button>
+            <button pButton pRipple label="Agregar" icon="pi pi-check" class="p-button-text" (click)="addCharge()"></button>
         </ng-template>
     </p-dialog>
     

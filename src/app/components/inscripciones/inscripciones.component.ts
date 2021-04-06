@@ -29,87 +29,7 @@ export class InscripcionesComponent implements OnInit {
   ciclosEscolares: any[] = [];
   cicloSelected: any;
 
-  cursos: any[] =  [
-    {
-      code: "",
-      nombre: "Seleccione un curso",
-    },
-    {
-      id: "xxx",
-      code: "KND-M",
-      nombre: "Kinder pago mensual",
-      descripcion: "Choro de la descripcion del curso y las facilidades de pago",
-      costo: 10000,
-      intervalopagos: 1,
-      numpagos: 12,
-      fechaprimerpago: "08/01/2021",
-      cargos:[
-        { nombre: "Inscripcion", costo: 1000, numpagos: 1, producto: { id: "604ae147d7cc5406e4abefc5"} },
-        { nombre: "Material", costo: 500, numpagos:1, producto: { id: "6047f1eb33dff3893ce49634" }},
-        { nombre: "Colegiatura", costo: (10000/12), numpagos: 12, producto: { id: "6051253243160a4cd086173e" }},
-      ]
-    },
-    {
-      id: "xxx",
-      code: "KND-B",
-      nombre: "Kinder pago bimestral",
-      descripcion: "Choro de la descripcion del curso y el X% de descuento y las facilidades de pago",
-      costo: 9500,
-      intervalopagos: 2,
-      numpagos: 6,
-      fechaprimerpago: "08/02/2021",
-      cargos:[
-        { nombre: "Inscripcion", costo: 1000, numpagos: 1, producto: { id: "604ae147d7cc5406e4abefc5"} },
-        { nombre: "Material", costo: 500, numpagos:1, producto: { id: "6047f1eb33dff3893ce49634" }},
-        { nombre: "Colegiatura", costo: (9500/6), numpagos: 6, producto: { id: "6051253243160a4cd086173e" }},
-      ]
-    },
-    {
-      id: "xxx",
-      code: "KND-T",
-      nombre: "Kinder pago trimestral",
-      descripcion: "Choro de la descripcion del curso y el MAYOR % de descuento Y las facilidades de pago",
-      costo: 9000,
-      intervalopagos: 3,
-      numpagos: 4,
-      fechaprimerpago: "08/03/2021",
-      cargos:[
-        { nombre: "Inscripcion", costo: 1000, numpagos: 1, producto: { id: "604ae147d7cc5406e4abefc5"} },
-        { nombre: "Material", costo: 500, numpagos:1, producto: { id: "6047f1eb33dff3893ce49634" }},
-        { nombre: "Colegiatura", costo: (9000/4), numpagos: 3, producto: { id: "6051253243160a4cd086173e" }},
-      ]
-    },
-    {
-      id: "xxx",
-      code: "KND-S",
-      nombre: "Kinder pago semestral",
-      descripcion: "Choro de la descripcion del curso y el MUCHO MEJO % de descuento",
-      costo: 8500,
-      intervalopagos: 6,
-      numpagos: 2,
-      fechaprimerpago: "08/04/2021",
-      cargos:[
-        { nombre: "Inscripcion", costo: 1000, numpagos: 1, producto: { id: "604ae147d7cc5406e4abefc5"} },
-        { nombre: "Material", costo: 500, numpagos:1, producto: { id: "6047f1eb33dff3893ce49634" }},
-        { nombre: "Colegiatura", costo: (8500/2), numpagos: 2, producto: { id: "6051253243160a4cd086173e" }},
-      ]
-    },
-    {
-      id: "xxx",
-      code: "KND-A",
-      nombre: "Kinder pago anual",
-      descripcion: "Choro de la descripcion del curso y MEJOR PORCENTAJE DE DESCUENTO",
-      costo: 8000,
-      intervalopagos: 1,
-      numpagos: 4,
-      fechaprimerpago: "08/05/2021",
-      cargos:[
-        { nombre: "Inscripcion", costo: 1000, numpagos: 1, producto: { id: "604ae147d7cc5406e4abefc5"} },
-        { nombre: "Material", costo: 500, numpagos:1, producto: { id: "6047f1eb33dff3893ce49634" }},
-        { nombre: "Colegiatura", costo: (8000), numpagos: 1, producto: { id: "6051253243160a4cd086173e" }},
-      ]
-    },
-  ]
+  cursos: any[] =  [];
 
   cargosalumno: any[] = [];
   fechaprimerpago: string = "";
@@ -146,7 +66,8 @@ export class InscripcionesComponent implements OnInit {
         this.showToastMessage("Cursos", "No hay cursos", eSeverityMessages.error);
         return;        
       }
-      this.cursos = body.cursos;
+      this.cursos = [ { code: "", nombre: "Seleccione un curso" },
+                      ...body.cursos ] ;
       this.cursoSelected = body.cursos[0];
     });
   }

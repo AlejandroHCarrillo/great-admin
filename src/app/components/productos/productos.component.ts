@@ -28,6 +28,15 @@ export class ProductosComponent implements OnInit {
                 private productosService: ProductosService) { }
 
   ngOnInit(): void {
+    let prevScreen = localStorage.getItem("prevScreen") || '';
+
+    console.log( "prevScreen: ", prevScreen );
+    
+    if (prevScreen == "producto"){
+      this.txtbuscar = localStorage.getItem("lastSearch") || "";
+      this.buscar();
+      return;
+    }
     this.loadProductos();
   }
 
@@ -73,6 +82,7 @@ export class ProductosComponent implements OnInit {
 
     // console.log(queryParams);
     localStorage.setItem('lastquery', queryParams);
+    localStorage.setItem('lastSearch', this.txtbuscar);
     
     this.productosService
     .findProductos(queryParams, this.txtbuscar)

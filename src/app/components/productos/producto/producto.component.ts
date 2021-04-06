@@ -11,6 +11,7 @@ import { ProductosService } from 'src/app/services/productos.service';
 import { DropDownItem } from 'src/app/interfaces/drop-down-item';
 import { Producto } from 'src/app/interfaces/producto';
 import { ImagesService } from 'src/app/shared/services/images.service';
+import { ddTipoItemVenta, ddUnidadesMedida } from 'src/app/config/enums';
 
 @Component({
   selector: 'app-producto',
@@ -27,14 +28,30 @@ export class ProductoComponent implements OnInit {
   imageURL: string = "";
   imagesUrls: string[] = [];
 
-  clasificaciones: DropDownItem[] = [
-    { name: 'Producto', code: 'P' },
-    { name: 'Servicio', code: 'S' }
-  ];
+  clasificaciones: DropDownItem[] = ddTipoItemVenta;
+  unidadesmedida: DropDownItem[] = ddUnidadesMedida;
 
+  unidadmedidaSelected: string = " ";
   results: string[] = [];
 
   form : FormGroup = new FormGroup({});
+
+  productoEmpty = {
+    activo: true,
+    nombre: "",
+    code: "",
+    descripcion: "",
+    costo: "0.0",
+    precio: "0.0",
+    cantidad: "",
+    tasaIVA: TASA_IVA*100,
+    exentoIVA: false,
+    clasificacion: "P",
+    img: "",
+    selectedClasificacion: this.setDropDownValue('P'),
+    unidadmedida: this.setDropDownValue('', 'unidadesmedida')
+  };
+
   
   constructor(  private fb: FormBuilder,
                 private router: Router,
@@ -120,32 +137,18 @@ export class ProductoComponent implements OnInit {
       tasaIVA: ['16', []],
       exentoIVA: [false, []],
       conceptocontable: ['', [Validators.maxLength(50)]],
+      unidadmedida: [''],
       clasificacion: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       img: ['' ],
       
       selectedClasificacion: [{
         name: "Producto",
         code: "P"
-      }]
+      }],      
     });
   }
 
   loadFormData (){
-    let valuesFormProducto = {
-      activo: true,
-      nombre: "",
-      code: "",
-      descripcion: "",
-      costo: "0.0",
-      precio: "0.0",
-      cantidad: "",
-      tasaIVA: TASA_IVA*100,
-      exentoIVA: false,
-      clasificacion: "P",
-      img: "",
-      selectedClasificacion: this.setDropDownValue('P')
-    };
-
     if(this.productoId){
       // console.log("buscando el producto con el id:", this.productoId);
       this.productosService.getProductoById(this.productoId)
@@ -170,7 +173,7 @@ export class ProductoComponent implements OnInit {
             this.producto = producto;
             
             if (producto){
-              Object.keys(valuesFormProducto).map((x)=>{            
+              Object.keys(this.productoEmpty).map((x)=>{            
                 if(x.toString().includes('fecha')){
                   let Fecha = moment(eval(`producto.${x}`));
                   eval(`valuesFormProducto.${x} = '${ Fecha.format('MM/DD/yyyy')}' `);
@@ -185,15 +188,15 @@ export class ProductoComponent implements OnInit {
               });
             }
 
-            valuesFormProducto.selectedClasificacion = this.setDropDownValue(producto.clasificacion);
+            this.productoEmpty.selectedClasificacion = this.setDropDownValue(producto.clasificacion);
 
             // console.log("producto", valuesFormProducto);
-            this.form.reset(valuesFormProducto);
+            this.form.reset(this.productoEmpty);
 
           });
     } else {
       // this.form.setValue({
-        this.form.reset(valuesFormProducto);
+        this.form.reset(this.productoEmpty);
       }
   }
 
@@ -265,8 +268,10 @@ export class ProductoComponent implements OnInit {
     }
   }
 
-  setDropDownValue(code:string) : any {
-    // console.log("code: ", code);    
+  setDropDownValue(code:string, ddname: string = "") : any {
+    if (ddname === "unidadesmedida"){
+      return this.unidadesmedida.find((obj) => ( obj.code === code ));
+    }
     return this.clasificaciones.find((obj) => ( obj.code === code ));
   }
 
@@ -352,4 +357,17 @@ export class ProductoComponent implements OnInit {
       taxControl.enable();
     }
   }
+                
+  edit(id?:string){
+    this.form.reset(this.productoEmpty);
+    this.router.navigate([`producto/${id}`]);
+  }
+
+  unidadMedidaChange(event: any){
+    console.log(event);
+    this.unidadmedidaSelected = " " + event.value.code;
+    console.log(this.unidadmedidaSelected);
+    
+  }
+
 }

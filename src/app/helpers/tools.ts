@@ -32,7 +32,10 @@ export const arraycounter = function (i: number) {
 }
 
 export const arrRemoveAt = (arr: any[], index:number) => {
+    // https://love2dev.com/blog/javascript-remove-from-array/
     if(index < 0 || index > arr.length-1 ) { return arr }
+
+    // return [ ...arr.splice(index, 1) ];
 
     let arrClon = [...arr];
     return [ ...arrClon.splice(0, index), 

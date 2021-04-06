@@ -18,6 +18,7 @@ import { ConfirmationService, MessageService } from "primeng/api";
   templateUrl: "./curso.component.html",
   styleUrls: ['./curso.component.css']
 })
+
 export class CursoComponent implements OnInit {
   counter= arraycounter;
   tiposCargos: DropDownItem[] = [ { name:"Seleccione tipo de cargo", code: "" }, ...ddTiposCargos];
@@ -42,7 +43,7 @@ export class CursoComponent implements OnInit {
   searchResultMsg: string = "";
   productoSelected: any = {};
 
-
+  
 
   constructor(
     public router: Router,
@@ -218,12 +219,38 @@ export class CursoComponent implements OnInit {
 
     if(!this.productoSelected) return;
 
+    if(this.curso.id){
+      // Si el curso ya existe lo guarda de una vez
+      console.log("cargoSelected: ", this.cargoSelected );
+      
+      if(this.cargoSelected.id){
+        // Si el cargo ya existia lo actualizamos 
+        this.cursosService.updateCharge(this.cargoSelected)
+            .then(async(resp)=>{              
+              const body = await resp.json();
+              console.log("respuesta actualizacion: ", body);
+              this.showToastMessage("Cargo", "Actualizado con exito", eSeverityMessages.success);
+              this.curso.cargos[this.cargoSelectedIndex] = this.cargoSelected;
+            });
+      } else {
+        this.cursosService.addCharge({...this.cargoSelected, curso: this.curso.id })
+            .then(async(resp)=>{
+              const body = await resp.json();
+              // console.log(body);
+              this.showToastMessage("Cargo", "Agregado con exito", eSeverityMessages.success);
+              this.curso.cargos[this.cargoSelectedIndex] = this.cargoSelected;
+            });
+      }
+
+    }
+
+    // Si es un curso nuevo sin id solo lo agrega a la lista
     if(this.cargoSelectedIndex < 0) {
       this.curso.cargos?.push(this.cargoSelected);
     }
+
     this.curso.cargos[this.cargoSelectedIndex] = this.cargoSelected;
-    
-    this.cleanSelectedCargo();
+    this.hideDialog();
   }
 
   cleanSelectedCargo(){
@@ -274,7 +301,24 @@ export class CursoComponent implements OnInit {
   }
 
   removeCargo(index: number){
+    // console.log(this.curso.cargos[index]);
+    let cargoId = this.curso.cargos[index].id;
+    if (!cargoId){
       this.curso.cargos =  arrRemoveAt(this.curso.cargos, index);
+      return;
+    }
+    this.cursosService.removeCharge(cargoId)
+      .then(async(resp)=>{
+        const body = await resp.json();
+        // console.log(body);        
+        if(!body.ok){
+          this.showToastMessage("Error", "Error al eliminar el cargo", eSeverityMessages.error);
+          return;
+        }
+        
+        this.showToastMessage("Cargo", "Se removio el cargo con exito.", eSeverityMessages.success);
+        this.curso.cargos =  arrRemoveAt(this.curso.cargos, index);
+      });
   }
 
   hideDialog(){

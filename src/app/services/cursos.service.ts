@@ -32,4 +32,17 @@ export class CursosService {
     return fetchToken(`curso/${id}`, {}, 'DELETE');
   }
 
+  addCharge(cargo:any){
+    return fetchToken('curso/cargo', cargo, 'POST');
+  }
+
+  updateCharge(cargo:any){
+    console.log("Servicio de actualizacion");
+    return fetchToken(`curso/cargo/${cargo.id}`, cargo, 'PUT');
+  }
+
+  removeCharge(id:string){
+    return fetchToken(`curso/cargo/${id}`, {}, 'DELETE');
+  }
+
 }

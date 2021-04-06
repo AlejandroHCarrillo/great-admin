@@ -60,7 +60,7 @@ export const ddNiveles = [
 ]
 
 export const ddTiposCargos = [
-    { code: "COL", name: "COLEGIATURAS" },
+    { code: "COL", name: "COLEGIATURA" },
     { code: "INSC", name: "INSCRIPCION" },
     { code: "CTAFAM", name: "CUOTA FAMILIAR" },
     { code: "TRANSP", name: "TRANSPORTE" },
@@ -76,3 +76,17 @@ export const ddTiposCargos = [
     { code: "OTROS", name: "OTROS" }
 ]
 
+export const ddTipoItemVenta = [
+    { name: 'Producto', code: 'P' },
+    { name: 'Servicio', code: 'S' }
+];
+
+export const ddUnidadesMedida = [
+    { code: '', name: 'No unidad de medida.' },
+    { code: 'PZA', name: 'Pieza' },
+    { code: 'KG', name: 'Kilogramo' },
+    { code: 'CAJA', name: 'Caja' },
+    { code: 'LB', name: 'Libra' },
+    { code: 'GR', name: 'Gramo' },
+    // { code: '', name: ' ' }
+  ];
