@@ -67,6 +67,7 @@ import { CiclosEscolaresComponent } from './components/ciclos-escolares/ciclos-e
 import { CursosComponent } from './components/cursos/cursos.component';
 import { CursoComponent } from './components/cursos/curso/curso.component';
 import { ServicesModule } from './services/services.module';
+import { IncripcionesReportComponent } from './components/inscripciones/incripciones-report/incripciones-report.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -99,7 +100,8 @@ import { ServicesModule } from './services/services.module';
     InscripcionesComponent,
     CiclosEscolaresComponent,
     CursosComponent,
-    CursoComponent
+    CursoComponent,
+    IncripcionesReportComponent
   ],
   imports: [
     BrowserModule,

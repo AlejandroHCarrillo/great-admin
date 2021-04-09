@@ -14,7 +14,7 @@ import { CargoItem } from 'src/app/interfaces/cargo-item';
 import { CargosService } from 'src/app/services/cargos.service';
 import { eEstatusCargos, eSeverityMessages } from 'src/app/config/enums';
 import { AlumnosListComponent } from '../alumnos/alumnos-list/alumnos-list.component';
-import { setfocus } from 'src/app/helpers/tools';
+import { arrRemoveAt, setfocus } from 'src/app/helpers/tools';
 
 @Component({
   selector: 'app-caja',
@@ -166,6 +166,7 @@ export class CajaComponent implements OnInit {
     const montoImpuestos = monto * (t.producto.tasaIVA/100);
 
     const item = new CartItem(t.index, "",
+      t.producto.id,
       t.producto.precio,
       t.cantidad,
       t.producto.tasaIVA,
@@ -222,9 +223,9 @@ export class CajaComponent implements OnInit {
       index: index,
       cantidad: this.shoppingcart[index].cantidad,
       producto: {
-        id: this.shoppingcart[index].producto.id,
-        code: this.shoppingcart[index].producto.code||"",
-        nombre: this.shoppingcart[index].producto.nombre||"",
+        id: this.shoppingcart[index].producto?.id||"",
+        code: this.shoppingcart[index].producto?.code||"",
+        nombre: this.shoppingcart[index].producto?.nombre||"",
         precio: this.shoppingcart[index].precio,
         exentoIVA: false,
         tasaIVA: this.shoppingcart[index].tasaIVA
@@ -244,10 +245,12 @@ export class CajaComponent implements OnInit {
     this.confirmationService.confirm({
       message: '¿En verdad deseas eliminar este cargo de la lista?',
       accept: () => {
-        let scClon = [...this.shoppingcart];
-        this.shoppingcart = [ ...scClon.splice(0, index), 
-                              ...this.shoppingcart.splice(index+1)
-                            ];
+        // let scClon = [...this.shoppingcart];
+        // this.shoppingcart = [ ...scClon.splice(0, index), 
+        //                       ...this.shoppingcart.splice(index+1)
+        //                     ];
+        this.shoppingcart = arrRemoveAt(this.shoppingcart, index);
+        
         this.selectedIndex = -1;
 
         this.cargosalumno[cargoIndex].isAddedSC = false;        
@@ -326,16 +329,16 @@ export class CajaComponent implements OnInit {
       }
 
     // console.log("index: ", cargo.producto );
-    cargo.producto.nombre += " / " + cargo.concepto;
+    // cargo.producto.nombre += " / " + cargo.concepto;
     const item = new CartItem(0, "",
-                      // cargo.producto.id || "",
-                      cargo.producto.precio,
+                      "cargo.producto?.id" || "",
+                      cargo.precio,
                       cargo.cantidad,
                       cargo.tasaIVA,
                       cargo.impuestos,
                       cargo.descuento,
                       cargo.monto,
-                      cargo.producto,
+                      { id:"", code: "", nombre: cargo.concepto, precio: cargo.precio, tasaIVA: cargo.tasaIVA },
                       cargoIndex
                     );
 
@@ -383,11 +386,11 @@ export class CajaComponent implements OnInit {
           this.cargosalumno = [];
           return
         };
+        this.resetTransactions();
 
         this.alumnoSelected = { ...alumno };
         this.messageService.add({severity:'info', summary: 'Alumno seleccionado', detail:'matricula:' + alumno.matricula });
         this.cargosalumno = await this.cargosService.findCargos( alumno.id );
-
     });
   }
 
@@ -399,7 +402,7 @@ export class CajaComponent implements OnInit {
             detail: `${text}` || 'Texto'});
   }
 
-  reset(){
+  resetTransactions(){
     this.alumnoSelected = null;
     this.cargosalumno = [];
 

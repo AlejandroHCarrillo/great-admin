@@ -29,7 +29,7 @@
                     <span class="icon"><i class="fas fa-user"></i></span>
                     <span class="title">&nbsp;Buscar</span>
                 </button>
-                <button class="btn btn-warning" (click)="reset()">Reset</button>
+                <button class="btn btn-warning" (click)="resetTransactions()">Reset</button>
             </div>
         </div>
         </div>
@@ -186,8 +186,8 @@
             <ng-template pTemplate="body" let-p let-i="rowIndex">
                 <tr (click)="selectedItem(i)" (dblclick)="setEditCartItem(i)" >
                     <td style="text-align: center;">{{p.cantidad}}</td>
-                    <td class="col-medium text-start mr-10" >{{p.producto.code}}</td>
-                    <td class="col-extra-large text-start" >{{p.producto.nombre}}</td>
+                    <td class="col-medium text-start mr-10" >{{p.producto?.code || "" }}</td>
+                    <td class="col-extra-large text-start" >{{p.producto?.nombre  || "" }}</td>
                     <td style="text-align: right;">{{p.precio | currency }}</td>
                     <td style="text-align: center;">{{p.descuento | currency }}</td>
                     <td style="text-align: center;">{{p.tasaIVA}}%</td>

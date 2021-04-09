@@ -11,8 +11,7 @@ export class CargoCurso {
         public monto: number = 0,
         public numpagos: number = 1,
         public intervalopagos: number = 1,
-        
-        public producto?: Producto
+        public tipocargo: string = ""
         )
     {}
 

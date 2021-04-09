@@ -11,6 +11,7 @@ export class CiclosescolaresService {
   constructor() { }
 
   getCiclosEscolares(urlQueryParams?:string) {
+    // console.log("getCiclosEscolares...");
     return fetchToken(`cicloescolar`, urlQueryParams, 'GET');
   }
 

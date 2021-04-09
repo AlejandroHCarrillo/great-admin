@@ -77,7 +77,7 @@
                 <td>{{curso.nombre}}</td>
                 <td>{{curso.descripcion}}</td>
                 <td>{{curso.nivel}}</td>
-                <td>{{!!curso.activo}}</td>
+                <td>{{curso.activo ? 'Activo' : 'Inactivo' }}</td>
                 <td >
                     <button class="btn btn-warning btn-sm" (click)="edit(curso.id)">
                         <span class="icon"><i class="fas fa-pencil-alt"></i></span>    

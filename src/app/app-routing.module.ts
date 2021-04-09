@@ -21,6 +21,7 @@ import { InscripcionesComponent } from './components/inscripciones/inscripciones
 import { CiclosEscolaresComponent } from './components/ciclos-escolares/ciclos-escolares.component';
 import { CursosComponent } from './components/cursos/cursos.component';
 import { CursoComponent } from './components/cursos/curso/curso.component';
+import { IncripcionesReportComponent } from './components/inscripciones/incripciones-report/incripciones-report.component';
 
 const routes: Routes = [
   // Rutas protegidas
@@ -52,6 +53,8 @@ const routes: Routes = [
       {path: 'productos', component: ProductosComponent},
       {path: 'producto', component: ProductoComponent},
       {path: 'producto/:id', component: ProductoComponent},    
+      
+      {path: 'reportes/inscripciones', component: IncripcionesReportComponent},
 
       {path: '', component: HomeComponent, pathMatch: 'full'},
 

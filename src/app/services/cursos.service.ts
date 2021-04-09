@@ -37,7 +37,6 @@ export class CursosService {
   }
 
   updateCharge(cargo:any){
-    console.log("Servicio de actualizacion");
     return fetchToken(`curso/cargo/${cargo.id}`, cargo, 'PUT');
   }
 

@@ -43,3 +43,25 @@ export const arrRemoveAt = (arr: any[], index:number) => {
            ];
 
 }
+
+export const buildRFC = (nombre: string, apaterno: string, amaterno: string, fecha: Date) =>{
+    let ffecha = moment(fecha).format("yyMMDD");
+    // console.log(ffecha);
+    return `${apaterno.substr(0,2).toUpperCase()}${amaterno.substr(0,1).toUpperCase()}${nombre.substr(0,1).toUpperCase()}${ffecha}`;
+}
+
+export const buildMatricula = (nombre: string, apaterno: string, amaterno: string, fecha: Date) =>{
+    let ffecha = moment(fecha).format("yyMMDD");
+    // console.log(ffecha);
+    return `${apaterno.substr(0,2).toUpperCase()}${amaterno.substr(0,1).toUpperCase()}${nombre.substr(0,1).toUpperCase()}${ffecha}-1`;
+}
+
+export const dateEsp2Eng = (fecha: string) => {
+    try{
+        let arrFecha = fecha.replace("-", "/").split("/");
+        return `${arrFecha[1]}/${arrFecha[0]}/${arrFecha[2]}`;
+    } catch(error){
+        console.log(error);
+        return "";
+    }
+}

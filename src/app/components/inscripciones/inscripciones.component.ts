@@ -55,7 +55,7 @@ export class InscripcionesComponent implements OnInit {
 
 
   loadCursos(){
-    this.cursosService.getCursos()
+    this.cursosService.getCursos("activo=true")
     .then(async (resp)=>{
       // console.log(resp);
       const body = await resp.json();
@@ -66,9 +66,13 @@ export class InscripcionesComponent implements OnInit {
         this.showToastMessage("Cursos", "No hay cursos", eSeverityMessages.error);
         return;        
       }
+      let arrCursos : any[] = body.cursos;
+
+      console.log(arrCursos);
+      
       this.cursos = [ { code: "", nombre: "Seleccione un curso" },
-                      ...body.cursos ] ;
-      this.cursoSelected = body.cursos[0];
+                      ...arrCursos.filter((x)=>(x.activo==true)) ] ;
+      // this.cursoSelected = body.cursos[0];
     });
   }
 
@@ -84,22 +88,23 @@ export class InscripcionesComponent implements OnInit {
         this.showToastMessage("Ciclos escolares", "No hay ciclos escolares para realizar inscripciones", eSeverityMessages.error);
         return;        
       }
-      this.ciclosEscolares = body.ciclosescolares;
-      this.cicloSelected = body.ciclosescolares[0];
+      let ciclos: any[] = body.ciclosescolares;
+
+      this.ciclosEscolares = [ { nombre:"Seleccione un ciclo", code:"" }, ...ciclos.filter((x)=>(x.activo===true)) ];
+      // this.cicloSelected = body.ciclosescolares[0];
     });
   }
 
   buildConcepto( cargo: any, index: number=0 ){
-    // console.log(cargo);
+    console.log(cargo);
     // console.log(this.cicloSelected);
     
-
-    let intervalopagos = this.cursoSelected.intervalopagos || 1;
+    let intervalopagos = cargo.intervalopagos || 1;
     let fechaInicio = new Date(this.cicloSelected.fechaInicio);
 
     let mesini = fechaInicio.getMonth() + (index * intervalopagos);
     if (mesini>11) mesini -= 12;
-    let mesfin = mesini + this.cursoSelected.intervalopagos - 1;
+    let mesfin = mesini + cargo.intervalopagos - 1;
     if (mesfin>11) mesfin -= 12;
 
     let periodo = intervalopagos===1? this.meses[index] : ` ${this.meses[mesini]} - ${this.meses[mesfin]}`
@@ -108,8 +113,8 @@ export class InscripcionesComponent implements OnInit {
 
   }
 
-  calculaFechaVencimiento(index: number){    
-    let mes = index * this.cursoSelected.intervalopagos;
+  calculaFechaVencimiento(index: number, intervalopagos: number ){    
+    let mes = index * intervalopagos;
     return moment(this.cursoSelected.fechaprimerpago).add(mes, "month").format("MM/DD/YYYY");
   }
 
@@ -139,7 +144,7 @@ export class InscripcionesComponent implements OnInit {
     
     if( this.isEnrolled(this.cicloSelected.id) ){
       // console.log("El alumno ya esta inscrito en este ciclo escolar");
-      this.showToastMessage("Error", "El alumno ya esta inscrito en este ciclo escolar.", eSeverityMessages.error);     
+      this.showToastMessage("Error", "El alumno ya esta inscrito en este ciclo escolar.", eSeverityMessages.error);
       return;
     }
 
@@ -152,17 +157,21 @@ export class InscripcionesComponent implements OnInit {
 
       let cargos : any[] = [];
       cargos = this.generarCargos();
-      // console.log("cargos a guardar", cargos);
-      // return;
+
       if(cargos.length>0) {
         this.cargosService.savecargos(cargos)
-            .then((resp)=>{
-              if(!resp.ok){
+            .then(async(resp)=>{
+              // console.log("Los cargos fueron guardados.", resp);
+
+              const body = await resp.json();
+              console.log(body);
+
+              if(!body.ok){
                 // console.log("Hubo un error al guardar los cargos.");
                 this.showToastMessage("Error", "Hubo un error al guardar los cargos.", eSeverityMessages.error);
                 return;
               }
-              // console.log("Los cargos fueron guardados.", resp);
+              
               this.showToastMessage("Cargos guardados", 
                                     `Los ${ cargos.length } cargos a ${ this.alumnoSelected.nombre } fueron guardados con exito`, 
                                     eSeverityMessages.success);
@@ -192,17 +201,21 @@ export class InscripcionesComponent implements OnInit {
     let cargos : any[] = [];
 
     this.cursoSelected.cargos.forEach((element:any) => {
-      // console.log( element );
+      console.log( element );
       for (let i = 0; i < element.numpagos; i++) {
         let cargo = new CargoItem(
-          "", this.alumnoSelected.id, 
-          element.productoid, 
+          "", this.alumnoSelected.id,
+          // element.productoid, 
           this.buildConcepto(element, i),
-          this.calculaFechaVencimiento(i), 
-          element.costo, 1, 0, 0, 0, 
-          element.costo,
+          this.calculaFechaVencimiento(i, element.intervalopagos) || "", 
+          element.precio, 1, 
+          element.tasaIVA, 
+          (element.precio * element.tasaIVA), 
+          0,
+          element.monto,
           eEstatusCargos.NO_PAGADO,
-          element.producto.id
+          "XXXX"
+          // element.producto.id || ""
         )
         // console.log("Cargo ", i, cargo);
         cargos.push(cargo);

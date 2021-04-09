@@ -19,18 +19,44 @@
           </li> -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Catalogos
+              Ingreso
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" [routerLink]="['/alumnos']" routerLinkActive="active">Alumnos</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/inscripciones']" routerLinkActive="active">Inscripciones</a></li>
               <li><a class="dropdown-item" [routerLink]="['/cursos']" routerLinkActive="active">Cursos</a></li>
               <li><a class="dropdown-item" [routerLink]="['/ciclos']" routerLinkActive="active">Ciclos Escolares</a></li>
-              <li><a class="dropdown-item" [routerLink]="['/usuarios']" routerLinkActive="active">Usuarios</a></li>
-              <li><a class="dropdown-item" [routerLink]="['/alumnos']" routerLinkActive="active">Alumnos</a></li>
-              <li><a class="dropdown-item" [routerLink]="['/clientes']" routerLinkActive="active">Clientes</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" [routerLink]="['/formaspago']" routerLinkActive="active">Formas de pago</a></li>
+              <!-- <li><a class="dropdown-item" [routerLink]="['/usuarios']" routerLinkActive="active">Usuarios</a></li> -->
+              <!-- <li><a class="dropdown-item" [routerLink]="['/clientes']" routerLinkActive="active">Clientes</a></li> -->
+              <!-- <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" [routerLink]="['/formaspago']" routerLinkActive="active">Formas de pago</a></li> -->
             </ul>
           </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Administracion
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" [routerLink]="['/usuarios']" routerLinkActive="active">Usuarios</a></li>
+              <li><a class="dropdown-item" [routerLink]="['/clientes']" routerLinkActive="active">Clientes</a></li>
+              <!-- <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" [routerLink]="['/formaspago']" routerLinkActive="active">Formas de pago</a></li> -->
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Reportes
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" [routerLink]="['/reportes/inscripciones']" routerLinkActive="active">Inscripciones</a></li>
+              <!-- <li><a class="dropdown-item" [routerLink]="['/clientes']" routerLinkActive="active">Clientes</a></li> -->
+              <!-- <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" [routerLink]="['/formaspago']" routerLinkActive="active">Formas de pago</a></li> -->
+            </ul>
+          </li>
+
           <li class="nav-item">
             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
           </li>

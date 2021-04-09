@@ -10,6 +10,7 @@ import { REGEXP_EMAIL, REGEXP_RFC, REGEXP_CURP } from '../../../config/settings'
 import { SharedService } from 'src/app/services/shared.service';
 import { AlumnosService } from 'src/app/services/alumnos.service';
 import { DropDownItem } from 'src/app/interfaces/drop-down-item';
+import { buildMatricula } from 'src/app/helpers/tools';
 @Component({
   selector: 'app-alumno',
   templateUrl: './alumno.component.html',
@@ -202,7 +203,10 @@ export class AlumnoComponent implements OnInit {
 
             const alumno = body.alumno;
             this.alumno = body.alumno;
-                    
+
+            // const rfc = buildRFC(alumno.nombre, alumno.apaterno, alumno.amaterno, alumno.fechaNacimiento);
+            // console.log("RFC: ", rfc);
+            
             if (alumno){
               Object.keys(originalAlumno).map((x)=>{            
                 if(x.toString().includes('fecha')){
@@ -293,7 +297,6 @@ export class AlumnoComponent implements OnInit {
     return this.states.find((obj : DropDownItem ) => ( obj.code === code ));
   }
 
-
   toggleEdit(enabled?:boolean){
     // console.log("is edit mode?", enabled)
     if(enabled!==undefined) this.editMode = enabled;
@@ -344,5 +347,19 @@ export class AlumnoComponent implements OnInit {
 
   closeModal(){
     this.showModal = false;
+  }
+
+  calculateMatricula(){
+    let matriculaCtl = this.getFormControl("matricula");
+    // console.log("this.alumno.matricula: ", matriculaCtl?.value);
+    
+    if(matriculaCtl?.value != undefined && matriculaCtl?.value !== ""){
+      console.log("Ya tiene matricula, no hace nada");
+      return;      
+    }
+
+    let strMatricula = buildMatricula(this.alumno.nombre, this.alumno.apaterno, this.alumno.amaterno, this.alumno.fechaNacimiento );
+    matriculaCtl?.setValue(strMatricula);
+
   }
 }
