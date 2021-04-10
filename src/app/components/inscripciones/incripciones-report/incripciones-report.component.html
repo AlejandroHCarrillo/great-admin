@@ -1,7 +1,6 @@
 <h1>Reporte de inscripciones</h1>
 <hr>
-
-<div class="row" *ngFor="let insc of inscripciones" >
+<!-- <div class="row" *ngFor="let insc of inscripciones" >
     <div class="col">Ciclo Escolar:</div>
     <div class="col">{{ insc.cicloescolar.nombre }} </div>
     <div class="col">Nivel:</div>
@@ -12,10 +11,34 @@
     <div class="col">{{ insc.alumno.nombre }}&nbsp;{{ insc.alumno.apaterno }}&nbsp;{{ insc.alumno.amaterno }}</div>
     <div class="col">Estatus:</div>
     <div class="col">{{ insc.estatus }}</div>
-</div>
+</div> -->
 
-
+<p-table #dt [columns]="cols" [value]="inscripcionesreport" selectionMode="multiple" [(selection)]="inscripcionesSelected">
+    <ng-template pTemplate="caption">
+        <div class="p-d-flex">
+            <button type="button" pButton pRipple icon="pi pi-file-o" (click)="dt.exportCSV()" class="p-mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+            <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success p-mr-2"  pTooltip="XLS" tooltipPosition="bottom"></button>
+            <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()" class="p-button-warning p-mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+            <button type="button" pButton pRipple icon="pi pi-filter" (click)="dt.exportCSV({selectionOnly:true})" class="p-button-info p-ml-auto" pTooltip="Selection Only" tooltipPosition="bottom"></button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
 <hr>
-Inscripciones: <pre>{{ inscripciones | json}}</pre>
+<!-- inscripcionesreport: <pre>{{ inscripcionesreport | json}}</pre>
+Inscripciones: <pre>{{ inscripciones | json}}</pre> -->
 
 
