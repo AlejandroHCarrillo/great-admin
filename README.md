@@ -21,6 +21,9 @@ https://simonbengtsson.github.io/jsPDF-AutoTable/
 
 https://github.com/simonbengtsson/jsPDF-AutoTable
 
+https://artskydj.github.io/jsPDF/docs/jsPDF.html
+
+
 ## Excel
 https://www.npmjs.com/package/xlsx
 npm install xlsx --save

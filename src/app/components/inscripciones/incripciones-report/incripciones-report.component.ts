@@ -30,10 +30,10 @@ export class IncripcionesReportComponent implements OnInit {
 
     this.cols = [
       { field: 'cicloescolar', header: 'Ciclo Escolar' },
+      { field: 'matricula', header: 'Matricula' },
+      { field: 'nombrecompleto', header: 'Nombre' },
       { field: 'nivel', header: 'Nivel' },
       { field: 'grado', header: 'Grado' },
-      { field: 'matricula', header: 'Matricula' },
-      { field: 'nombrecompleto', header: 'Nombre' }
       ];
 
       this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
@@ -57,10 +57,10 @@ export class IncripcionesReportComponent implements OnInit {
       this.inscripcionesreport = this.inscripciones.map((x) => 
         ( 
           { cicloescolar: x["cicloescolar"].nombre,
-            nivel: x["alumno"].nivel,
-            grado: x["alumno"].grado,
             matricula: x["alumno"].matricula,
-            nombrecompleto: `${x["alumno"].nombre} ${x["alumno"].apaterno } ${x["alumno"].amaterno }`
+            nombrecompleto: `${x["alumno"].nombre} ${x["alumno"].apaterno } ${x["alumno"].amaterno }`,
+            nivel: x["alumno"].nivel,
+            grado: x["alumno"].grado
           }
       )
       );
@@ -78,13 +78,12 @@ export class IncripcionesReportComponent implements OnInit {
   exportPdf() {
     let title = "Reporte de Inscripciones";
     let footer = `Reporte generado el ${ moment(new Date() ).toString() }`;
+    const filename = "reporteInscripciones.pdf";
 
     // const doc = new jsPDF();
     // const doc = new jsPDF("p", "px", "letter", true);
     const doc = new jsPDF();
     doc.setCreationDate(new Date())
-    let fonts = doc.getFontList();
-    console.log(fonts);
     
     const headers = [...this.cols.map( (x)=>( x.header ) )];
 
@@ -100,9 +99,6 @@ export class IncripcionesReportComponent implements OnInit {
 
     console.log(headers);
     console.log(this.inscripcionesreport);
-
-    console.log( Object.keys(fonts) );
-    console.log( Object.values(fonts) );
 
     doc.setFont( "times", "italic", 500);
     doc.setTextColor("navy");
@@ -123,32 +119,31 @@ export class IncripcionesReportComponent implements OnInit {
     autoTable(doc, {
                       // styles: { fillColor: [188, 188, 188], textColor: [0,0,0] },
                       styles: { halign: 'center' },
-                      columnStyles: { 1: { halign: 'left' },
-                                      3: { halign: 'left'},
-                                      4: { halign: 'left'}
+                      columnStyles: { 0: { halign: 'left' },
+                                      1: { halign: 'left' },
+                                      2: { halign: 'left' },
+                                      3: { halign: 'left' }
                                      }, 
                       margin: { top: 20 },
                       head: [headers],
                       body: data,
-                      foot: [["1", "2", "3", "4", "5"]],
-                      didDrawCell: (data) => {
+                      foot: [["", "", "", "", ""]],
+                      // didDrawCell: (data) => {
                       // console.log(data.column.index)
-                      },
+                      // },
                     });
 
-    // autoTable(doc, {
-    //   styles: { fillColor: [255, 0, 0] },
-    //   columnStyles: { 0: { halign: 'center', fillColor: [0, 255, 0] } }, // Cells in first column centered and green
-    //   margin: { top: 10 },
-    //   head: headers,
-    //   body: data,
-    //   didDrawCell: (data) => {
-    //   // console.log(data.column.index)
-    //   }
+    // const htmltable = document.getElementById("reporttable");
+    // const strtable = htmltable?.innerText || "";
+    // console.log(strtable );
+
+    // doc.html(strtable, {
+    //   callback: (doc)=>{
+    //     doc.save(filename);
+    //   }, 
+    //   margin: 300,      
     // });
-
-
-    doc.save('table.pdf');
+    doc.save(filename);
 
   }
 

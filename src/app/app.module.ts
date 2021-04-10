@@ -23,6 +23,7 @@ import { MessageModule } from 'primeng/message';
 import { ToolbarModule } from 'primeng/toolbar';
 import { RatingModule } from 'primeng/rating';
 import { DialogModule } from 'primeng/dialog';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
@@ -126,6 +127,7 @@ import { IncripcionesReportComponent } from './components/inscripciones/incripci
     InputSwitchModule,
     InputNumberModule,
     DialogModule,
+    TooltipModule,
     DynamicDialogModule,
     ToastModule,
     ButtonModule,
