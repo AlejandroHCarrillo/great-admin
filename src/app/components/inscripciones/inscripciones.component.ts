@@ -11,6 +11,7 @@ import { aMeses, eEstatusCargos, eSeverityMessages } from '../../config/enums';
 import { AlumnosListComponent } from '../alumnos/alumnos-list/alumnos-list.component';
 import { arraycounter } from 'src/app/helpers/tools'
 import { CursosService } from 'src/app/services/cursos.service';
+import { Curso } from 'src/app/interfaces/curso';
 
 @Component({
   selector: 'app-inscripciones',
@@ -29,7 +30,7 @@ export class InscripcionesComponent implements OnInit {
   ciclosEscolares: any[] = [];
   cicloSelected: any;
 
-  cursos: any[] =  [];
+  cursos: Curso[] =  [];
 
   cargosalumno: any[] = [];
   fechaprimerpago: string = "";
@@ -214,7 +215,7 @@ export class InscripcionesComponent implements OnInit {
           0,
           element.monto,
           eEstatusCargos.NO_PAGADO,
-          "XXXX"
+          element.tipocargo
           // element.producto.id || ""
         )
         // console.log("Cargo ", i, cargo);

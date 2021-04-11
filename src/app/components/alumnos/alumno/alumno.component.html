@@ -13,144 +13,147 @@
     
     <h1><small>Alumno</small></h1>
     <hr>
-    <form [formGroup]="form" (ngSubmit)="submit()">
+    <form [formGroup]="form" (ngSubmit)="submit()">        
         <div class="form-group row">
-            <div class="row mt-3 ">
-                <div class="col-2" >
-                    <div style="display: flex; direction: row; ;">
-                        <div *ngIf="alumno.img" style="width: 18rem;" >
-                            <img *ngIf="alumno && alumno.img" 
-                            id="myImg" 
-                            [src]="alumno.img" 
-                            [alt]="alumno.name" 
-                            class="card-img-top image-medium-rounded"
-                            (click)="toggleModal()"
-                            >
+            <div class="col-2 text-center">
 
-                        </div>
-                        <span *ngIf="editMode" class="icon" (click)="showUploadImage()"><i class="fas fa-camera big-icon"></i></span>
-                    </div>
-                </div>
-                <!-- <div *ngIf="alumnoId" class="position-relative top-50 start-50 translate-middle">
-                </div> -->
-                <div class="col col-3"> 
-                    <div class="mb-3 form-group form">
-                        <label for="nombre" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" placeholder="Escriba el nombre" maxlength="30"
-                        name="nombre" 
-                        formControlName="nombre"
-                        [class.is-invalid]="isInvalidControl('nombre')"
-                        >
-                        <small *ngIf="isInvalidControl('nombre')" class="text-danger">El nombre es obligatorio </small>
-                    </div>
-                    <!-- <p-checkbox [formControl]="form.controls['editMode']"></p-checkbox>edit -->
-                </div>
-                <div class="col col-3"> 
-                    <div class="mb-3 form">
-                        <label for="apaterno" class="form-label">Apellido paterno:</label>
-                        <input type="text" class="form-control" id="apaterno" placeholder="Escriba el apellido paterno" maxlength="30"
-                        name="apaterno" 
-                        formControlName="apaterno"
-                        [class.is-invalid]="isInvalidControl('apaterno')"
-                        >
-                        <small *ngIf="isInvalidControl('apaterno')" class="text-danger">El apellido paterno es obligatorio </small>
-                    </div>        
-                </div>
-                <div class="col col-3"> 
-                    <div class="mb-3 form">
-                        <label for="amaterno" class="form-label">Apellido materno:</label>
-                        <input type="text" class="form-control" id="amaterno" placeholder="Escriba el apellido materno" maxlength="30"
-                        name="amaterno" 
-                        formControlName="amaterno"
-                        [class.is-invalid]="isInvalidControl('amaterno')"
-                        >
-                    </div>        
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col"> 
-                    <div class="mb-3 form">
-                        <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
-                        <p-calendar 
-                        name="fechaNacimiento" 
-                        formControlName="fechaNacimiento"
-                        [class.is-invalid]="isInvalidControl('fechaNacimiento')"></p-calendar>
-                    </div>        
-                </div>
-                <div class="col"> 
-                    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadFilesModal">
-                        Load images
-                    </button>
-                    Galeria de imagenes -->
-                    <!-- <div class="col-md-12" *ngIf="images.length > 0 " style="padding: .5rem 2rem;" >
-                        <div class="row" style="display: flex; flex-direction: row; flex-flow: wrap;" >
-                          <gallery [pictures]="images" [title]="Nombre de la imagen aqui" [direction]="'h'"></gallery>
-                        </div>
-                    </div> -->
-                    <!-- <div class="mb-3 form">
-                        <label for="rfc" class="form-label">RFC:</label>
-                        <input type="text" class="form-control" id="rfc" placeholder="Escriba el RFC" maxlength="13"
-                            name="rfc" 
-                            formControlName="rfc"
-                            [class.is-invalid]="isInvalidControl('rfc')"
-                        >
-                    </div>         -->
-                </div>
-                <div class="col"> 
-                    <div class="mb-3 form">
-                        <label for="fechaIngreso" class="form-label">Fecha de Ingreso:</label>
-                        <p-calendar name="fechaIngreso" 
-                        formControlName="fechaIngreso"
-                        [class.is-invalid]="isInvalidControl('fechaIngreso')"></p-calendar>
-                    </div>        
-                </div>
-                <div class="col"> 
-                    <div class="mb-3 form">
-                        <label class="form-label">Activo:</label>
-                        <div >
-                            <p-inputSwitch name="activo" formControlName="activo"></p-inputSwitch>
-                        </div>
-                    </div>
-                </div>    
-            </div>
-
-            <div class="row">
-                <div class="col col-4"> 
-                    <label for="matricula" class="form-label">Matricula:</label>
-                    <input type="text" class="form-control" id="matricula" placeholder="Escriba la matricula" maxlength="15"
-                            name="matricula" 
-                            formControlName="matricula"
-                            [class.is-invalid]="isInvalidControl('matricula')"
-                            (dblclick)="calculateMatricula()"
-                        >
-                </div>
-                <div class="col col-4">
-                    <label for="curp" class="form-label">CURP:</label>
-                    <input type="text" class="form-control" id="curp" placeholder="Escriba la CURP" maxlength="18"
-                    name="curp" 
-                    formControlName="curp"
-                    [class.is-invalid]="isInvalidControl('curp')"
+                <img *ngIf="alumno && alumno.img" 
+                style="display: inline;"
+                id="myImg" 
+                [src]="alumno.img" 
+                [alt]="alumno.name" 
+                class="image-large-rounded mt-4 ml-3" 
+                (click)="toggleModal()"
                 >
-                </div>
-                <div class="col col-4"> 
-                    <div class="mb-3 form">
-                        <label class="form-label">Sexo:</label>
-                        <div class="form-check">
-                            <p-radioButton name="sexo" value="M" formControlName="sexo"></p-radioButton>
-                            <label class="form-check-label">
-                                &nbsp;Masculino
-                            </label>
-                            <br>
-                            <p-radioButton name="sexo" value="F" formControlName="sexo"></p-radioButton>
-                            <label class="form-check-label">
-                                &nbsp;Femenino
-                            </label>                            
-                        </div>
-                    </div>        
+                <div (click)="showUploadImage()">
+                    <span *ngIf="editMode" class="icon icon-big" ><i class="fas fa-camera"></i></span>
                 </div>
 
             </div>
+
+            <div class="col">
+                <div class="row mt-3 ">
+                    <div class="col col-4"> 
+                        <div class="mb-3 form-group form">
+                            <label for="nombre" class="form-label">Nombre:</label>
+                            <input type="text" class="form-control" id="nombre" placeholder="Escriba el nombre" maxlength="30"
+                            name="nombre" 
+                            formControlName="nombre"
+                            [class.is-invalid]="isInvalidControl('nombre')"
+                            >
+                            <small *ngIf="isInvalidControl('nombre')" class="text-danger">El nombre es obligatorio </small>
+                        </div>
+                        <!-- <p-checkbox [formControl]="form.controls['editMode']"></p-checkbox>edit -->
+                    </div>
+                    <div class="col col-4"> 
+                        <div class="mb-3 form">
+                            <label for="apaterno" class="form-label">Apellido paterno:</label>
+                            <input type="text" class="form-control" id="apaterno" placeholder="Escriba el apellido paterno" maxlength="30"
+                            name="apaterno" 
+                            formControlName="apaterno"
+                            [class.is-invalid]="isInvalidControl('apaterno')"
+                            >
+                            <small *ngIf="isInvalidControl('apaterno')" class="text-danger">El apellido paterno es obligatorio </small>
+                        </div>        
+                    </div>
+                    <div class="col col-4"> 
+                        <div class="mb-3 form">
+                            <label for="amaterno" class="form-label">Apellido materno:</label>
+                            <input type="text" class="form-control" id="amaterno" placeholder="Escriba el apellido materno" maxlength="30"
+                            name="amaterno" 
+                            formControlName="amaterno"
+                            [class.is-invalid]="isInvalidControl('amaterno')"
+                            >
+                        </div>        
+                    </div>
+                </div>
+            
+                <div class="row">
+                    <div class="col-2"> 
+                        <div class="mb-3 form">
+                            <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
+                            <p-calendar 
+                            name="fechaNacimiento" 
+                            formControlName="fechaNacimiento"
+                            [class.is-invalid]="isInvalidControl('fechaNacimiento')"></p-calendar>
+                        </div>
+                    </div>
+                    <div class="col-2"> 
+                        <div class="mb-3 form">
+                            <label for="fechaIngreso" class="form-label">Fecha de Ingreso:</label>
+                            <p-calendar name="fechaIngreso" 
+                            formControlName="fechaIngreso"
+                            [class.is-invalid]="isInvalidControl('fechaIngreso')"></p-calendar>
+                        </div>        
+                    </div>
+                    <div class="col-2"> 
+                        <div class="mb-3 form">
+                            <label for="nivel" class="form-label">Nivel:</label>
+                        </div>
+                    </div>
+
+                    <div class="col-2"> 
+                        <div class="mb-3 form">
+                            <label for="grado" class="form-label">Grado:</label>
+                        </div>
+                    </div>
+
+                    <div class="col-2"> 
+                        <div class="mb-3 form">
+                            <label for="grupo" class="form-label">Grupo:</label>
+                        </div>
+                    </div>
+
+                    <div class="col"> 
+                        <div class="mb-3 form">
+                            <label class="form-label">Activo:</label>
+                            <div >
+                                <p-inputSwitch name="activo" formControlName="activo"></p-inputSwitch>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+
+                <div class="row">
+                    <div class="col col-4"> 
+                        <label for="matricula" class="form-label">Matricula:</label>
+                        <input type="text" class="form-control" id="matricula" placeholder="Escriba la matricula" maxlength="15"
+                                name="matricula" 
+                                formControlName="matricula"
+                                [class.is-invalid]="isInvalidControl('matricula')"
+                                (dblclick)="calculateMatricula()"
+                            >
+                    </div>
+                    <div class="col col-4">
+                        <label for="curp" class="form-label">CURP:</label>
+                        <input type="text" class="form-control" id="curp" placeholder="Escriba la CURP" maxlength="18"
+                        name="curp" 
+                        formControlName="curp"
+                        [class.is-invalid]="isInvalidControl('curp')"
+                    >
+                    </div>
+                    <div class="col col-4"> 
+                        <div class="mb-3 form">
+                            <label class="form-label">Sexo:</label>
+                            <div class="form-check">
+                                <p-radioButton name="sexo" value="M" formControlName="sexo"></p-radioButton>
+                                <label class="form-check-label">
+                                    &nbsp;Masculino
+                                </label>
+                                <br>
+                                <p-radioButton name="sexo" value="F" formControlName="sexo"></p-radioButton>
+                                <label class="form-check-label">
+                                    &nbsp;Femenino
+                                </label>                            
+                            </div>
+                        </div>        
+                    </div>
+
+                </div>
+
+
+            </div>
+
 
             <div class="row">
                 <div class="col-8"> 

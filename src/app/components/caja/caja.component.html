@@ -5,6 +5,7 @@
     <h1>Caja</h1> 
     <hr>
     <div class="shadow p-3 mb-2 bg-body rounded">
+
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-1">
                 <label for="buscar" class="title">Buscar:</label>
@@ -12,8 +13,8 @@
             <div class="col">
                 <input type="text" class="form-control" maxlength="30" 
                 placeholder="Escriba el nombre, apellido o matricula del alumno"
-                id="alumnSearch" 
-                name="alumnSearch" 
+                id="alumnoSearch" 
+                name="alumnoSearch" 
                 [(ngModel)]="searchtext" 
                 (keyup.enter)="showAlumnosList()" 
                 (keyup)="searchResultMsg = ''"
@@ -64,6 +65,7 @@
             </div>
     
         </div>
+
         <!-- <div class="row">
             <label for="producto" class="form-label" >Alumno:</label>
             <div class="col">

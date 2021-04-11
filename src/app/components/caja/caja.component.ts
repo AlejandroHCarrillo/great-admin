@@ -4,7 +4,6 @@ import { DIA_MILLISECONDS, PAGE_SIZE } from '../../config/settings'
 import * as moment from 'moment';
 
 import { Alumno } from 'src/app/interfaces/alumno';
-import { DropDownItem } from 'src/app/interfaces/drop-down-item';
 import { CartItem } from 'src/app/interfaces/cart-item';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Producto } from 'src/app/interfaces/producto';
@@ -24,9 +23,8 @@ import { arrRemoveAt, setfocus } from 'src/app/helpers/tools';
 
 export class CajaComponent implements OnInit {
   searchtext: string = "";
-  searchResultMsg = "";
+  searchResultMsg = ""; 
 
-  alumnoslist : DropDownItem[] = [];
   alumnoSelected: any; // DropDownItem = { name:"Seleccione un alumno", code:"-1" };
 
   private emptytranscaction = { 
@@ -65,7 +63,7 @@ export class CajaComponent implements OnInit {
   ngOnInit(): void {
     // this.loadAlumnos()
     // this.alumnochanged({ value: { code: "605018e1ab32bf465014d1a4"}});
-    setfocus("alumnSearch");
+    setfocus("alumnoSearch");
   }
 
   // buscar(){
@@ -411,7 +409,7 @@ export class CajaComponent implements OnInit {
 
     this.searchtext = "";
 
-    setfocus("alumnSearch");
+    setfocus("alumnoSearch");
   }
 
   generarPago(){

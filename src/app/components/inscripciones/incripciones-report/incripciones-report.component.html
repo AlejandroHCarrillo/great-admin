@@ -1,18 +1,5 @@
 <h1>Reporte de inscripciones</h1>
 <hr>
-<!-- <div class="row" *ngFor="let insc of inscripciones" >
-    <div class="col">Ciclo Escolar:</div>
-    <div class="col">{{ insc.cicloescolar.nombre }} </div>
-    <div class="col">Nivel:</div>
-    <div class="col">{{ insc.alumno.nivel }}</div>
-    <div class="col">Grado:</div>
-    <div class="col">{{ insc.alumno.grado }}</div>
-    <div class="col">Alumno:</div>
-    <div class="col">{{ insc.alumno.nombre }}&nbsp;{{ insc.alumno.apaterno }}&nbsp;{{ insc.alumno.amaterno }}</div>
-    <div class="col">Estatus:</div>
-    <div class="col">{{ insc.estatus }}</div>
-</div> -->
-
 <p-table #dt [columns]="cols" [value]="inscripcionesreport" selectionMode="multiple" [(selection)]="inscripcionesSelected"  name="reporttable" id="reporttable">
     <ng-template pTemplate="caption">
         <div class="p-d-flex text-end">

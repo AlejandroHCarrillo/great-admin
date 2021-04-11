@@ -1,69 +1,86 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { eSeverityMessages } from 'src/app/config/enums';
-import { InscripcionesService } from 'src/app/services/inscripciones.service';
+import { CargosService } from 'src/app/services/cargos.service';
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import * as moment from 'moment';
-@Component({
-  selector: 'app-incripciones-report',
-  templateUrl: './incripciones-report.component.html',
-  styleUrls: ['./incripciones-report.component.css']
-})
-export class IncripcionesReportComponent implements OnInit {
+import { AlumnosListComponent } from '../alumnos/alumnos-list/alumnos-list.component';
+import { Alumno } from 'src/app/interfaces/alumno';
+import { DialogService } from 'primeng/dynamicdialog';
 
-  inscripciones: any[] = [];
-  inscripcionesreport: any[] = [];
-  inscripcionesSelected: any[] = [];
+@Component({
+  selector: 'app-estado-cuenta',
+  templateUrl: './estado-cuenta.component.html',
+  styleUrls: ['./estado-cuenta.component.css']
+})
+
+
+export class EstadoCuentaComponent implements OnInit {
+  fileName = "estadodecuenta";
+
+  alumnoSelected: any;
+  searchtext: string = "";
+  searchResultMsg = "";
+
+  cargos: any[] = [];
+  cargosreport: any[] = [];
+  cargosSelected: any[] = [];
 
   cols: any[] = [];
   exportColumns: any[] = [];
 
   constructor( 
     private messageService: MessageService,
-    private inscripcionesService: InscripcionesService 
+    private dialogService: DialogService,
+    private cargosService: CargosService
     ) { }
 
   ngOnInit(): void {
-    this.loadInscripciones();
-
     this.cols = [
-      { field: 'cicloescolar', header: 'Ciclo Escolar' },
-      { field: 'matricula', header: 'Matricula' },
-      { field: 'nombrecompleto', header: 'Nombre' },
-      { field: 'nivel', header: 'Nivel' },
-      { field: 'grado', header: 'Grado' },
+      { field: 'tipocargo', header: 'Tipo' },
+      { field: 'fecha', header: 'Fecha' },
+      { field: 'concepto', header: 'Concepto' },
+      { field: 'monto', header: 'Monto' },
+      { field: 'estatus', header: 'Estatus' },
+      { field: 'nombrecompleto', header: 'alumno' },
       ];
 
       this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
 
   }
 
-  loadInscripciones(){
-    this.inscripcionesService.getInscripciones()
+  loadCargos(){
+    this.cargosService.getCargosByAlumno("6050fc972a99ae688413d942")
     .then(async (resp)=>{
       // console.log(resp);
       const body = await resp.json();
-      // console.log(body);
+      console.log(body);
 
       if(!body.ok){
-        // console.log("No hay ciclos escolares");
-        this.showToastMessage("Incripciones", "No hay inscripciones", eSeverityMessages.error);
+        // console.log("No cargos");
+        this.showToastMessage("Cargos", "No hay cargos", eSeverityMessages.error);
         return;        
       }
-      this.inscripciones = [ ...body.inscripciones ];
+      this.cargos = [ ...body.cargos ];
 
-      this.inscripcionesreport = this.inscripciones.map((x) => 
-        ( 
-          { cicloescolar: x["cicloescolar"].nombre,
-            matricula: x["alumno"].matricula,
-            nombrecompleto: `${x["alumno"].nombre} ${x["alumno"].apaterno } ${x["alumno"].amaterno }`,
-            nivel: x["alumno"].nivel,
-            grado: x["alumno"].grado
-          }
-      )
-      );
+      this.mapDataToReport(body.cargos);
     });
+  }
+
+  mapDataToReport(data: any[]){
+    this.cargosreport = data.map((x) => 
+    ( 
+      { 
+        fecha: moment( x.fechavencimiento ).format("DD/MMM/yyyy"),
+        tipocargo: x.tipocargo,
+        concepto: x.concepto,
+        monto: x.monto,
+        estatus: x.estatus
+      }
+    )
+    );
+
   }
 
   showToastMessage(title: string = "", text: string = "", tipo: string = "success"){
@@ -75,9 +92,8 @@ export class IncripcionesReportComponent implements OnInit {
   }
 
   exportPdf() {
-    let title = "Reporte de Inscripciones";
+    let title = "Reporte de Cargos";
     let footer = `Reporte generado el ${ moment(new Date() ).toString() }`;
-    const filename = "reporteInscripciones.pdf";
 
     // const doc = new jsPDF();
     // const doc = new jsPDF("p", "px", "letter", true);
@@ -94,10 +110,10 @@ export class IncripcionesReportComponent implements OnInit {
     let offsetX = (textWide * fontwide)/2;
 
     var data = [ [] ];    
-    data = this.inscripcionesreport.map((x => ( Object.values(x) ) ));
+    data = this.cargosreport.map((x => ( Object.values(x) ) ));
 
     console.log(headers);
-    console.log(this.inscripcionesreport);
+    console.log(this.cargosreport);
 
     doc.setFont( "times", "italic", 500);
     doc.setTextColor("navy");
@@ -119,39 +135,25 @@ export class IncripcionesReportComponent implements OnInit {
                       // styles: { fillColor: [188, 188, 188], textColor: [0,0,0] },
                       styles: { halign: 'center' },
                       columnStyles: { 0: { halign: 'left' },
-                                      1: { halign: 'left' },
-                                      2: { halign: 'left' },
-                                      3: { halign: 'left' }
-                                     }, 
+                                      2: { halign: 'left', cellWidth: 500 },
+                                      3: { halign: 'right' }
+                                      }, 
                       margin: { top: 20 },
                       head: [headers],
                       body: data,
                       foot: [["", "", "", "", ""]],
-                      // didDrawCell: (data) => {
-                      // console.log(data.column.index)
-                      // },
                     });
 
-    // const htmltable = document.getElementById("reporttable");
-    // const strtable = htmltable?.innerText || "";
-    // console.log(strtable );
-
-    // doc.html(strtable, {
-    //   callback: (doc)=>{
-    //     doc.save(filename);
-    //   }, 
-    //   margin: 300,      
-    // });
-    doc.save(filename);
+    doc.save(`${this.fileName}.pdf`);
 
   }
 
   exportExcel() {
       import("xlsx").then(xlsx => {
-          const worksheet = xlsx.utils.json_to_sheet(this.inscripcionesreport );
+          const worksheet = xlsx.utils.json_to_sheet(this.cargosreport );
           const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
           const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-          this.saveAsExcelFile(excelBuffer, "inscripciones");
+          this.saveAsExcelFile(excelBuffer, this.fileName);
       });
   }
 
@@ -165,4 +167,29 @@ export class IncripcionesReportComponent implements OnInit {
           FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
       });
   }
+
+  showAlumnosList() {
+    const ref = this.dialogService.open(AlumnosListComponent, {
+      header: 'Seleccione un alumno',
+      width: '70%',
+      data: {
+        searchtext: this.searchtext
+      }
+    });
+
+    ref.onClose.subscribe(async(alumno: Alumno) => {
+        // console.log("Alumno seleccionado: ", alumno);
+        if (!alumno) {
+          this.cargos = [];
+          return
+        };
+        this.alumnoSelected = { ...alumno };
+        this.messageService.add({severity:'info', summary: 'Alumno seleccionado', detail:'matricula:' + alumno.matricula });
+        
+        this.cargos = await this.cargosService.findCargos( alumno.id );
+        this.mapDataToReport(this.cargos);
+
+    });
+  }
+
 }

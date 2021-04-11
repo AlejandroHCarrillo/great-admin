@@ -1,0 +1,92 @@
+<h1>Estado de cuenta</h1>
+<hr>
+<div class="row" style="margin-bottom: 10px;">
+    <div class="col-1">
+        <label for="buscar" class="title">Buscar:</label>
+    </div>
+    <div class="col">
+        <input type="text" class="form-control" maxlength="30" 
+        placeholder="Escriba el nombre, apellido o matricula del alumno"
+        id="alumnoSearch" 
+        name="alumnoSearch" 
+        [(ngModel)]="searchtext" 
+        (keyup.enter)="showAlumnosList()" 
+        (keyup)="searchResultMsg = ''"
+        >
+        <div *ngIf="searchResultMsg">
+            <small>{{searchResultMsg}}</small>
+        </div>            
+    </div>        
+<!-- <pre> {{ alumnoSelected | json }} </pre> -->
+<div class="col-3 text-end">
+    <div>
+        <button class="btn btn-primary" (click)="showAlumnosList()">
+            <span class="icon"><i class="fas fa-user"></i></span>
+            <span class="title">&nbsp;Buscar</span>
+        </button>
+    </div>
+</div>
+</div>
+<div class="row">
+    <div class="row">
+        <div *ngIf="alumnoSelected" class="row mb-3">
+            <div class="col-1"></div>
+            <div class="col">
+                <table style="width: 100%; border: 1px;;">
+                    <tr>
+                        <td>
+                            <img class="image-small-rounded" 
+                            [src]="alumnoSelected.img" 
+                            [alt]="alumnoSelected.nombre">
+                        </td>
+                        <td class="title">Alumno:</td>
+                        <td>{{ alumnoSelected.nombre }} {{ alumnoSelected.apaterno }} {{ alumnoSelected.amaterno }}</td>
+                        <td class="title">Matricula:</td>
+                        <td>{{ alumnoSelected.matricula }}</td>
+                        <td class="title">Nivel:</td>
+                        <td>{{ alumnoSelected.nivel }}</td>
+                        <td class="title">Grado:</td>
+                        <td>{{ alumnoSelected.grado }}</td>
+                        <td class="title">Grupo:</td>
+                        <td>{{ alumnoSelected.grupo }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+    </div>
+</div>
+
+<p-table #dt [columns]="cols" [value]="cargosreport" selectionMode="single" [(selection)]="cargosSelected"  name="reporttable" id="reporttable">
+    <ng-template pTemplate="caption">
+        <div class="p-d-flex text-end">
+            <button type="button" pButton pRipple icon="pi pi-file-o" (click)="dt.exportCSV()" class="p-mr-2" pTooltip="Exportar a CSV" tooltipPosition="top"></button> &nbsp;
+            <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success p-mr-2"  pTooltip="Exportar a Excel" tooltipPosition="top"></button> &nbsp;
+            <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()" class="p-button-warning p-mr-2" pTooltip="Exportar a PDF" tooltipPosition="top"></button> &nbsp;
+            <button type="button" pButton pRipple icon="pi pi-filter" (click)="dt.exportCSV({selectionOnly:true})" class="p-button-info p-ml-auto" pTooltip="Selection Only" tooltipPosition="bottom"></button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<hr>
+<!-- cargosreport: <pre>{{ cargosreport | json}}</pre> -->
+cargos: <pre>{{ cargos | json}}</pre> 
+
+<br>
+<br>
+<br>
+<br>

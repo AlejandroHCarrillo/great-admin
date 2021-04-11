@@ -13,6 +13,10 @@ export class CargosService {
     return fetchToken(`cargo`, urlQueryParams, 'GET');
   }
 
+  getCargosByAlumno(id:string) {
+    return fetchToken(`cargo/alumno/${id}`, 'GET');
+  }
+
   async findCargos (buscar:string = '') {
     let retCargos: CargoItem[] = [];
     await fetchToken(`cargo/find/${buscar}`, "", 'GET')
