@@ -89,18 +89,32 @@
                     <div class="col-2"> 
                         <div class="mb-3 form">
                             <label for="nivel" class="form-label">Nivel:</label>
+                            <p-dropdown [options]="niveles"
+                            optionLabel="name"
+                            name="nivelSelected"
+                            formControlName="nivelSelected"></p-dropdown>
                         </div>
                     </div>
 
                     <div class="col-2"> 
                         <div class="mb-3 form">
                             <label for="grado" class="form-label">Grado:</label>
+                            <input type="number" class="form-control" id="grado" placeholder="Escriba el grado" maxlength="1" min="1" max="6"
+                            name="grado" 
+                            formControlName="grado"
+                            [class.is-invalid]="isInvalidControl('grado')"
+                            >
                         </div>
                     </div>
 
                     <div class="col-2"> 
                         <div class="mb-3 form">
                             <label for="grupo" class="form-label">Grupo:</label>
+                            <input type="text" class="form-control" id="grupo" placeholder="Escriba el grupo" maxlength="1"
+                            name="grupo" 
+                            formControlName="grupo"
+                            [class.is-invalid]="isInvalidControl('grupo')"
+                            >
                         </div>
                     </div>
 

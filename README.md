@@ -23,6 +23,9 @@ https://github.com/simonbengtsson/jsPDF-AutoTable
 
 https://artskydj.github.io/jsPDF/docs/jsPDF.html
 
+# Mongo autoincrement
+https://www.npmjs.com/package/mongoose-auto-increment
+npm install mongoose-auto-increment
 
 ## Excel
 https://www.npmjs.com/package/xlsx

@@ -90,3 +90,15 @@ export const ddUnidadesMedida = [
     { code: 'GR', name: 'Gramo' },
     // { code: '', name: ' ' }
   ];
+
+export const ddFormasPago = [
+    { code: '', name: 'Seleccione una forma de pago.' },
+    { code: 'EF', name: 'EFECTIVO' },
+    { code: 'DEPEF', name: 'DEPOSITO' },
+    { code: 'TRNS', name: 'TRANSFERENCIA' },
+    { code: 'TC', name: 'TARJETA CREDITO' },
+    { code: 'TD', name: 'TARJETA DEBITO' },
+    { code: 'CHQ', name: 'CHEQUE' },
+    { code: 'OTRO', name: 'OTRO' }
+    // { code: '', name: ' ' }
+  ];

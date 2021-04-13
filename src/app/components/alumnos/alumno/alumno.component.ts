@@ -29,6 +29,8 @@ export class AlumnoComponent implements OnInit {
   form : FormGroup = new FormGroup({});
 
   urlImagen: string = "";
+
+  niveles: DropDownItem[] = [];
   
   constructor(  private fb: FormBuilder,
                 private router: Router,
@@ -129,6 +131,8 @@ export class AlumnoComponent implements OnInit {
       fechaIngreso: ['', [Validators.required]],
 
       matricula: ['', []],
+      nivel: ['', []],
+      grado: ['', []],
       curp: ['', [Validators.pattern(REGEXP_CURP)]],
       sexo: new FormControl('M', Validators.required),
 
@@ -162,6 +166,8 @@ export class AlumnoComponent implements OnInit {
       fechaIngreso: "", 
       
       matricula: "",
+      nivel: "",
+      grado: "",
       curp: "",
       sexo: "",
       callenumero: "",
@@ -251,6 +257,8 @@ export class AlumnoComponent implements OnInit {
     obj.estado = this.form.value.selectedState.code;
     obj.activo = this.form.value.activo;
     obj.matricula = this.form.value.matricula;
+    obj.nivel = this.form.value.nivel;
+    obj.grado = this.form.value.grado;
     obj.rfc = this.form.value.rfc;
 
     console.log("guardar: ", obj);

@@ -11,9 +11,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProductosListComponent } from '../productos/productos-list/productos-list.component';
 import { CargoItem } from 'src/app/interfaces/cargo-item';
 import { CargosService } from 'src/app/services/cargos.service';
-import { eEstatusCargos, eSeverityMessages } from 'src/app/config/enums';
+import { eEstatusCargos, eSeverityMessages, ddFormasPago } from 'src/app/config/enums';
 import { AlumnosListComponent } from '../alumnos/alumnos-list/alumnos-list.component';
 import { arrRemoveAt, setfocus } from 'src/app/helpers/tools';
+import { DropDownItem } from 'src/app/interfaces/drop-down-item';
+import { PagosService } from 'src/app/services/pagos.service';
 
 @Component({
   selector: 'app-caja',
@@ -50,10 +52,22 @@ export class CajaComponent implements OnInit {
   cargosalumno: CargoItem[] = [];
 
   shoppingcart: CartItem[]= [];
-  
+
+  pagoDialog:Boolean = false;
+  formasPago: DropDownItem[] = ddFormasPago;
+  formapagoSelected: DropDownItem = new DropDownItem();
+
+  pago: any = {
+    fechapago: new Date(),
+    alumno: "",
+    formapago: "", 
+    montopagado: 0
+  }
+
   // private alumnosService: AlumnosService,
   constructor(  private router: Router,
                 private cargosService: CargosService,
+                private pagosService: PagosService,
                 private dialogService: DialogService,
                 private confirmationService: ConfirmationService,
                 private messageService: MessageService
@@ -65,52 +79,6 @@ export class CajaComponent implements OnInit {
     // this.alumnochanged({ value: { code: "605018e1ab32bf465014d1a4"}});
     setfocus("alumnoSearch");
   }
-
-  // buscar(){
-  //   let queryParams = `desde=${""}&records=${""}&sort=${""}`
-
-  //   let prevScreen = localStorage.getItem("prevScreen") || '';
-  //   if (prevScreen == "caja"){
-  //     queryParams = localStorage.getItem("lastquery")||'';
-  //     localStorage.setItem('prevScreen', '');
-  //   }
-
-  //   // console.log(queryParams);
-  //   localStorage.setItem('lastquery', queryParams);
-    
-  //   this.alumnosService
-  //   .findAlumnos(queryParams, this.searchtext)
-  //   .then(async (resp:any)=>{
-  //     const body = await resp.json();
-  //     this.alumnos = body.alumnos;
-  //     // this.totalRecords = body.total;
-
-  //     if(this.alumnos){
-  //       // console.log("Alumnos: ", this.alumnos );
-  //       this.alumnoslist =  [ { name:"Seleccione un alumno", code:"-1" },
-  //                             ...this.alumnos.map((a)=>({ name: `${a.nombre} ${a.apaterno || ""} ${a.amaterno || ""} - ${ a.matricula || "" }` , code: a.id }))
-  //                           ];
-  //     }
-
-  //     this.searchResultMsg = `Se encontraron ${body.found} registros.`
-      
-  //   })
-  //   .catch((e)=>{
-  //       console.log("error: ", e);            
-  //   });
-  // }
-
-  // async alumnochanged(event: any){
-  //   this.alumnosdrdwnenabled = false;
-
-  //   if (event.value.code !== -1 && event.value.code.length >= 24 ) {
-  //     this.cargosalumno = await this.cargosService.findCargos(event.value.code);
-  //   } else {
-  //     this.cargosalumno = [];
-  //   }
-  //   this.alumnosdrdwnenabled = true;
-  //   this.setfocus("producto");
-  // }
 
   edit(id?:string){
     this.router.navigate([`caja/${id}`]);
@@ -412,13 +380,54 @@ export class CajaComponent implements OnInit {
     setfocus("alumnoSearch");
   }
 
-  generarPago(){
+  showPago(){
+    this.pago.montopagado = this.total;
+    this.pago.alumno = this.alumnoSelected.id;
 
-    this.shoppingcart.forEach(element => {
-        console.log("element: ", element);
-        
-    });
-
+    this.pagoDialog = true;
   }
 
+  onChangeFormapago(event: any){
+    console.log(event);
+    this.formapagoSelected = event.value;
+    this.pago.formapago = event.value.code;
+  }
+
+  hideDialog(){
+    this.pagoDialog = false;
+  }
+
+  pagar(){
+    this.pagosService.save(this.pago)
+      .then(async(resp)=>{
+        const body = await resp.json();
+        console.log("Guardado: ", body);
+        if(body.ok){
+          this.showToastMessage("Pago", "Registrado con exito", eSeverityMessages.success);
+
+          console.log("this.cargosalumno: ", this.cargosalumno.filter((x)=> ( x.isAddedSC === true ) ) );
+          
+          this.cargosalumno.filter( (x) => ( x.isAddedSC === true )).forEach(cargo => {
+            console.log("Cargo: ", cargo);
+            cargo.estatus = "PAGADO";
+
+            this.cargosService.update(cargo)
+              .then(async (resp)=>{
+                const body = await resp.json();
+                console.log(body);
+                this.showToastMessage( cargo.concepto, "Pagado con exito", eSeverityMessages.success);
+                cargo.isAddedSC = false;
+              });
+          });
+
+          this.shoppingcart = [];
+          
+          this.hideDialog();
+        } else{
+          this.showToastMessage("Pago", "Error al aplicar el pago del cargo", eSeverityMessages.error);
+        }
+      });
+      return;
+  }
+  
 }
