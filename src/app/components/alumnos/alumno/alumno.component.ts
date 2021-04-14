@@ -11,6 +11,7 @@ import { SharedService } from 'src/app/services/shared.service';
 import { AlumnosService } from 'src/app/services/alumnos.service';
 import { DropDownItem } from 'src/app/interfaces/drop-down-item';
 import { buildMatricula } from 'src/app/helpers/tools';
+import { ddNiveles } from 'src/app/config/enums';
 @Component({
   selector: 'app-alumno',
   templateUrl: './alumno.component.html',
@@ -23,14 +24,14 @@ export class AlumnoComponent implements OnInit {
   alumno: any = {};
 
   results: string[] = [];
-  states: DropDownItem[] = [];
-  // states: STATES;
+  states: DropDownItem[] = STATES;
+  stateSelected: DropDownItem = new DropDownItem();
 
   form : FormGroup = new FormGroup({});
 
   urlImagen: string = "";
-
-  niveles: DropDownItem[] = [];
+  niveles: DropDownItem[] = ddNiveles;
+  nivelSelected: DropDownItem = new DropDownItem();
   
   constructor(  private fb: FormBuilder,
                 private router: Router,
@@ -38,17 +39,9 @@ export class AlumnoComponent implements OnInit {
                 private myService :  SharedService,
                 private alumnosService :  AlumnosService  ){
 
-                  
                 }
 
   ngOnInit() {
-    this.states = STATES;
-    // this.myService
-    //  .getEstados()
-    //  .then( ( data : any) => {        
-    //    this.states = data;        
-    //  }); 
-
     this.alumnoId = this.route.snapshot.paramMap.get("id") || "";
     
     if(this.alumnoId==="new" || this.alumnoId === ""){
@@ -56,10 +49,7 @@ export class AlumnoComponent implements OnInit {
       this.editMode = true;
     }
         // console.log("this.alumnoId: ", this.alumnoId);
-    
     this.initFormGroup();
-
-
    }
 
   initFormGroup() {
@@ -133,6 +123,7 @@ export class AlumnoComponent implements OnInit {
       matricula: ['', []],
       nivel: ['', []],
       grado: ['', []],
+      grupo: ['', []],
       curp: ['', [Validators.pattern(REGEXP_CURP)]],
       sexo: new FormControl('M', Validators.required),
 
@@ -150,7 +141,9 @@ export class AlumnoComponent implements OnInit {
       email: ['', [Validators.required, Validators.pattern(REGEXP_EMAIL)]],
       notas: [''],
       img: [this.urlImagen],
-      selectedState: ['']
+
+      stateSelected: [''],
+      nivelSelected: ['']
     });
   }
 
@@ -168,6 +161,7 @@ export class AlumnoComponent implements OnInit {
       matricula: "",
       nivel: "",
       grado: "",
+      grupo: "",
       curp: "",
       sexo: "",
       callenumero: "",
@@ -184,7 +178,8 @@ export class AlumnoComponent implements OnInit {
       email: "",
       img: this.urlImagen,
       notas: "",
-      selectedState:  this.setDropDownValue('AGS')
+      stateSelected: { code:"", name:"", },
+      nivelSelected: { code:"", name:"", }
     };
 
     if(this.alumnoId){
@@ -227,13 +222,26 @@ export class AlumnoComponent implements OnInit {
                 }
               });
             }
-            originalAlumno.selectedState = this.setDropDownValue(alumno.estado);
+            this.nivelSelected = this.setDDValue(alumno.nivel, this.niveles);
+            this.stateSelected = this.setDDValue(alumno.estado, this.states);
+
+            console.log("this.stateSelected: ", this.stateSelected);
+            console.log("this.nivelSelected.code: ", this.nivelSelected);
+
+            // this.getFormControl("selectedState")?.setValue(this.stateSelected);
+            // this.getFormControl("nivelSelected")?.setValue(this.nivelSelected);
+
+            originalAlumno.estado = alumno.estado;
+            originalAlumno.nivel = alumno.nivel;
+
+            originalAlumno.nivelSelected = this.nivelSelected;
+            originalAlumno.stateSelected = this.stateSelected;
 
             this.form.reset(originalAlumno);
           });
     } else {
         this.form.reset(originalAlumno);
-      }
+    }
   }
 
   verificaCampos(form?: any){
@@ -254,11 +262,13 @@ export class AlumnoComponent implements OnInit {
 
   private saveAlumno() {
     let obj = {...this.form.value};
-    obj.estado = this.form.value.selectedState.code;
+
+    obj.estado = this.stateSelected.code;
     obj.activo = this.form.value.activo;
     obj.matricula = this.form.value.matricula;
-    obj.nivel = this.form.value.nivel;
+    obj.nivel = this.nivelSelected.code;
     obj.grado = this.form.value.grado;
+    obj.grupo = this.form.value.grupo;
     obj.rfc = this.form.value.rfc;
 
     console.log("guardar: ", obj);
@@ -283,13 +293,19 @@ export class AlumnoComponent implements OnInit {
   }
   
   private updateAlumno() {
-    let obj = {...this.form.value};      
-    obj.estado = this.form.value.selectedState.code;
+    console.log(this.stateSelected);
+    console.log(this.nivelSelected);
+    
+    let obj = {...this.form.value};
+    obj.estado = this.stateSelected.code;
+    obj.nivel = this.nivelSelected.code;
     obj.id = this.alumnoId;
     
-    console.log("guardar: ", obj);
+    console.log("Actualizar: ", obj);
       this.alumnosService.update(obj)
       .then( (resp) => {
+        console.log("resp: ", resp);
+        
         if(resp.ok){
           Swal.fire({
             title: 'Alumno actualizado',
@@ -301,9 +317,16 @@ export class AlumnoComponent implements OnInit {
       });
   }
 
-  setDropDownValue(code:string) : any {
-    return this.states.find((obj : DropDownItem ) => ( obj.code === code ));
+  // setDropDownValue(code:string) : any {
+  //   return this.states.find((obj : DropDownItem ) => ( obj.code === code ));
+  // }
+
+  setDDValue(code:string, arrOptions: DropDownItem[] = []) : any {
+    console.log("Buscar: ", code, " en: ", arrOptions );
+    
+    return arrOptions.find((obj : DropDownItem ) => ( obj.code === code ));
   }
+
 
   toggleEdit(enabled?:boolean){
     // console.log("is edit mode?", enabled)
@@ -370,4 +393,13 @@ export class AlumnoComponent implements OnInit {
     matriculaCtl?.setValue(strMatricula);
 
   }
+
+  onChangeNivel(event: any){
+    this.nivelSelected = event.value;
+  }
+
+  onChangeEstado(event: any){
+    this.stateSelected = event.value;
+  }
+
 }

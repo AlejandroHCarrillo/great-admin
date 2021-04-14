@@ -408,13 +408,13 @@ export class CajaComponent implements OnInit {
           console.log("this.cargosalumno: ", this.cargosalumno.filter((x)=> ( x.isAddedSC === true ) ) );
           
           this.cargosalumno.filter( (x) => ( x.isAddedSC === true )).forEach(cargo => {
-            console.log("Cargo: ", cargo);
+            // console.log("Cargo: ", cargo);
             cargo.estatus = "PAGADO";
 
             this.cargosService.update(cargo)
               .then(async (resp)=>{
                 const body = await resp.json();
-                console.log(body);
+                // console.log(body);
                 this.showToastMessage( cargo.concepto, "Pagado con exito", eSeverityMessages.success);
                 cargo.isAddedSC = false;
               });

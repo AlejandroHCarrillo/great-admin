@@ -12,6 +12,7 @@
     </div>
     
     <h1><small>Alumno</small></h1>
+    <!-- Nivel selected: {{ nivelSelected | json }} -->
     <hr>
     <form [formGroup]="form" (ngSubmit)="submit()">        
         <div class="form-group row">
@@ -86,12 +87,14 @@
                             [class.is-invalid]="isInvalidControl('fechaIngreso')"></p-calendar>
                         </div>        
                     </div>
-                    <div class="col-2"> 
+                    <div class="col-4"> 
                         <div class="mb-3 form">
                             <label for="nivel" class="form-label">Nivel:</label>
                             <p-dropdown [options]="niveles"
                             optionLabel="name"
                             name="nivelSelected"
+                            [disabled]="!editMode"
+                            (onChange)="onChangeNivel($event)"
                             formControlName="nivelSelected"></p-dropdown>
                         </div>
                     </div>
@@ -107,7 +110,7 @@
                         </div>
                     </div>
 
-                    <div class="col-2"> 
+                    <div class="col-1"> 
                         <div class="mb-3 form">
                             <label for="grupo" class="form-label">Grupo:</label>
                             <input type="text" class="form-control" id="grupo" placeholder="Escriba el grupo" maxlength="1"
@@ -170,7 +173,7 @@
 
 
             <div class="row">
-                <div class="col-8"> 
+                <div class="col-4"> 
                     <div class="mb-3 form">
                         <label for="email" class="form-label">Email:</label>
                         <input type="email" name="email" id="email" class="form-control" maxlength="100"
@@ -211,7 +214,7 @@
             </div>
 
             <div class="row" >
-                <div class="col"> 
+                <div class="col title"> 
                     Direccion:
                 </div>
             </div>
@@ -260,8 +263,10 @@
                         <br>
                         <p-dropdown [options]="states"
                                     optionLabel="name"
-                                    name="selectedState"
-                                    formControlName="selectedState"></p-dropdown>
+                                    name="stateSelected"
+                                    [disabled]="!editMode"
+                                    (onChange)="onChangeEstado($event)"
+                                    formControlName="stateSelected"></p-dropdown>
                     </div>        
                 </div>
                 <div class="col-2"> 
@@ -320,9 +325,11 @@
     {{ form.value | json }}
 </pre> -->
 
+<!-- alumno : <pre>{{ alumno | json}}</pre> -->
+
 TODO: 
 <ul>
-    <li>Agregar Nivel, grado y grupo</li>
+    <li></li>
 </ul>
 
 
