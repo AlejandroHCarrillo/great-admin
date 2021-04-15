@@ -19,6 +19,10 @@ import { AlumnoComponent } from './components/alumnos/alumno/alumno.component';
 import { CajaComponent } from './components/caja/caja.component';
 import { InscripcionesComponent } from './components/inscripciones/inscripciones.component';
 import { CiclosEscolaresComponent } from './components/ciclos-escolares/ciclos-escolares.component';
+import { CursosComponent } from './components/cursos/cursos.component';
+import { CursoComponent } from './components/cursos/curso/curso.component';
+import { IncripcionesReportComponent } from './components/inscripciones/incripciones-report/incripciones-report.component';
+import { EstadoCuentaComponent } from './components/estado-cuenta/estado-cuenta.component';
 
 const routes: Routes = [
   // Rutas protegidas
@@ -31,6 +35,9 @@ const routes: Routes = [
       {path: 'cuentas', component: NopagefoundComponent },
       {path: 'formaspago', component: NopagefoundComponent },
 
+      {path: 'cursos', component: CursosComponent },
+      {path: 'curso', component: CursoComponent },
+      {path: 'curso/:id', component: CursoComponent },
       {path: 'caja', component: CajaComponent },
       {path: 'ciclos', component: CiclosEscolaresComponent },
       {path: 'inscripciones', component: InscripcionesComponent },
@@ -47,6 +54,9 @@ const routes: Routes = [
       {path: 'productos', component: ProductosComponent},
       {path: 'producto', component: ProductoComponent},
       {path: 'producto/:id', component: ProductoComponent},    
+      
+      {path: 'reportes/inscripciones', component: IncripcionesReportComponent},
+      {path: 'estadocuenta', component: EstadoCuentaComponent},
 
       {path: '', component: HomeComponent, pathMatch: 'full'},
 

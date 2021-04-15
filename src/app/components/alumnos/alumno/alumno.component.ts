@@ -10,6 +10,8 @@ import { REGEXP_EMAIL, REGEXP_RFC, REGEXP_CURP } from '../../../config/settings'
 import { SharedService } from 'src/app/services/shared.service';
 import { AlumnosService } from 'src/app/services/alumnos.service';
 import { DropDownItem } from 'src/app/interfaces/drop-down-item';
+import { buildMatricula } from 'src/app/helpers/tools';
+import { ddNiveles } from 'src/app/config/enums';
 @Component({
   selector: 'app-alumno',
   templateUrl: './alumno.component.html',
@@ -22,12 +24,14 @@ export class AlumnoComponent implements OnInit {
   alumno: any = {};
 
   results: string[] = [];
-  states: DropDownItem[] = [];
-  // states: STATES;
+  states: DropDownItem[] = STATES;
+  stateSelected: DropDownItem = new DropDownItem();
 
   form : FormGroup = new FormGroup({});
 
   urlImagen: string = "";
+  niveles: DropDownItem[] = ddNiveles;
+  nivelSelected: DropDownItem = new DropDownItem();
   
   constructor(  private fb: FormBuilder,
                 private router: Router,
@@ -35,17 +39,9 @@ export class AlumnoComponent implements OnInit {
                 private myService :  SharedService,
                 private alumnosService :  AlumnosService  ){
 
-                  
                 }
 
   ngOnInit() {
-    this.states = STATES;
-    // this.myService
-    //  .getEstados()
-    //  .then( ( data : any) => {        
-    //    this.states = data;        
-    //  }); 
-
     this.alumnoId = this.route.snapshot.paramMap.get("id") || "";
     
     if(this.alumnoId==="new" || this.alumnoId === ""){
@@ -53,10 +49,7 @@ export class AlumnoComponent implements OnInit {
       this.editMode = true;
     }
         // console.log("this.alumnoId: ", this.alumnoId);
-    
     this.initFormGroup();
-
-
    }
 
   initFormGroup() {
@@ -128,6 +121,9 @@ export class AlumnoComponent implements OnInit {
       fechaIngreso: ['', [Validators.required]],
 
       matricula: ['', []],
+      nivel: ['', []],
+      grado: ['', []],
+      grupo: ['', []],
       curp: ['', [Validators.pattern(REGEXP_CURP)]],
       sexo: new FormControl('M', Validators.required),
 
@@ -143,9 +139,16 @@ export class AlumnoComponent implements OnInit {
       ttrabajo: [''],
 
       email: ['', [Validators.required, Validators.pattern(REGEXP_EMAIL)]],
+
+      beca: ['0'],
+      prestacion: ['0'],
+      apoyo: ['0'],
+
       notas: [''],
       img: [this.urlImagen],
-      selectedState: ['']
+
+      stateSelected: [''],
+      nivelSelected: ['']
     });
   }
 
@@ -161,6 +164,9 @@ export class AlumnoComponent implements OnInit {
       fechaIngreso: "", 
       
       matricula: "",
+      nivel: "",
+      grado: "",
+      grupo: "",
       curp: "",
       sexo: "",
       callenumero: "",
@@ -175,9 +181,14 @@ export class AlumnoComponent implements OnInit {
       ttrabajo: "",
       
       email: "",
+      beca: "0",
+      prestacion: "0",
+      apoyo: "0",
+
       img: this.urlImagen,
       notas: "",
-      selectedState:  this.setDropDownValue('AGS')
+      stateSelected: { code:"", name:"", },
+      nivelSelected: { code:"", name:"", }
     };
 
     if(this.alumnoId){
@@ -202,7 +213,10 @@ export class AlumnoComponent implements OnInit {
 
             const alumno = body.alumno;
             this.alumno = body.alumno;
-                    
+
+            // const rfc = buildRFC(alumno.nombre, alumno.apaterno, alumno.amaterno, alumno.fechaNacimiento);
+            // console.log("RFC: ", rfc);
+            
             if (alumno){
               Object.keys(originalAlumno).map((x)=>{            
                 if(x.toString().includes('fecha')){
@@ -217,13 +231,26 @@ export class AlumnoComponent implements OnInit {
                 }
               });
             }
-            originalAlumno.selectedState = this.setDropDownValue(alumno.estado);
+            this.nivelSelected = this.setDDValue(alumno.nivel, this.niveles);
+            this.stateSelected = this.setDDValue(alumno.estado, this.states);
+
+            console.log("this.stateSelected: ", this.stateSelected);
+            console.log("this.nivelSelected.code: ", this.nivelSelected);
+
+            // this.getFormControl("selectedState")?.setValue(this.stateSelected);
+            // this.getFormControl("nivelSelected")?.setValue(this.nivelSelected);
+
+            originalAlumno.estado = alumno.estado;
+            originalAlumno.nivel = alumno.nivel;
+
+            originalAlumno.nivelSelected = this.nivelSelected;
+            originalAlumno.stateSelected = this.stateSelected;
 
             this.form.reset(originalAlumno);
           });
     } else {
         this.form.reset(originalAlumno);
-      }
+    }
   }
 
   verificaCampos(form?: any){
@@ -244,10 +271,18 @@ export class AlumnoComponent implements OnInit {
 
   private saveAlumno() {
     let obj = {...this.form.value};
-    obj.estado = this.form.value.selectedState.code;
+
+    obj.estado = this.stateSelected.code;
     obj.activo = this.form.value.activo;
     obj.matricula = this.form.value.matricula;
+    obj.nivel = this.nivelSelected.code;
+    obj.grado = this.form.value.grado;
+    obj.grupo = this.form.value.grupo;
     obj.rfc = this.form.value.rfc;
+
+    obj.beca = this.form.value.beca;
+    obj.prestacion = this.form.value.prestacion;
+    obj.apoyo = this.form.value.apoyo;
 
     console.log("guardar: ", obj);
     
@@ -271,13 +306,23 @@ export class AlumnoComponent implements OnInit {
   }
   
   private updateAlumno() {
-    let obj = {...this.form.value};      
-    obj.estado = this.form.value.selectedState.code;
-    obj.id = this.alumnoId;
+    console.log(this.stateSelected);
+    console.log(this.nivelSelected);
     
-    console.log("guardar: ", obj);
+    let obj = {...this.form.value};
+    obj.estado = this.stateSelected.code;
+    obj.nivel = this.nivelSelected.code;
+    obj.id = this.alumnoId;
+
+    obj.beca = this.form.value.beca;
+    obj.prestacion = this.form.value.prestacion;
+    obj.apoyo = this.form.value.apoyo;
+    
+    console.log("Actualizar: ", obj);
       this.alumnosService.update(obj)
       .then( (resp) => {
+        console.log("resp: ", resp);
+        
         if(resp.ok){
           Swal.fire({
             title: 'Alumno actualizado',
@@ -289,8 +334,14 @@ export class AlumnoComponent implements OnInit {
       });
   }
 
-  setDropDownValue(code:string) : any {
-    return this.states.find((obj : DropDownItem ) => ( obj.code === code ));
+  // setDropDownValue(code:string) : any {
+  //   return this.states.find((obj : DropDownItem ) => ( obj.code === code ));
+  // }
+
+  setDDValue(code:string, arrOptions: DropDownItem[] = []) : any {
+    console.log("Buscar: ", code, " en: ", arrOptions );
+    
+    return arrOptions.find((obj : DropDownItem ) => ( obj.code === code ));
   }
 
 
@@ -345,4 +396,27 @@ export class AlumnoComponent implements OnInit {
   closeModal(){
     this.showModal = false;
   }
+
+  calculateMatricula(){
+    let matriculaCtl = this.getFormControl("matricula");
+    // console.log("this.alumno.matricula: ", matriculaCtl?.value);
+    
+    if(matriculaCtl?.value != undefined && matriculaCtl?.value !== ""){
+      console.log("Ya tiene matricula, no hace nada");
+      return;      
+    }
+
+    let strMatricula = buildMatricula(this.alumno.nombre, this.alumno.apaterno, this.alumno.amaterno, this.alumno.fechaNacimiento );
+    matriculaCtl?.setValue(strMatricula);
+
+  }
+
+  onChangeNivel(event: any){
+    this.nivelSelected = event.value;
+  }
+
+  onChangeEstado(event: any){
+    this.stateSelected = event.value;
+  }
+
 }

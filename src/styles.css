@@ -90,6 +90,13 @@
 .title{
     font-weight: bold;
 }
+
+.title-header{
+    font-weight: bold;
+    background-color: rgb(230, 230, 230);
+    text-align: center;
+}
+
 /** FAB Floating Action Button  **/
 .fab{
     border-radius: 100%;
@@ -166,6 +173,10 @@ button{
 
 .text-numeric{
     text-align: right;
+}
+
+.text-center{
+    text-align: center;
 }
 
 /* images */

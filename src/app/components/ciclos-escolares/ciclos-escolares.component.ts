@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { PAGE_SIZE } from 'src/app/config/settings';
-import { isDate } from 'src/app/helpers/tools';
+import { dateEsp2Eng, isDate } from 'src/app/helpers/tools';
 import { CicloEscolar } from 'src/app/interfaces/cicloescolar';
 import { PageInfo } from 'src/app/interfaces/pageinfo.model';
 import { CiclosescolaresService } from 'src/app/services/ciclosescolares.service';
@@ -12,35 +13,40 @@ import { CiclosescolaresService } from 'src/app/services/ciclosescolares.service
   templateUrl: './ciclos-escolares.component.html',
   styleUrls: ['./ciclos-escolares.component.css', './primetable.scss']
 })
+
 export class CiclosEscolaresComponent implements OnInit {
-  cicloescolarDialog: boolean = false;
-  ciclosescolares: CicloEscolar[] = [];
-  cicloescolar?: any;
-  ciclosescolaresSelected: CicloEscolar[] = [];
-  submitted: boolean = false;
+    isDate = isDate;
+    dateEsp2Eng = dateEsp2Eng;
 
-  isDate = isDate;
-  txtbuscar: string = "";
+    showCicloescolarDialog: boolean = false;
+    ciclosescolares: CicloEscolar[] = [];
+    cicloescolar: CicloEscolar = new CicloEscolar(true, "", new Date(), new Date());
+    ciclosescolaresSelected: CicloEscolar[] = [];
+    submitted: boolean = false;
 
-  pageinfo : PageInfo = new PageInfo(1, PAGE_SIZE, 1, 1, "nombre");
-  totalRecords: number = 0;
+    txtbuscar: string = "";
 
-  constructor(private ciclosService: CiclosescolaresService, 
-              private messageService: MessageService, 
-              private confirmationService: ConfirmationService) { }
+    pageinfo : PageInfo = new PageInfo(1, PAGE_SIZE, 1, 1, "nombre");
+    totalRecords: number = 0;
 
-  ngOnInit(): void {
-    console.log("ciclos init");
-    this.loaddata();
+    fInicio: string = "";
+    fFin: string = "";
 
-  }
+    constructor(private ciclosService: CiclosescolaresService, 
+                private messageService: MessageService, 
+                private confirmationService: ConfirmationService) { }
+
+    ngOnInit(): void {
+        // console.log("ciclos init");
+        this.loaddata();
+    }
 
 loaddata(){
     let queryParams = `desde=${this.pageinfo.first}&records=${this.pageinfo.rows}&sort=${this.pageinfo.sort}`
     this.ciclosService.getCiclosEscolares(queryParams)    
         .then(async (resp)=>{
-            console.log("resp: ", resp);
             const body = await resp.json();
+            console.log("body: ", body);
             this.ciclosescolares = body.ciclosescolares;
             this.totalRecords = body.total;
     })
@@ -83,9 +89,12 @@ loaddata(){
   }
 
 openNew() {
-    this.cicloescolar = {};
+    this.cicloescolar = new CicloEscolar(true, "", new Date(), new Date());
+    this.fInicio = moment( new Date() ).format("DD/MM/yyyy");
+    this.fFin = moment( new Date() ).format("DD/MM/yyyy");
+
     this.submitted = false;
-    this.cicloescolarDialog = true;
+    this.showCicloescolarDialog = true;
 }
 
 deleteSelectedItems() {
@@ -117,7 +126,11 @@ deleteSelectedItems() {
 
 edit(cicloescolar: CicloEscolar) {
     this.cicloescolar = {...cicloescolar};
-    this.cicloescolarDialog = true;
+
+    this.fInicio = moment( this.cicloescolar.fechaInicio ).format("DD/MM/yyyy");
+    this.fFin = moment( this.cicloescolar.fechaFin ).format("DD/MM/yyyy");
+
+    this.showCicloescolarDialog = true;
 }
 
 delete(cicloescolar: CicloEscolar) {
@@ -129,7 +142,7 @@ delete(cicloescolar: CicloEscolar) {
             this.ciclosService.delete(cicloescolar.id || "")
                     .then(()=>{
                         this.ciclosescolares = this.ciclosescolares.filter(val => val.id !== cicloescolar.id);
-                        this.cicloescolar = {};
+                        this.cicloescolar = new CicloEscolar(true, "", new Date(), new Date());;
                         this.messageService.add({
                             severity:'success', 
                             summary: cicloescolar.nombre + 'Ciclo escolar', 
@@ -140,15 +153,19 @@ delete(cicloescolar: CicloEscolar) {
 }
 
 hideDialog() {
-    this.cicloescolarDialog = false;
+    this.showCicloescolarDialog = false;
     this.submitted = false;
 }
 
 save() {
     this.submitted = true;
+
+    this.cicloescolar.fechaInicio = new Date( dateEsp2Eng(this.fInicio) );
+    this.cicloescolar.fechaFin = new Date( dateEsp2Eng(this.fFin) );
+
     if (!this.cicloescolar?.nombre || 
-        !isDate(this.cicloescolar.fechaInicio) ||
-        !isDate(this.cicloescolar.fechaFin)        
+        !isDate(this.cicloescolar.fechaInicio.toString()) ||
+        !isDate(this.cicloescolar.fechaFin.toString())
          ) {
             console.log("Hubo un error al guardar");
             return;
@@ -157,19 +174,21 @@ save() {
             // Actualizar
             this.ciclosService.save(this.cicloescolar)
                 .then(async (resp) => {
-                    console.log(resp);
+                    // console.log(resp);
                     if(resp.ok){
                         this.messageService.add({
                             severity:'success', 
                             summary: 'Ciclo escolar', 
-                            detail: 'Actualizado con exito', 
+                            detail: this.cicloescolar.nombre + ' actualizado con exito', 
                             life: 3000});
                         
                         // const body = await resp.json();
-                        this.ciclosescolares[this.findIndexById(this.cicloescolar.id)] = this.cicloescolar;
+                        this.ciclosescolares[this.findIndexById(this.cicloescolar.id || '' )] = this.cicloescolar;
 
-                        this.cicloescolarDialog = false;
-                        this.cicloescolar = {};
+                        this.showCicloescolarDialog = false;
+                        this.cicloescolar = new CicloEscolar(true, "", new Date(), new Date());
+
+                        this.hideDialog();
                       }
                 
                 });
@@ -185,15 +204,17 @@ save() {
                         this.messageService.add({
                             severity:'success', 
                             summary: 'Ciclo escolar', 
-                            detail: 'Creado con exito', 
+                            detail: this.cicloescolar.nombre + 'creado con exito', 
                             life: 3000});            
                         
                         const body = await resp.json();
                         this.cicloescolar.id = body.id;                        
                         this.ciclosescolares.push(this.cicloescolar);
 
-                        this.cicloescolarDialog = false;
-                        this.cicloescolar = {};
+                        this.showCicloescolarDialog = false;
+                        this.cicloescolar = new CicloEscolar(true, "", new Date(), new Date());
+                        
+                        this.hideDialog();
                       }
                 
                 });
@@ -215,15 +236,6 @@ findIndexById(id: string): number {
     }
 
     return index;
-}
-
-createId(): string {
-    let id = '';
-    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for ( var i = 0; i < 5; i++ ) {
-        id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
 }
 
 }

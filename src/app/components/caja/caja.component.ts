@@ -4,7 +4,6 @@ import { DIA_MILLISECONDS, PAGE_SIZE } from '../../config/settings'
 import * as moment from 'moment';
 
 import { Alumno } from 'src/app/interfaces/alumno';
-import { DropDownItem } from 'src/app/interfaces/drop-down-item';
 import { CartItem } from 'src/app/interfaces/cart-item';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Producto } from 'src/app/interfaces/producto';
@@ -12,9 +11,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProductosListComponent } from '../productos/productos-list/productos-list.component';
 import { CargoItem } from 'src/app/interfaces/cargo-item';
 import { CargosService } from 'src/app/services/cargos.service';
-import { eEstatusCargos, eSeverityMessages } from 'src/app/config/enums';
+import { eEstatusCargos, eSeverityMessages, ddFormasPago } from 'src/app/config/enums';
 import { AlumnosListComponent } from '../alumnos/alumnos-list/alumnos-list.component';
-import { setfocus } from 'src/app/helpers/tools';
+import { arrRemoveAt, setfocus } from 'src/app/helpers/tools';
+import { DropDownItem } from 'src/app/interfaces/drop-down-item';
+import { PagosService } from 'src/app/services/pagos.service';
 
 @Component({
   selector: 'app-caja',
@@ -24,9 +25,8 @@ import { setfocus } from 'src/app/helpers/tools';
 
 export class CajaComponent implements OnInit {
   searchtext: string = "";
-  searchResultMsg = "";
+  searchResultMsg = ""; 
 
-  alumnoslist : DropDownItem[] = [];
   alumnoSelected: any; // DropDownItem = { name:"Seleccione un alumno", code:"-1" };
 
   private emptytranscaction = { 
@@ -52,10 +52,22 @@ export class CajaComponent implements OnInit {
   cargosalumno: CargoItem[] = [];
 
   shoppingcart: CartItem[]= [];
-  
+
+  pagoDialog:Boolean = false;
+  formasPago: DropDownItem[] = ddFormasPago;
+  formapagoSelected: DropDownItem = new DropDownItem();
+
+  pago: any = {
+    fechapago: new Date(),
+    alumno: "",
+    formapago: "", 
+    montopagado: 0
+  }
+
   // private alumnosService: AlumnosService,
   constructor(  private router: Router,
                 private cargosService: CargosService,
+                private pagosService: PagosService,
                 private dialogService: DialogService,
                 private confirmationService: ConfirmationService,
                 private messageService: MessageService
@@ -65,54 +77,8 @@ export class CajaComponent implements OnInit {
   ngOnInit(): void {
     // this.loadAlumnos()
     // this.alumnochanged({ value: { code: "605018e1ab32bf465014d1a4"}});
-    setfocus("alumnSearch");
+    setfocus("alumnoSearch");
   }
-
-  // buscar(){
-  //   let queryParams = `desde=${""}&records=${""}&sort=${""}`
-
-  //   let prevScreen = localStorage.getItem("prevScreen") || '';
-  //   if (prevScreen == "caja"){
-  //     queryParams = localStorage.getItem("lastquery")||'';
-  //     localStorage.setItem('prevScreen', '');
-  //   }
-
-  //   // console.log(queryParams);
-  //   localStorage.setItem('lastquery', queryParams);
-    
-  //   this.alumnosService
-  //   .findAlumnos(queryParams, this.searchtext)
-  //   .then(async (resp:any)=>{
-  //     const body = await resp.json();
-  //     this.alumnos = body.alumnos;
-  //     // this.totalRecords = body.total;
-
-  //     if(this.alumnos){
-  //       // console.log("Alumnos: ", this.alumnos );
-  //       this.alumnoslist =  [ { name:"Seleccione un alumno", code:"-1" },
-  //                             ...this.alumnos.map((a)=>({ name: `${a.nombre} ${a.apaterno || ""} ${a.amaterno || ""} - ${ a.matricula || "" }` , code: a.id }))
-  //                           ];
-  //     }
-
-  //     this.searchResultMsg = `Se encontraron ${body.found} registros.`
-      
-  //   })
-  //   .catch((e)=>{
-  //       console.log("error: ", e);            
-  //   });
-  // }
-
-  // async alumnochanged(event: any){
-  //   this.alumnosdrdwnenabled = false;
-
-  //   if (event.value.code !== -1 && event.value.code.length >= 24 ) {
-  //     this.cargosalumno = await this.cargosService.findCargos(event.value.code);
-  //   } else {
-  //     this.cargosalumno = [];
-  //   }
-  //   this.alumnosdrdwnenabled = true;
-  //   this.setfocus("producto");
-  // }
 
   edit(id?:string){
     this.router.navigate([`caja/${id}`]);
@@ -166,6 +132,7 @@ export class CajaComponent implements OnInit {
     const montoImpuestos = monto * (t.producto.tasaIVA/100);
 
     const item = new CartItem(t.index, "",
+      t.producto.id,
       t.producto.precio,
       t.cantidad,
       t.producto.tasaIVA,
@@ -222,9 +189,9 @@ export class CajaComponent implements OnInit {
       index: index,
       cantidad: this.shoppingcart[index].cantidad,
       producto: {
-        id: this.shoppingcart[index].producto.id,
-        code: this.shoppingcart[index].producto.code||"",
-        nombre: this.shoppingcart[index].producto.nombre||"",
+        id: this.shoppingcart[index].producto?.id||"",
+        code: this.shoppingcart[index].producto?.code||"",
+        nombre: this.shoppingcart[index].producto?.nombre||"",
         precio: this.shoppingcart[index].precio,
         exentoIVA: false,
         tasaIVA: this.shoppingcart[index].tasaIVA
@@ -244,10 +211,12 @@ export class CajaComponent implements OnInit {
     this.confirmationService.confirm({
       message: '¿En verdad deseas eliminar este cargo de la lista?',
       accept: () => {
-        let scClon = [...this.shoppingcart];
-        this.shoppingcart = [ ...scClon.splice(0, index), 
-                              ...this.shoppingcart.splice(index+1)
-                            ];
+        // let scClon = [...this.shoppingcart];
+        // this.shoppingcart = [ ...scClon.splice(0, index), 
+        //                       ...this.shoppingcart.splice(index+1)
+        //                     ];
+        this.shoppingcart = arrRemoveAt(this.shoppingcart, index);
+        
         this.selectedIndex = -1;
 
         this.cargosalumno[cargoIndex].isAddedSC = false;        
@@ -326,16 +295,16 @@ export class CajaComponent implements OnInit {
       }
 
     // console.log("index: ", cargo.producto );
-    cargo.producto.nombre += " / " + cargo.concepto;
+    // cargo.producto.nombre += " / " + cargo.concepto;
     const item = new CartItem(0, "",
-                      // cargo.producto.id || "",
-                      cargo.producto.precio,
+                      "cargo.producto?.id" || "",
+                      cargo.precio,
                       cargo.cantidad,
                       cargo.tasaIVA,
                       cargo.impuestos,
                       cargo.descuento,
                       cargo.monto,
-                      cargo.producto,
+                      { id:"", code: "", nombre: cargo.concepto, precio: cargo.precio, tasaIVA: cargo.tasaIVA },
                       cargoIndex
                     );
 
@@ -383,11 +352,11 @@ export class CajaComponent implements OnInit {
           this.cargosalumno = [];
           return
         };
+        this.resetTransactions();
 
         this.alumnoSelected = { ...alumno };
         this.messageService.add({severity:'info', summary: 'Alumno seleccionado', detail:'matricula:' + alumno.matricula });
-        this.cargosalumno = await this.cargosService.findCargos( alumno.id );
-
+        this.cargosalumno = await this.cargosService.findCargosByAlumno( alumno.id );
     });
   }
 
@@ -399,7 +368,7 @@ export class CajaComponent implements OnInit {
             detail: `${text}` || 'Texto'});
   }
 
-  reset(){
+  resetTransactions(){
     this.alumnoSelected = null;
     this.cargosalumno = [];
 
@@ -408,16 +377,57 @@ export class CajaComponent implements OnInit {
 
     this.searchtext = "";
 
-    setfocus("alumnSearch");
+    setfocus("alumnoSearch");
   }
 
-  generarPago(){
+  showPago(){
+    this.pago.montopagado = this.total;
+    this.pago.alumno = this.alumnoSelected.id;
 
-    this.shoppingcart.forEach(element => {
-        console.log("element: ", element);
-        
-    });
-
+    this.pagoDialog = true;
   }
 
+  onChangeFormapago(event: any){
+    console.log(event);
+    this.formapagoSelected = event.value;
+    this.pago.formapago = event.value.code;
+  }
+
+  hideDialog(){
+    this.pagoDialog = false;
+  }
+
+  pagar(){
+    this.pagosService.save(this.pago)
+      .then(async(resp)=>{
+        const body = await resp.json();
+        console.log("Guardado: ", body);
+        if(body.ok){
+          this.showToastMessage("Pago", "Registrado con exito", eSeverityMessages.success);
+
+          console.log("this.cargosalumno: ", this.cargosalumno.filter((x)=> ( x.isAddedSC === true ) ) );
+          
+          this.cargosalumno.filter( (x) => ( x.isAddedSC === true )).forEach(cargo => {
+            // console.log("Cargo: ", cargo);
+            cargo.estatus = "PAGADO";
+
+            this.cargosService.update(cargo)
+              .then(async (resp)=>{
+                const body = await resp.json();
+                // console.log(body);
+                this.showToastMessage( cargo.concepto, "Pagado con exito", eSeverityMessages.success);
+                cargo.isAddedSC = false;
+              });
+          });
+
+          this.shoppingcart = [];
+          
+          this.hideDialog();
+        } else{
+          this.showToastMessage("Pago", "Error al aplicar el pago del cargo", eSeverityMessages.error);
+        }
+      });
+      return;
+  }
+  
 }

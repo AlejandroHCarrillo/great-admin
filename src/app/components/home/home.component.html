@@ -14,6 +14,15 @@
 
         <div class="card">
             <div class="card-img-overlay text-center">
+                <a [routerLink]="['/cursos']" routerLinkActive="active" >
+                    <span class="icon"><i class="fas fa-scroll"></i></span>
+                </a>
+                <h5 class="card-title">Cursos</h5>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-img-overlay text-center">
                 <a [routerLink]="['/inscripciones']" routerLinkActive="active" >
                     <span class="icon"><i class="fas fa-user-edit"></i></span>
                 </a>
@@ -32,8 +41,8 @@
 
         <div class="card">
             <div class="card-img-overlay text-center">
-                <a [routerLink]="['/pagos']" routerLinkActive="active" >
-                    <span class="icon"><i class="fas fa-file-invoice"></i></span>
+                <a [routerLink]="['/estadocuenta']" routerLinkActive="active" >
+                    <span class="icon" style="font-size: 50px;"><i class="fas fa-file-invoice"></i></span>
                 </a>
                 <h5 class="card-title">Estado de cuenta</h5>
             </div>
@@ -111,16 +120,7 @@
                 <h5 class="card-title">Alumnos</h5>
             </div>
         </div>
-        
-        <div class="card">
-            <div class="card-img-overlay text-center">
-                <a [routerLink]="['/productos']" routerLinkActive="active" >
-                    <span class="icon"><i class="fas fa-scroll"></i></span>
-                </a>
-                <h5 class="card-title">Cursos</h5>
-            </div>
-        </div>
-        
+                
         <div class="card">
             <div class="card-img-overlay text-center">
                 <a [routerLink]="['/empleados']" routerLinkActive="active" >

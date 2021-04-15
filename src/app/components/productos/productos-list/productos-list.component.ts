@@ -4,8 +4,6 @@ import { PAGE_SIZE } from 'src/app/config/settings';
 import { Producto } from 'src/app/interfaces/producto';
 import { ProductosService } from 'src/app/services/productos.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { setfocus } from 'src/app/helpers/tools';
-import { PageInfo } from 'src/app/interfaces/pageinfo.model';
   
 @Component({
   selector: 'app-productos-list',
@@ -17,7 +15,15 @@ export class ProductosListComponent implements OnInit {
   txtbuscar: string = "";
   searchResultMsg = "";
 
-  pageinfo : PageInfo = new PageInfo(0, PAGE_SIZE, 0, 0, "nombre");
+  pagesize = PAGE_SIZE;
+
+  pageinfo = {
+                first : 0,
+                rows : this.pagesize,
+                page : 0,
+                pageCount : 0,
+                sort: 'nombre'
+          };
 
   currentPage: number=0;
   totalRecords: number = 0;
@@ -53,7 +59,6 @@ export class ProductosListComponent implements OnInit {
       this.totalRecords = body.total;
       this.searchResultMsg = `Se encontraron ${body.found || 0 } registros.`
 
-      setfocus("buscar");
     })
     .catch((e)=>{
         console.log("error: ", e);            

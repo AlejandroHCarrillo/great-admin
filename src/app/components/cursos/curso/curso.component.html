@@ -1,0 +1,297 @@
+<p-toast key="tmKey" position="top-right"></p-toast>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1><small>Curso</small></h1>
+            <hr>    
+            <form #f="ngForm" (ngSubmit)="save()" *ngIf="curso">
+                <div class="row">
+                    <div class="col-3">
+                        <label for="code" class="form-label">Codigo:</label>
+                        <input type="text" class="form-control" 
+                        id="code" name="code" 
+                        placeholder="Escriba el code del curso" maxlength="10"
+                        [(ngModel)]="curso.code"
+                        [class.is-invalid]="isInvalid('curso.code')"
+                        required
+                        >
+                        <small *ngIf="isInvalid('curso.code')" class="text-danger">El nombre del curso es obligatorio </small>    
+                    </div>
+
+                    <div class="col">
+                        <label for="nombre" class="form-label">Nombre del Curso:</label>
+                        <input type="text" class="form-control" 
+                        id="nombre" name="nombre" 
+                        placeholder="Escriba el nombre del curso" maxlength="30"
+                        [(ngModel)]="curso.nombre"
+                        [class.is-invalid]="isInvalid('curso.nombre')"
+                        required
+                        >
+                        <small *ngIf="isInvalid('curso.nombre')" class="text-danger">El nombre del curso es obligatorio </small>        
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col">
+
+                        <label for="descripcion" class="form-label">Descripcion del Curso:</label>
+                        <input type="text" class="form-control" 
+                        id="descripcion" name="descripcion" 
+                        placeholder="Escriba el descripcion del curso" maxlength="100"
+                        [(ngModel)]="curso.descripcion"
+                        [class.is-invalid]="isInvalid('curso.descripcion')"
+                        >
+                        <small *ngIf="isInvalid('curso.descripcion')" class="text-danger">El nombre del curso es obligatorio </small>
+                    </div>
+
+                    <div class="col-2">
+                        <div class="mb-3">
+                            <label class="form-label">Activo:{{ (curso.activo)?"Si":"No" }}</label>
+                            <div>
+                                <p-inputSwitch name="activo" [(ngModel)]="curso.activo"></p-inputSwitch>
+                            </div>
+                        </div>
+                    </div>
+    
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col">
+                        <label for="fechaprimerpago" class="form-label">Fecha primer pago:</label>
+                        <p-calendar 
+                        name="fechaprimerpago" 
+                        inputStyleClass="text-center"
+                        [(ngModel)]="curso.fechaprimerpago"
+                        class="col-large"
+                        [class.is-invalid]="isInvalid('curso.fechaprimerpago')"
+                        ></p-calendar>
+                        
+                        <small *ngIf="isInvalid('curso.fechaprimerpago')" class="text-danger">El nombre del curso es obligatorio </small>
+                    </div>
+
+                    <div class="col">
+                        <label for="nivel" class="form-label">Nivel:</label>
+                        <p-dropdown [options]="niveles"
+                        class="col-large"
+                        optionLabel="name"
+                        name="nivelSelected"
+                        (onChange) ="onChangeNivel($event)"
+                        [(ngModel)]="nivelSelected"></p-dropdown>
+                        <small *ngIf="isInvalid('nivelSelected')" class="text-danger">El nombre del curso es obligatorio </small>
+                    </div>
+
+                    <div class="col">
+                        <label for="grado" class="form-label">Grado:</label>
+
+                        <p-inputNumber [min]="1" [max]="6"
+                            class="col-medium"
+                            inputStyleClass="text-center"
+                            [showButtons]="false"
+                            id="grado" name="grado" placeholder="1"
+                            [(ngModel)]="curso.grado" 
+                        ></p-inputNumber>
+                        <small *ngIf="isInvalid('grado')" class="text-danger">El nombre del curso es obligatorio </small>
+                    </div>
+                </div>
+                <hr>
+                <!-- <pre> {{ cargoSelectedSelected | json }} </pre> -->
+                <div class="text-end">
+                    <button class="btn btn-warning" type="submit" [disabled]="!f.valid">
+                        Guardar
+                    </button>
+                    <button type="button" 
+                    class="btn btn-secondary " 
+                    [routerLink]="['/cursos']">Regresar</button>
+                </div>
+
+                <!-- {{ f.valid }} -->
+            </form>
+
+        </div>
+
+        <div class="col mt-3">
+            <span *ngIf="curso.id">
+                <h4>Cargos: <button class="btn btn-success" (click)="openNew()">
+                    <span class="icon"><i class="fas fa-plus"></i></span>
+                </button> </h4>
+                <hr>
+            </span>
+            <div class="row" *ngFor="let cargo of curso.cargos; let i = index">
+                
+                <div class="col">
+                    <div class="row">
+                        <div class="col title-header text-align">
+                            {{ cargo.nombre }} 
+                            {{ cargo.monto * cargo.numpagos | currency }}
+                        </div>
+                        <div class="col-1 col-small title-header" style="display: flex; direction: row; justify-content: space-between;">
+                            <span class="icon" (click)="editCargo(i)"><i class="fas fa-pencil-alt"></i></span>
+                            <span class="icon" (click)="removeCargo(i)"><i class="fas fa-times"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 title">Tipo de cargo:&nbsp;</div>
+                        <div class="col">{{ cargo.tipocargo }}</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 title">Precio:&nbsp;</div>
+                        <div class="col text-numeric">{{ cargo.precio | currency }} </div>
+                        <div class="col"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 title">Tasa IVA:&nbsp;</div>
+                        <div class="col">{{ (cargo.tasaIVA || 0) * 100 }}% </div>
+                        <div class="col"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 title">Monto IVA:&nbsp;</div>
+                        <div class="col text-numeric">{{ cargo.precio * cargo.tasaIVA | currency }} </div>
+                        <div class="col"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 title">Monto cargo:&nbsp;</div>
+                        <div class="col text-numeric">{{ cargo.monto | currency }}</div>
+                        <div class="col"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 title">Numero de cargos:&nbsp;</div>
+                        <div class="col">{{ cargo.numpagos }}</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 title">Intervalo pagos:&nbsp;</div>
+                        <div class="col">{{ cargo.intervalopagos }} mes(es)</div>
+                    </div>
+
+                </div>
+
+                <hr>
+                <!-- <pre>
+                    {{cargo | json}}
+                </pre> -->
+
+            </div>
+    
+            <!-- <hr> -->
+            <!-- <pre> {{ curso.cargos | json }} </pre> -->
+
+        </div>
+
+    </div>
+
+    <!-- cargoDialog: {{cargoDialog}} -->
+    <p-dialog [(visible)]="cargoDialog" [style]="{width: '750px'}" header="Cargo" [modal]="true" styleClass="p-fluid">
+        <ng-template pTemplate="content">
+            <!-- selectedCargoIndex: {{cargoSelectedIndex}}
+            cursoId: {{ curso.id }} -->
+            <div class="shadow p-3 mb-2 bg-body rounded">
+                <div class="row">
+                    <div class="col-3 title mt-4">Tipo Cargo:</div>
+                    <div class="col  mt-4">
+                        <p-dropdown [options]="tiposCargos"
+                            optionLabel="name"
+                            name="tipocargo"
+                            [(ngModel)]="tipocargoSelected"
+                            (onChange)="onChangeTipocargo($event)"
+                            class="col-extra-large"
+                            >
+                        </p-dropdown>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-3 title">Cargo:</div>
+                    <div class="col">
+                        <input type="text" class="form-control" maxlength="30" 
+                        placeholder="Nombre del cargo"
+                        id="cargonombre" 
+                        name="cargonombre" 
+                        [(ngModel)]="cargoSelected.nombre" 
+                        (keyup.enter)="showProductosList()" 
+                        >
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-3 title">Precio:</div>
+                    <div class="col"> 
+                        <p-inputNumber [min]="0" [max]="9999999"
+                            id="precio" name="precio" placeholder="$ 0.00"
+                            class="col-medium" [maxlength]="15"
+                            inputStyleClass="text-numeric"
+                            prefix="$ " locale="es-MX"
+                            mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"
+                            [showButtons]="false"
+                            [(ngModel)]="cargoSelected.precio" 
+                        ></p-inputNumber>
+                    </div>
+                    <div class="col"></div>
+                </div>
+                <div class="row">
+                    <div class="col"></div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-3 title">Monto IVA:</div>
+                    <div class="col-4 text-numeric">$ {{ (cargoSelected.precio || 0) * (cargoSelected.tasaIVA || 0 ) }} </div>
+                    <div class="col-5 title">Tasa IVA: {{ (cargoSelected.tasaIVA || 0 ) * 100 }} %</div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-3 title">Moto cargo:</div>
+                    <div class="col-4 text-numeric">{{ cargoSelected.precio * ( 1 + cargoSelected.tasaIVA) | currency }} </div>
+                    <div class="col-5"></div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-3
+                     title">Numero pagos:</div>
+                    <div class="col">
+                        <p-inputNumber [min]="1" [max]="60"
+                            id="numpagos" name="numpagos" placeholder="0"
+                            class="col-medium" [maxlength]="10"
+                            [showButtons]="false"
+                            inputStyleClass="text-numeric"
+                            [(ngModel)]="cargoSelected.numpagos"
+                            suffix=" pago(s)"
+                        ></p-inputNumber>
+                    </div>
+                    <div class="col-3 title">Intervalo:</div>
+                    <div class="col">
+                        <p-inputNumber [min]="1" [max]="12"
+                            id="intervalopagos" name="intervalopagos" placeholder="0"
+                            class="col-medium" [maxlength]="11"
+                            inputStyleClass="text-numeric"
+                            [showButtons]="false"
+                            [(ngModel)]="cargoSelected.intervalopagos"
+                            suffix=" mes(es)."
+                        ></p-inputNumber>
+                        </div>
+                </div>
+                <!-- <br>
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col">
+                        <button class="btn btn-primary" (click)="addCharge()" >Agregar</button>
+                        <button class="btn btn-primary" (click)="cancelEditCharge()" >Cancelar</button>
+                    </div>
+                </div> -->
+            </div>
+
+        </ng-template>
+        
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+            <button pButton pRipple [label]=" cargoSelected.id ? 'Guardar': 'Agregar'" icon="pi pi-check" class="p-button-text" (click)="addCharge()"></button>
+        </ng-template>
+    </p-dialog>
+    
+
+</div>
+
+<!-- <pre>{{curso|json}}</pre> -->

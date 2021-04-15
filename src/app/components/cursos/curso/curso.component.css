@@ -1,0 +1,15 @@
+.title-header:hover{
+    cursor:pointer;    
+}
+
+.p-inputnumber {
+    text-align: right,
+}
+
+.p-inputnumber-input > input[type=text] {
+    text-align: right;
+}
+
+.p-inputnumber-input, .p-inputtext {
+    text-align: end !important; 
+}

@@ -1,17 +1,17 @@
 <p-toast></p-toast>
 
 <div class="card card-full-wide">
-    <p-toolbar styleClass="p-mb-4">
+    <!-- <p-toolbar styleClass="p-mb-4"> -->
         <ng-template pTemplate="left">
-            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="openNew()"></button>
+            <!-- <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="openNew()"></button> -->
             <button pButton pRipple label="Eliminar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedItems()" [disabled]="!ciclosescolaresSelected || !ciclosescolaresSelected.length"></button>
         </ng-template>
 
-        <ng-template pTemplate="right">
+        <!-- <ng-template pTemplate="right"> -->
             <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-d-inline-block"></p-fileUpload> -->
-            <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help"></button>
-        </ng-template>
-    </p-toolbar>
+            <!-- <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help"></button> -->
+        <!-- </ng-template> -->
+    <!-- </p-toolbar> -->
 
     <p-table #dt [value]="ciclosescolares" [rows]="10" [paginator]="true" [globalFilterFields]="['nombre','country.nombre','representative.nombre','status']"
         [(selection)]="ciclosescolaresSelected" [rowHover]="true" dataKey="id"
@@ -36,9 +36,10 @@
                 <th style="width: 3rem">
                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                 </th>
-                <th pSortableColumn="nombre">Ciclo escolar <p-sortIcon field="nombre"></p-sortIcon></th>
-                <th pSortableColumn="fechaInicio">Fecha inicio <p-sortIcon field="fechaInicio"></p-sortIcon></th>
-                <th pSortableColumn="fechaFin">Fecha fin <p-sortIcon field="fechaFin"></p-sortIcon></th>
+                <th pSortableColumn="nombre">Ciclo escolar<p-sortIcon field="nombre"></p-sortIcon></th>
+                <th pSortableColumn="fechaInicio">Fecha inicio<p-sortIcon field="fechaInicio"></p-sortIcon></th>
+                <th pSortableColumn="fechaFin">Fecha fin<p-sortIcon field="fechaFin"></p-sortIcon></th>
+                <th pSortableColumn="activo">Activo</th>
                 <th></th>
             </tr>
         </ng-template>
@@ -50,9 +51,10 @@
                 <td>{{cicloescolar.nombre}}</td>
                 <td>{{cicloescolar.fechaInicio | date: 'dd/MMM/yyyy'}}</td>
                 <td>{{cicloescolar.fechaFin | date: 'dd/MMM/yyyy'}}</td>
+                <td>{{ cicloescolar.activo ? 'Activo' : 'Inactivo' }}</td>
                 <td>
-                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="edit(cicloescolar)"></button>
-                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="delete(cicloescolar)"></button>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning p-mr-2" (click)="edit(cicloescolar)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger " (click)="delete(cicloescolar)"></button>
                 </td>
             </tr>
         </ng-template>
@@ -64,7 +66,7 @@
     </p-table>
 </div>
 
-<p-dialog [(visible)]="cicloescolarDialog" [style]="{width: '450px'}" header="Ciclo escolar" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="showCicloescolarDialog" [style]="{width: '450px'}" header="Ciclo escolar" [modal]="true" styleClass="p-fluid" *ngIf="cicloescolar">
     <ng-template pTemplate="content">
         <div class="row" style="padding-bottom: 10px;">
             <div class="col-4"><label for="nombre" class="title">Ciclo:</label></div>
@@ -84,7 +86,7 @@
                 <p-inputMask 
                 name="fechaInicio" 
                 id="fechaInicio" 
-                [(ngModel)]="cicloescolar.fechaInicio"                
+                [(ngModel)]="fInicio"
                 mask="99/99/9999"
                 slotChar=" "
                 #finicio
@@ -92,8 +94,8 @@
             </div>
         </div>
         <div class="p-field">            
-            <small class="p-error" *ngIf="submitted && !isDate( finicio.value)">La fecha de inicio no es valida.</small>
-            <small class="p-error" *ngIf="submitted && !cicloescolar.fechaInicio">La fecha de inicio del ciclo es requerida.</small>
+            <small class="p-error" *ngIf="submitted && !isDate( dateEsp2Eng(fInicio) )">La fecha de inicio no es valida.</small>
+            <small class="p-error" *ngIf="submitted && !fInicio">La fecha de inicio del ciclo es requerida.</small>
         </div>
 
         <div class="row" style="padding-bottom: 10px;">
@@ -102,20 +104,30 @@
                 <!-- <p-input id="fechaFin" [(ngModel)]="cicloescolar.fechaFin"></p-input> -->
             </div>
             <div class="col">
-                <!-- <input type="text" pInputText id="fechaFin" [(ngModel)]="cicloescolar.fechaFin" required autofocus /> -->
                 <p-inputMask 
                 name="fechaFin" 
                 id="fechaFin" 
-                [(ngModel)]="cicloescolar.fechaFin"                
+                [(ngModel)]="fFin"
                 mask="99/99/9999"
                 slotChar=" "
                 #ffin
                 ></p-inputMask>
             </div>
         </div>
+        
+        <div class="row" style="padding-bottom: 10px;">
+            <div class="col-4">
+                <label for="activo" class="title">Activo:</label>
+                <!-- <p-input id="activo" [(ngModel)]="cicloescolar.activo"></p-input> -->
+            </div>
+            <div class="col">
+                <p-inputSwitch name="activo" [(ngModel)]="cicloescolar.activo"></p-inputSwitch>
+            </div>
+        </div>
+
         <div class="p-field">            
-            <small class="p-error" *ngIf="submitted && !cicloescolar.fechaFin">La fecha de fin del ciclo es requerida.</small>
-            <small class="p-error" *ngIf="submitted && !isDate( ffin.value)">La fecha de inicio no es valida.</small>
+            <small class="p-error" *ngIf="submitted && !fFin">La fecha de fin del ciclo es requerida.</small>
+            <small class="p-error" *ngIf="submitted && !isDate( dateEsp2Eng(fFin) )">La fecha de inicio no es valida.</small>
         </div>
 
     </ng-template>
@@ -127,6 +139,14 @@
 </p-dialog>
 
 <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+<div *ngIf="!showCicloescolarDialog" class="btn btn-primary fab" (click)="openNew()">
+    <span class="icon"><i class="fas fa-plus"></i></span>
+</div>
+
+<div class="btn btn-danger fab" style="top: 160px;" (click)="deleteSelectedItems()" *ngIf="ciclosescolaresSelected && ciclosescolaresSelected.length>0">
+    <span class="icon"><i class="fas fa-minus"></i></span>
+</div>
 
 TODO: 
 <ul>

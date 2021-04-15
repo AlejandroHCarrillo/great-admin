@@ -1,18 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
-import { PAGE_SIZE } from 'src/app/config/settings';
+import { PAGE_SIZE } from '../../config/settings'
 
-import { Producto } from 'src/app/interfaces/producto';
-import { ProductosService } from 'src/app/services/productos.service';
+
+import { Curso } from 'src/app/interfaces/curso';
+import { CursosService } from 'src/app/services/cursos.service';
 import { PageInfo } from 'src/app/interfaces/pageinfo.model';
 
 @Component({
-  selector: 'app-productos',
-  templateUrl: './productos.component.html',
-  styleUrls: ['./productos.component.css']
+  selector: 'app-cursos',
+  templateUrl: './cursos.component.html',
+  styleUrls: ['./cursos.component.css']
 })
-export class ProductosComponent implements OnInit {
+export class CursosComponent implements OnInit {
   txtbuscar: string = "";
   searchResultMsg = "";
 
@@ -22,29 +23,20 @@ export class ProductosComponent implements OnInit {
 
   currentPage: number=0;
   totalRecords: number = 0;
-  productos: Producto[] = [];
+  cursos: Curso[] = [];
 
   constructor(  private router: Router,
-                private productosService: ProductosService) { }
+                private cursosService: CursosService) { }
 
   ngOnInit(): void {
-    let prevScreen = localStorage.getItem("prevScreen") || '';
-
-    console.log( "prevScreen: ", prevScreen );
-    
-    if (prevScreen == "producto"){
-      this.txtbuscar = localStorage.getItem("lastSearch") || "";
-      this.buscar();
-      return;
-    }
-    this.loadProductos();
+    this.loadCursos();
   }
 
-  loadProductos(){
+  loadCursos(){
     let queryParams = `desde=${this.pageinfo.first}&records=${this.pageinfo.rows}&sort=${this.pageinfo.sort}`
 
     let prevScreen = localStorage.getItem("prevScreen") || '';
-    if (prevScreen == "producto"){
+    if (prevScreen == "curso"){
       queryParams = localStorage.getItem("lastquery")||'';
       localStorage.setItem('prevScreen', '');
     }
@@ -52,14 +44,13 @@ export class ProductosComponent implements OnInit {
     // console.log(queryParams);
     localStorage.setItem('lastquery', queryParams);
     
-    this.productosService
-    .getProductos(queryParams)
+    this.cursosService
+    .getCursos(queryParams)
     .then(async (resp)=>{
       const body = await resp.json();
-      this.productos = body.productos;
+      this.cursos = body.cursos;
       this.totalRecords = body.total;
       this.searchResultMsg = "";
-      // console.log(body);
     })
     .catch((e)=>{
         console.log("error: ", e);            
@@ -68,27 +59,26 @@ export class ProductosComponent implements OnInit {
 
   buscar(){
     if (!this.txtbuscar || this.txtbuscar===""){
-      this.loadProductos();
+      this.loadCursos();
       return;
     }
 
     let queryParams = `desde=${this.pageinfo.first}&records=${this.pageinfo.rows}&sort=${this.pageinfo.sort}`
 
     let prevScreen = localStorage.getItem("prevScreen") || '';
-    if (prevScreen == "producto"){
+    if (prevScreen == "curso"){
       queryParams = localStorage.getItem("lastquery")||'';
       localStorage.setItem('prevScreen', '');
     }
 
     // console.log(queryParams);
     localStorage.setItem('lastquery', queryParams);
-    localStorage.setItem('lastSearch', this.txtbuscar);
     
-    this.productosService
-    .findProductos(queryParams, this.txtbuscar)
+    this.cursosService
+    .findCursos(queryParams, this.txtbuscar)
     .then(async (resp)=>{
       const body = await resp.json();
-      this.productos = body.productos;
+      this.cursos = body.cursos;
       this.totalRecords = body.total;
       this.searchResultMsg = `Se encontraron ${body.found} registros.`
     })
@@ -98,14 +88,14 @@ export class ProductosComponent implements OnInit {
   }
 
   edit(id?:string){
-    this.router.navigate([`producto/${id}`]);
+    this.router.navigate([`curso/${id}`]);
   }
 
-  delete(producto:any){
-    // alert("eliminar:" + producto.nombre);
+  delete(curso:any){
+    // alert("eliminar:" + curso.nombre);
     Swal.fire({
-      title: '¿En verdad quiere eliminar este producto?',
-      text: "El producto sera borrado permanentemente.",
+      title: '¿En verdad quiere eliminar este curso?',
+      text: "El curso sera borrado permanentemente.",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -115,11 +105,11 @@ export class ProductosComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
 
-        this.productosService.delete(producto._id)
+        this.cursosService.delete(curso._id)
             .then(()=>{
               Swal.fire(
-                'Producto eliminado',
-                'El producto ha sido eliminado con exito',
+                'Curso eliminado',
+                'El curso ha sido eliminado con exito',
                 'success'
                 );
             });
@@ -132,7 +122,7 @@ export class ProductosComponent implements OnInit {
   }
 
   paginate(pageEvent:any){
-    if(pageEvent.page != this.currentPage){
+    // if(pageEvent.page != this.currentPage){
       this.currentPage = pageEvent.page;
       console.log("cambio de pagina", pageEvent);
       this.pageinfo = {
@@ -140,15 +130,15 @@ export class ProductosComponent implements OnInit {
         ...pageEvent
       };
 
-      this.loadProductos();
-    }
+      this.loadCursos();
+    // }
   }
 
   setOrder(colname:string){
     this.pageinfo.sort = colname;
     this.pageinfo.first = 0;
     
-    this.loadProductos();
+    this.loadCursos();
   }
 
 }

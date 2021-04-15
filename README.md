@@ -3,6 +3,39 @@
 
 https://iconarchive.com/show/office-icons-by-thalita-torres/color-catalog-icon.html
 
+
+## PDF
+https://www.npmjs.com/package/jspdf
+npm install jspdf --save
+
+http://raw.githack.com/MrRio/jsPDF/master/docs/
+
+https://www.npmjs.com/package/jspdf-autotable
+npm i jspdf-autotable
+
+npm install jspdf jspdf-autotable
+
+https://github.com/simonbengtsson/jsPDF-AutoTable/tree/master/examples
+
+https://simonbengtsson.github.io/jsPDF-AutoTable/
+
+https://github.com/simonbengtsson/jsPDF-AutoTable
+
+https://artskydj.github.io/jsPDF/docs/jsPDF.html
+
+# Mongo autoincrement
+https://www.npmjs.com/package/mongoose-auto-increment
+npm install mongoose-auto-increment
+
+## Excel
+https://www.npmjs.com/package/xlsx
+npm install xlsx --save
+
+## File server
+https://www.npmjs.com/package/file-saver
+npm i file-saver --save
+
+
 # GreatAdmin
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.2.

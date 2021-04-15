@@ -34,6 +34,7 @@
                 <div class="col"> 
                     <div class="mb-3 form-group form">
                         <label for="nombre" class="form-label">Nombre:</label>
+
                         <input type="text" class="form-control" id="nombre" placeholder="Escriba el nombre" maxlength="30"
                         name="nombre" 
                         formControlName="nombre"
@@ -58,13 +59,23 @@
             <div class="row">
                 <div class="col">
                     <div class="mb-3 form-group form">
-                        <label for="precio" class="form-label">Descripcion:</label>
+                        <label for="descripcion" class="form-label">Descripcion:</label>
                         <input type="text" class="form-control" id="descripcion" 
                         placeholder="Descripcion del producto" maxlength="100"
                         name="descripcion" 
                         formControlName="descripcion"
                         [class.is-invalid]="isInvalidControl('descripcion')"
                         >
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="mb-3 form-group form">
+                        <label for="unidadmedida" class="form-label">Unidad medida:</label>
+                        <p-dropdown [options]="unidadesmedida" 
+                        optionLabel="name"
+                        name="unidadmedidaSelected"
+                        (onChange)="unidadMedidaChange($event)"
+                        formControlName="unidadmedida"></p-dropdown>
                     </div>
                 </div>
             </div>
@@ -74,11 +85,20 @@
                 <div class="col-3">
                     <div class="mb-3 form-group form">
                         <label for="costo" class="form-label">Costo:</label>
-                        <input type="text" class="form-control text-numeric" id="costo" placeholder="0.00" maxlength="10"
+                        <!-- <input type="text" class="form-control text-numeric" id="costo" placeholder="0.00" maxlength="10"
                         name="costo" 
                         formControlName="costo"
                         [class.is-invalid]="isInvalidControl('costo')"
-                        >
+                        > -->
+                        <p-inputNumber [min]="0" [max]="999999999"
+                        id="costo" name="costo" placeholder="0"
+                        class="col-medium" [maxlength]="5"
+                        inputStyleClass="text-numeric"
+                        [showButtons]="false"
+                        formControlName="costo"
+                        prefix="$"
+                    ></p-inputNumber>
+
                         <small *ngIf="isInvalidControl('costo')" class="text-danger">El costo es obligatorio </small>
                     </div>
                 </div>
@@ -88,7 +108,7 @@
                     <div class="mb-3 form-group form">
                         <label for="tasaIVA" class="form-label" >Excenta IVA: {{ (!!form.value.exentoIVA)?"Si":"No" }}</label>
                         <div style="display: flex; flex-direction: row;;" >
-                            <p-inputSwitch name="exentoIVA" formControlName="exentoIVA" ></p-inputSwitch>
+                            <p-inputSwitch name="exentoIVA" formControlName="exentoIVA" (onChange)="toggleTax($event)" ></p-inputSwitch>
                         </div>
                     </div>
                 </div>
@@ -97,11 +117,14 @@
                     <div class="mb-3 form-group form">
                         <label for="tasaIVA" class="form-label" >% Tasa IVA:</label>
                         <div  style="display: flex; flex-direction: row;" >
-                            <input type="text" class="form-control text-numeric" id="tasaIVA" placeholder="0.00" maxlength="3"
-                            name="tasaIVA" 
-                            formControlName="tasaIVA"
-                            [class.is-invalid]="isInvalidControl('tasaIVA')"
-                            ><span>%</span>
+                            <p-inputNumber [min]="0" [max]="99"
+                                id="tasaIVA" name="tasaIVA" placeholder="0"
+                                class="col-medium" [maxlength]="5"
+                                inputStyleClass="text-numeric"
+                                [showButtons]="false"
+                                formControlName="tasaIVA"
+                                suffix="%"
+                            ></p-inputNumber>
                             <small *ngIf="isInvalidControl('tasaIVA')" class="text-danger">El tasa IVA es obligatorio </small>
                         </div>
                     </div>
@@ -114,24 +137,41 @@
                 <div class="col-3">
                     <div class="mb-3 form-group form">
                         <label for="precio" class="form-label">Precio:</label>
-                        <input type="text" class="form-control text-numeric" id="precio" placeholder="0.00" maxlength="10"
+                        <!-- <input type="text" class="form-control text-numeric" id="precio" placeholder="0.00" maxlength="10"
                         name="precio" 
                         formControlName="precio"
                         [class.is-invalid]="isInvalidControl('precio')"
-                        >
+                        > -->
+                        <p-inputNumber [min]="0" [max]="999999999"
+                        id="precio" name="precio" placeholder="0"
+                        class="col-medium" [maxlength]="5"
+                        inputStyleClass="text-numeric"
+                        [showButtons]="false"
+                        formControlName="precio"
+                        prefix="$"
+                    ></p-inputNumber>
                         <small *ngIf="isInvalidControl('precio')" class="text-danger">El precio es obligatorio </small>
                     </div>
                 </div>
 
                 <div class="col-3">
                     <div class="mb-3 form-group form">
-                        <label for="cantidad" class="form-label" >Cantidad:</label>
+                        <label for="cantidad" class="form-label" >Cantidad inventario:</label>
                         <div style="display: flex; flex-direction: row;" >
-                            <input type="text" class="form-control text-numeric" id="cantidad" placeholder="" maxlength="10"
+                            <!-- <input type="text" class="form-control text-numeric" id="cantidad" placeholder="" maxlength="10"
                             name="cantidad" 
                             formControlName="cantidad"
                             [class.is-invalid]="isInvalidControl('cantidad')"
-                            >       
+                            >        -->
+                            <p-inputNumber [min]="0" [max]="999999999"
+                            id="cantidad" name="cantidad" placeholder="0"
+                            class="col-medium" [maxlength]="5"
+                            inputStyleClass="text-numeric"
+                            [showButtons]="false"
+                            formControlName="cantidad"
+                            [suffix]="unidadmedidaSelected"
+                        ></p-inputNumber>
+    
                         </div>
                     </div>
                 </div>
@@ -203,6 +243,11 @@
     </span>
     
 </div>
+
+<div class="btn btn-primary fab" (click)="edit('new')">
+    <span class="icon"><i class="fas fa-plus"></i></span>
+</div>
+
 <!-- 
 <pre>
     {{ form.value | json}}

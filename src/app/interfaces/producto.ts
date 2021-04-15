@@ -8,11 +8,12 @@ export class Producto {
         public costo: number = 0, 
         public precio: number = 0, 
         public cantidad: number = 0, 
-        public tasaIVA: number = 0, 
+        public tasaIVA: number = .16, 
         public exentoIVA: boolean = false, 
         public conceptocontable: string = "", 
         public clasificacion: string = "P",
-        public id?: string
+        public id?: string,
+        public unidadmedida?: string
         ){
 }
 

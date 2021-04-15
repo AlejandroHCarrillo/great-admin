@@ -23,6 +23,7 @@ import { MessageModule } from 'primeng/message';
 import { ToolbarModule } from 'primeng/toolbar';
 import { RatingModule } from 'primeng/rating';
 import { DialogModule } from 'primeng/dialog';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
@@ -41,7 +42,7 @@ import { LoginComponent } from './components/common/auth/login.component';
 import { RegisterComponent } from './components/common/auth/register.component';
 
 import { SharedService } from './services/shared.service';
-import { ClientesService } from './services/clientes.service';
+// import { ClientesService } from './services/clientes.service';
 import { ProductosComponent } from './components/productos/productos.component';
 import { ProductoComponent } from './components/productos/producto/producto.component';
 import { ProgressComponent } from './components/common/progress/progress.component';
@@ -51,7 +52,7 @@ import { CatalogosComponent } from './components/catalogos/catalogos.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import { AlumnosComponent } from './components/alumnos/alumnos.component';
 import { AlumnoComponent } from './components/alumnos/alumno/alumno.component';
-import { AlumnosService } from './services/alumnos.service';
+// import { AlumnosService } from './services/alumnos.service';
 import { ModalImageComponent } from './components/common/modal-image/modal-image.component';
 import { UploadFilesComponent } from './components/common/upload-files/upload-files.component';
 import { UploadFilesService } from './shared/services/upload-files.service';
@@ -64,6 +65,11 @@ import { AlumnosListComponent } from './components/alumnos/alumnos-list/alumnos-
 import { AuthService, SubirArchivoService } from './services/services.index';
 import { InscripcionesComponent } from './components/inscripciones/inscripciones.component';
 import { CiclosEscolaresComponent } from './components/ciclos-escolares/ciclos-escolares.component';
+import { CursosComponent } from './components/cursos/cursos.component';
+import { CursoComponent } from './components/cursos/curso/curso.component';
+import { ServicesModule } from './services/services.module';
+import { IncripcionesReportComponent } from './components/inscripciones/incripciones-report/incripciones-report.component';
+import { EstadoCuentaComponent } from './components/estado-cuenta/estado-cuenta.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -94,7 +100,11 @@ import { CiclosEscolaresComponent } from './components/ciclos-escolares/ciclos-e
     CajaComponent,
     ProductosListComponent,
     InscripcionesComponent,
-    CiclosEscolaresComponent
+    CiclosEscolaresComponent,
+    CursosComponent,
+    CursoComponent,
+    IncripcionesReportComponent,
+    EstadoCuentaComponent
   ],
   imports: [
     BrowserModule,
@@ -102,6 +112,8 @@ import { CiclosEscolaresComponent } from './components/ciclos-escolares/ciclos-e
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+
+    ServicesModule,
 
     MessagesModule,
     MessageModule,
@@ -117,6 +129,7 @@ import { CiclosEscolaresComponent } from './components/ciclos-escolares/ciclos-e
     InputSwitchModule,
     InputNumberModule,
     DialogModule,
+    TooltipModule,
     DynamicDialogModule,
     ToastModule,
     ButtonModule,
@@ -131,8 +144,6 @@ import { CiclosEscolaresComponent } from './components/ciclos-escolares/ciclos-e
     DialogService,
     AuthService,
     SharedService,
-    ClientesService,
-    AlumnosService,
     UploadFilesService,
     SubirArchivoService
   ],

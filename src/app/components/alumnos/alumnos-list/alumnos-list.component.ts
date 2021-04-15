@@ -29,7 +29,7 @@ export class AlumnosListComponent implements OnInit {
                 ) { }
 
   ngOnInit(): void {
-    console.log("pageinfo; ", this.pageinfo);
+    // console.log("pageinfo; ", this.pageinfo);
     
     this.txtbuscar = this.config?.data.searchtext;
     this.buscar();
