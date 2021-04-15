@@ -12,9 +12,22 @@ export class PagosService {
     return fetchToken(`pago`, urlQueryParams, 'GET');
   }
 
-  findPagos(urlQueryParams?:string, buscar:string = '') {
-    return fetchToken(`pago/find/${buscar}`, urlQueryParams, 'GET');
+  getPagosByAlumno(id:string) {
+    return fetchToken(`pago/alumno/${id}`, 'GET');
   }
+
+
+  async findPagosPorAlumno(buscar:string = '') {
+      let retPagos: any[] = [];
+      await fetchToken(`pago/alumno/${buscar}`, "", 'GET')
+        .then( async (resp) => {
+          const body = await resp.json();
+    // console.log(body);
+          retPagos = body.pagos;
+        } );
+      return retPagos;
+  }
+
 
   getPagoById(id:string) {
     return fetchToken(`pago/${id}`, null, 'GET');

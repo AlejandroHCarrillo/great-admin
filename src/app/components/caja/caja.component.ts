@@ -356,7 +356,7 @@ export class CajaComponent implements OnInit {
 
         this.alumnoSelected = { ...alumno };
         this.messageService.add({severity:'info', summary: 'Alumno seleccionado', detail:'matricula:' + alumno.matricula });
-        this.cargosalumno = await this.cargosService.findCargos( alumno.id );
+        this.cargosalumno = await this.cargosService.findCargosByAlumno( alumno.id );
     });
   }
 

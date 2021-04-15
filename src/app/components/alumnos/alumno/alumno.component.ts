@@ -139,6 +139,11 @@ export class AlumnoComponent implements OnInit {
       ttrabajo: [''],
 
       email: ['', [Validators.required, Validators.pattern(REGEXP_EMAIL)]],
+
+      beca: ['0'],
+      prestacion: ['0'],
+      apoyo: ['0'],
+
       notas: [''],
       img: [this.urlImagen],
 
@@ -176,6 +181,10 @@ export class AlumnoComponent implements OnInit {
       ttrabajo: "",
       
       email: "",
+      beca: "0",
+      prestacion: "0",
+      apoyo: "0",
+
       img: this.urlImagen,
       notas: "",
       stateSelected: { code:"", name:"", },
@@ -271,6 +280,10 @@ export class AlumnoComponent implements OnInit {
     obj.grupo = this.form.value.grupo;
     obj.rfc = this.form.value.rfc;
 
+    obj.beca = this.form.value.beca;
+    obj.prestacion = this.form.value.prestacion;
+    obj.apoyo = this.form.value.apoyo;
+
     console.log("guardar: ", obj);
     
     this.alumnosService.save(obj)
@@ -300,6 +313,10 @@ export class AlumnoComponent implements OnInit {
     obj.estado = this.stateSelected.code;
     obj.nivel = this.nivelSelected.code;
     obj.id = this.alumnoId;
+
+    obj.beca = this.form.value.beca;
+    obj.prestacion = this.form.value.prestacion;
+    obj.apoyo = this.form.value.apoyo;
     
     console.log("Actualizar: ", obj);
       this.alumnosService.update(obj)

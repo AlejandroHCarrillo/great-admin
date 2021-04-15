@@ -28,6 +28,17 @@ export class CargosService {
     return retCargos;
   }
 
+  async findCargosByAlumno (alumnoId:string = '') {
+    let retCargos: CargoItem[] = [];
+    await fetchToken(`cargo/alumno/${alumnoId}`, "", 'GET')
+      .then( async (resp) => {
+        const body = await resp.json();
+  // console.log(body);
+        retCargos = body.cargos;
+      } );
+    return retCargos;
+  }
+
   getCargoById(id:string) {
     return fetchToken(`cargo/${id}`, null, 'GET');
   }

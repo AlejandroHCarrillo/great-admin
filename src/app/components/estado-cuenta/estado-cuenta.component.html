@@ -58,7 +58,7 @@
     </div>
 </div>
 
-<p-table #dt [columns]="cols" [value]="cargosreport" selectionMode="single" [(selection)]="cargosSelected"  name="reporttable" id="reporttable">
+<p-table #dt [columns]="cols" [value]="estadocuentareport" selectionMode="single" [(selection)]="cargosSelected"  name="reporttable" id="reporttable">
     <ng-template pTemplate="caption">
         <div class="p-d-flex text-end">
             <button type="button" pButton pRipple icon="pi pi-file-o" (click)="dt.exportCSV()" class="p-mr-2" pTooltip="Exportar a CSV" tooltipPosition="top"></button> &nbsp;
@@ -76,15 +76,51 @@
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData">
-            <td *ngFor="let col of columns">
-                {{rowData[col.field]}}
+            <td>
+                {{ rowData["fecha"] }}
             </td>
+            <!-- <td>
+                {{ rowData["tipo"] }}
+            </td> -->
+            <td class="col-gigant">
+                {{ rowData["concepto"] }}
+            </td>
+            <td class="text-end">
+                {{ ( rowData["cargo"] === 0 ? "" : rowData["cargo"] ) | currency }}
+            </td>
+            <td class="text-end">
+                {{ ( rowData["abono"] === 0 ? "" : rowData["abono"] ) | currency}}
+            </td>
+            <td class="text-end">
+                {{ rowData["saldo"] | currency }}
+            </td>
+            <!-- <td *ngFor="let col of columns">
+                <div *ngIf="col.field === 'cargo' || col.field === 'abono' ">
+                    {{ (rowData[col.field] === 0 ? "" : rowData[col.field]) | currency }}
+                </div>
+                <div>
+                    {{ rowData[col.field] }}
+                </div>
+            </td> -->
         </tr>
     </ng-template>
+
+    <ng-template pTemplate="footer" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-end">Saldo:</td>
+            <td class="text-end">{{ saldo | currency }}</td>
+        </tr>
+    </ng-template>
+    
 </p-table>
 <hr>
-<!-- cargosreport: <pre>{{ cargosreport | json}}</pre> -->
-cargos: <pre>{{ cargos | json}}</pre> 
+estadocuentareport : <pre>{{ estadocuentareport | json}}</pre>
+<!-- estadocuentareport: <pre>{{ estadocuentareport | json}}</pre> -->
+<!-- pagos: <pre>{{ pagos | json}}</pre> -->
+<!-- cargos: <pre>{{ cargos | json}}</pre>  -->
 
 <br>
 <br>

@@ -76,6 +76,7 @@
                             <p-calendar 
                             name="fechaNacimiento" 
                             formControlName="fechaNacimiento"
+                            inputStyleClass="text-center"
                             [class.is-invalid]="isInvalidControl('fechaNacimiento')"></p-calendar>
                         </div>
                     </div>
@@ -84,6 +85,7 @@
                             <label for="fechaIngreso" class="form-label">Fecha de Ingreso:</label>
                             <p-calendar name="fechaIngreso" 
                             formControlName="fechaIngreso"
+                            inputStyleClass="text-center"
                             [class.is-invalid]="isInvalidControl('fechaIngreso')"></p-calendar>
                         </div>        
                     </div>
@@ -99,10 +101,10 @@
                         </div>
                     </div>
 
-                    <div class="col-2"> 
+                    <div class="col-1"> 
                         <div class="mb-3 form">
                             <label for="grado" class="form-label">Grado:</label>
-                            <input type="number" class="form-control" id="grado" placeholder="Escriba el grado" maxlength="1" min="1" max="6"
+                            <input type="number" class="form-control text-center" id="grado" placeholder="Escriba el grado" maxlength="1" min="1" max="6"
                             name="grado" 
                             formControlName="grado"
                             [class.is-invalid]="isInvalidControl('grado')"
@@ -113,16 +115,16 @@
                     <div class="col-1"> 
                         <div class="mb-3 form">
                             <label for="grupo" class="form-label">Grupo:</label>
-                            <input type="text" class="form-control" id="grupo" placeholder="Escriba el grupo" maxlength="1"
-                            name="grupo" 
-                            formControlName="grupo"
-                            [class.is-invalid]="isInvalidControl('grupo')"
+                            <input type="text" class="form-control text-center" id="grupo" placeholder="Escriba el grupo" maxlength="1"
+                                name="grupo" 
+                                formControlName="grupo"
+                                [class.is-invalid]="isInvalidControl('grupo')"
                             >
                         </div>
                     </div>
 
                     <div class="col"> 
-                        <div class="mb-3 form">
+                        <div class="mb-3 form text-center">
                             <label class="form-label">Activo:</label>
                             <div >
                                 <p-inputSwitch name="activo" formControlName="activo"></p-inputSwitch>
@@ -168,26 +170,21 @@
 
                 </div>
 
-
             </div>
 
 
             <div class="row">
-                <div class="col-4"> 
+                <div class="col-3"> 
                     <div class="mb-3 form">
                         <label for="email" class="form-label">Email:</label>
-                        <input type="email" name="email" id="email" class="form-control" maxlength="100"
+                        <input type="email" name="email" id="email" class="form-control" maxlength="50"
                         name="email" 
                         formControlName="email"
                         [class.is-invalid]="isInvalidControl('email')">
                     </div>        
                 </div>
-                <div class="col">
-                </div>
-            </div>
-                    
-            <div class="row">
-                <div class="col"> 
+
+                <div class="col-2"> 
                     <div class="mb-3 form">
                         <label for="tCelular" class="form-label">Telefono Celular:</label>
                         <p-inputMask mask="(999) 999-9999" characterPattern="[А-Яа-я]"
@@ -195,7 +192,7 @@
                         formControlName="tcelular"></p-inputMask>
                     </div>        
                 </div>
-                <div class="col"> 
+                <div class="col-2"> 
                     <div class="mb-3 form">
                         <label for="tCasa" class="form-label">Telefono Casa:</label>
                         <p-inputMask mask="(999) 999-9999" characterPattern="[А-Яа-я]"
@@ -203,7 +200,7 @@
                         formControlName="tcasa"></p-inputMask>
                     </div>        
                 </div>
-                <div class="col"> 
+                <div class="col-2"> 
                     <div class="mb-3 form">
                         <label for="tTrabajo" class="form-label">Telefono Trabajo:</label>
                         <p-inputMask mask="(999) 999-9999? x99999" characterPattern="[А-Яа-я]"
@@ -211,7 +208,63 @@
                         formControlName="ttrabajo"></p-inputMask>
                     </div>        
                 </div>
+
+
+                <div class="col-1">
+                    <div class="mb-3 form">
+                        <label for="beca" class="form-label">Beca:</label>                        
+                        <!-- <input type="beca" name="beca" id="beca" class="form-control" maxlength="100"
+                        name="beca" 
+                        formControlName="beca"
+                        [class.is-invalid]="isInvalidControl('beca')"> -->
+                        <p-inputNumber [min]="0" [max]="33"
+                        id="beca" name="beca" placeholder="0%"
+                        class="col-medium" [maxlength]="5"
+                        inputStyleClass="text-numeric"
+                        [showButtons]="false"
+                        formControlName="beca"
+                        suffix="%"
+                    ></p-inputNumber>
+                    </div>
+                </div>
+                <div class="col-1">
+                    <div class="mb-3 form">
+                        <label for="prestacion" class="form-label">Prestacion:</label>
+                        <!-- <input type="prestacion" name="prestacion" id="prestacion" class="form-control" maxlength="100"
+                        name="prestacion" 
+                        formControlName="prestacion"
+                        [class.is-invalid]="isInvalidControl('prestacion')"> -->
+                        <p-inputNumber [min]="0" [max]="33"
+                            id="prestacion" name="prestacion" placeholder="0%"
+                            class="col-medium" [maxlength]="5"
+                            inputStyleClass="text-numeric"
+                            [showButtons]="false"
+                            formControlName="prestacion"
+                            suffix="%"
+                        ></p-inputNumber>
+                    </div>
+                </div>
+                <div class="col-1">
+                    <div class="mb-3 form">
+                        <label for="apoyo" class="form-label">Apoyo:</label>
+                        <!-- <input type="apoyo" name="apoyo" id="apoyo" class="form-control" maxlength="100"
+                        name="apoyo" 
+                        formControlName="apoyo"
+                        [class.is-invalid]="isInvalidControl('apoyo')"> -->
+                        <p-inputNumber [min]="0" [max]="33"
+                            id="apoyo" name="apoyo" placeholder="0%"
+                            class="col-medium" [maxlength]="5"
+                            inputStyleClass="text-numeric"
+                            [showButtons]="false"
+                            formControlName="apoyo"
+                            suffix="%"
+                        ></p-inputNumber>
+                    </div>
+                </div>
             </div>
+                    
+            <!-- <div class="row">
+            </div> -->
 
             <div class="row" >
                 <div class="col title"> 
@@ -220,7 +273,7 @@
             </div>
 
             <div class="row">
-                <div class="col-6"> 
+                <div class="col-5"> 
                     <div class="mb-3 form">
                         <label for="callenumero" class="form-label">Calle y numero:</label>
                         <input type="text" class="form-control" id="callenumero" 
@@ -230,7 +283,7 @@
                                 [class.is-invalid]="isInvalidControl('callenumero')">
                     </div>        
                 </div>
-                <div class="col-6" >
+                <div class="col" >
                     <div class="mb-3 form">
                         <label for="colonia" class="form-label">Colonia:</label>
                         <br>
@@ -257,7 +310,7 @@
                             [class.is-invalid]="isInvalidControl('municipio')">
                     </div>        
                 </div>
-                <div class="col-5"> 
+                <div class="col-6"> 
                     <div class="mb-3 form">
                         <label for="Estado" class="form-label">Estado:</label>
                         <br>
@@ -269,7 +322,7 @@
                                     formControlName="stateSelected"></p-dropdown>
                     </div>        
                 </div>
-                <div class="col-2"> 
+                <div class="col"> 
                     <div class="mb-3 form">
                         <label for="CP" class="form-label">CP:</label>
                         <input type="text" class="form-control" id="CP" placeholder="CP" maxlength="5" style="width: 80px;"

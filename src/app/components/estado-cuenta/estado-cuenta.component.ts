@@ -8,6 +8,9 @@ import * as moment from 'moment';
 import { AlumnosListComponent } from '../alumnos/alumnos-list/alumnos-list.component';
 import { Alumno } from 'src/app/interfaces/alumno';
 import { DialogService } from 'primeng/dynamicdialog';
+import { PagosService } from 'src/app/services/pagos.service';
+import { EstadocuentaItem } from 'src/app/interfaces/estadocuenta-item.model';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-estado-cuenta',
@@ -24,62 +27,96 @@ export class EstadoCuentaComponent implements OnInit {
   searchResultMsg = "";
 
   cargos: any[] = [];
-  cargosreport: any[] = [];
   cargosSelected: any[] = [];
+
+  estadocuentareport: EstadocuentaItem[] = [];
+
+  pagos: any[] = [];
 
   cols: any[] = [];
   exportColumns: any[] = [];
 
+  saldo : number = 0;
+
   constructor( 
     private messageService: MessageService,
     private dialogService: DialogService,
-    private cargosService: CargosService
+    private cargosService: CargosService,
+    private pagosService: PagosService
     ) { }
 
   ngOnInit(): void {
     this.cols = [
-      { field: 'tipocargo', header: 'Tipo' },
       { field: 'fecha', header: 'Fecha' },
+      // { field: 'tipo', header: 'Tipo' },
+      // { field: 'estatus', header: 'Estatus' },
       { field: 'concepto', header: 'Concepto' },
-      { field: 'monto', header: 'Monto' },
-      { field: 'estatus', header: 'Estatus' },
-      { field: 'nombrecompleto', header: 'alumno' },
+      { field: 'cargo', header: 'Cargo' },
+      { field: 'abono', header: 'Abono' },
+      { field: 'saldo', header: 'Saldo' },
       ];
 
       this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
 
   }
 
-  loadCargos(){
-    this.cargosService.getCargosByAlumno("6050fc972a99ae688413d942")
-    .then(async (resp)=>{
-      // console.log(resp);
-      const body = await resp.json();
-      console.log(body);
+  // loadCargos(){
+  //   this.cargosService.getCargosByAlumno("6050fc972a99ae688413d942")
+  //   .then(async (resp)=>{
+  //     // console.log(resp);
+  //     const body = await resp.json();
+  //     console.log(body);
 
-      if(!body.ok){
-        // console.log("No cargos");
-        this.showToastMessage("Cargos", "No hay cargos", eSeverityMessages.error);
-        return;        
-      }
-      this.cargos = [ ...body.cargos ];
+  //     if(!body.ok){
+  //       // console.log("No cargos");
+  //       this.showToastMessage("Cargos", "No hay cargos", eSeverityMessages.error);
+  //       return;        
+  //     }
+  //     this.cargos = [ ...body.cargos ];
+  //     this.mapCargosToReport(body.cargos);
+  //   });
+  // }
 
-      this.mapDataToReport(body.cargos);
-    });
+  // loadPagos(){
+  //   this.pagosService.getPagosByAlumno("6050fc972a99ae688413d942")
+  //   .then(async (resp)=>{
+  //     // console.log(resp);
+  //     const body = await resp.json();
+  //     console.log(body);
+
+  //     if(!body.ok){
+  //       // console.log("No pagos");
+  //       this.showToastMessage("Pagos", "No hay pagos", eSeverityMessages.error);
+  //       return;        
+  //     }
+  //     this.pagos = [ ...body.pagos ];
+  //     this.mapPagosToReport(body.pagos);
+  //   });
+  // }
+
+  mapCargosToReport(data: any[]){
+    this.estadocuentareport = [
+      ...this.estadocuentareport, 
+      ...data.map((cargo) => 
+    ( 
+      new EstadocuentaItem("", "cargo", 
+        moment( cargo.fechavencimiento ).format("DD/MM/yyyy"), 
+        cargo.concepto, cargo.tipocargo, cargo.monto, 0, cargo.estatus)
+    )
+    )];
+
   }
 
-  mapDataToReport(data: any[]){
-    this.cargosreport = data.map((x) => 
+  mapPagosToReport(data: any[]){
+    this.estadocuentareport = [
+      ...this.estadocuentareport, 
+      ...data.map((abono) => 
     ( 
-      { 
-        fecha: moment( x.fechavencimiento ).format("DD/MMM/yyyy"),
-        tipocargo: x.tipocargo,
-        concepto: x.concepto,
-        monto: x.monto,
-        estatus: x.estatus
-      }
+      new EstadocuentaItem("", "abono", 
+        moment( abono.fechapago ).format("DD/MM/yyyy"), 
+        "Pago en " + String(abono.formapago).toLocaleLowerCase(), abono.formapago , 0, abono.montopagado, abono.estatus)
     )
-    );
+    )];
 
   }
 
@@ -110,10 +147,15 @@ export class EstadoCuentaComponent implements OnInit {
     let offsetX = (textWide * fontwide)/2;
 
     var data = [ [] ];    
-    data = this.cargosreport.map((x => ( Object.values(x) ) ));
+    // data = this.estadocuentareport.map((x => ( Object.values(x) ) ));
+
+    console.log("OJO: no esta mapeando aqui");
+    
+    // data = [ [this.estadocuentareport ] ];
+
 
     console.log(headers);
-    console.log(this.cargosreport);
+    console.log(this.estadocuentareport);
 
     doc.setFont( "times", "italic", 500);
     doc.setTextColor("navy");
@@ -136,7 +178,9 @@ export class EstadoCuentaComponent implements OnInit {
                       styles: { halign: 'center' },
                       columnStyles: { 0: { halign: 'left' },
                                       2: { halign: 'left', cellWidth: 500 },
-                                      3: { halign: 'right' }
+                                      3: { halign: 'right' },
+                                      4: { halign: 'right' },
+                                      5: { halign: 'right' }
                                       }, 
                       margin: { top: 20 },
                       head: [headers],
@@ -150,7 +194,7 @@ export class EstadoCuentaComponent implements OnInit {
 
   exportExcel() {
       import("xlsx").then(xlsx => {
-          const worksheet = xlsx.utils.json_to_sheet(this.cargosreport );
+          const worksheet = xlsx.utils.json_to_sheet(this.estadocuentareport );
           const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
           const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
           this.saveAsExcelFile(excelBuffer, this.fileName);
@@ -186,10 +230,40 @@ export class EstadoCuentaComponent implements OnInit {
         this.alumnoSelected = { ...alumno };
         this.messageService.add({severity:'info', summary: 'Alumno seleccionado', detail:'matricula:' + alumno.matricula });
         
-        this.cargos = await this.cargosService.findCargos( alumno.id );
-        this.mapDataToReport(this.cargos);
+        this.estadocuentareport = [];
 
+        this.cargos = await this.cargosService.findCargosByAlumno( alumno.id );
+        this.mapCargosToReport(this.cargos);
+
+        this.pagos = await this.pagosService.findPagosPorAlumno( alumno.id );
+        this.mapPagosToReport(this.pagos);
+
+        this.estadocuentareport.sort(this.comparefechas)
+        this.calcularSaldos();
     });
+  }
+
+  private comparefechas(a:any, b:any) {
+    return moment(a.fecha).diff(b.fecha, "day") < 0 ? -1 : 1;
+    // if (a.fecha > b.fecha) return 1;
+    // if (b.fecha > a.fecha) return -1;  
+    // return 0;
+  }
+
+  private calcularSaldos() {
+    let saldo = 0;
+    for (let i = 0; i < this.estadocuentareport.length; i++) {
+      // const element = this.estadocuentareport[i];
+      saldo += this.estadocuentareport[i].cargo;
+      saldo -= this.estadocuentareport[i].abono;
+
+      this.estadocuentareport[i].saldo = saldo;
+
+      // console.log(this.estadocuentareport[i].saldo);      
+    }
+
+    this.saldo = saldo;
+
   }
 
 }
