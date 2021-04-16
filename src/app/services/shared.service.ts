@@ -16,6 +16,7 @@ export class SharedService {
       setTimeout( function() {
           resolve(data.filter( (x)=> x.name.toLowerCase().includes(text.toLowerCase() )  ));
           }, 10);
+          
         });
     
         return promise;

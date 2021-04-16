@@ -1,6 +1,6 @@
-<h1>Estado de cuenta</h1>
+<h1 id="titulo" [ngClass]="{'print': imprimirview }" >Estado de cuenta</h1>
 <hr>
-<div class="row" style="margin-bottom: 10px;">
+<div class="row" style="margin-bottom: 10px;" *ngIf="!imprimirview" >
     <div class="col-1">
         <label for="buscar" class="title">Buscar:</label>
     </div>
@@ -30,12 +30,11 @@
 <div class="row">
     <div class="row">
         <div *ngIf="alumnoSelected" class="row mb-3">
-            <div class="col-1"></div>
-            <div class="col">
-                <table style="width: 100%; border: 1px;;">
+            <!-- <div class="col"> -->
+                <table style="width: 100%; border: 1px;" [ngClass]="{'print': imprimirview }">
                     <tr>
                         <td>
-                            <img class="image-small-rounded" 
+                            <img class="image-small-rounded" *ngIf="!imprimirview"
                             [src]="alumnoSelected.img" 
                             [alt]="alumnoSelected.nombre">
                         </td>
@@ -43,6 +42,9 @@
                         <td>{{ alumnoSelected.nombre }} {{ alumnoSelected.apaterno }} {{ alumnoSelected.amaterno }}</td>
                         <td class="title">Matricula:</td>
                         <td>{{ alumnoSelected.matricula }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
                         <td class="title">Nivel:</td>
                         <td>{{ alumnoSelected.nivel }}</td>
                         <td class="title">Grado:</td>
@@ -51,57 +53,39 @@
                         <td>{{ alumnoSelected.grupo }}</td>
                     </tr>
                 </table>
-            </div>
-            <div class="col-1"></div>
+            <!-- </div> -->
         </div>
 
     </div>
 </div>
 
-<p-table #dt [columns]="cols" [value]="estadocuentareport" selectionMode="single" [(selection)]="cargosSelected"  name="reporttable" id="reporttable">
+<p-table #dt [columns]="cols" [value]="estadocuentareport" selectionMode="single" [(selection)]="cargosSelected"  name="reporttable" id="reporttable"  *ngIf="!imprimirview">
     <ng-template pTemplate="caption">
         <div class="p-d-flex text-end">
             <button type="button" pButton pRipple icon="pi pi-file-o" (click)="dt.exportCSV()" class="p-mr-2" pTooltip="Exportar a CSV" tooltipPosition="top"></button> &nbsp;
             <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success p-mr-2"  pTooltip="Exportar a Excel" tooltipPosition="top"></button> &nbsp;
             <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()" class="p-button-warning p-mr-2" pTooltip="Exportar a PDF" tooltipPosition="top"></button> &nbsp;
-            <button type="button" pButton pRipple icon="pi pi-filter" (click)="dt.exportCSV({selectionOnly:true})" class="p-button-info p-ml-auto" pTooltip="Selection Only" tooltipPosition="bottom"></button>
+            <!-- <button type="button" pButton pRipple icon="pi pi-filter" (click)="dt.exportCSV({selectionOnly:true})" class="p-button-info p-ml-auto" pTooltip="Selection Only" tooltipPosition="bottom"></button> -->
+            <button type="button" pButton pRipple icon="pi pi-print" (click)="imprimir()" class="p-button-secondary p-mr-2" pTooltip="imprimir estado de cuenta" tooltipPosition="top"></button>
         </div>
     </ng-template>
     <ng-template pTemplate="header" let-columns>
-        <tr>
-            <th *ngFor="let col of columns">
-                {{col.header}}
-            </th>
+        <tr [ngClass]="{'print': imprimirview }">
+            <th class="col-small text-center">Fecha</th>
+            <th class="col-large">Concepto</th>
+            <th class="col-small text-center">Cargo</th>
+            <th class="col-small text-center">Abono</th>
+            <th class="col-small text-center">Saldo</th>
         </tr>
     </ng-template>
+    
     <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr [pSelectableRow]="rowData">
-            <td>
-                {{ rowData["fecha"] }}
-            </td>
-            <!-- <td>
-                {{ rowData["tipo"] }}
-            </td> -->
-            <td class="col-gigant">
-                {{ rowData["concepto"] }}
-            </td>
-            <td class="text-end">
-                {{ ( rowData["cargo"] === 0 ? "" : rowData["cargo"] ) | currency }}
-            </td>
-            <td class="text-end">
-                {{ ( rowData["abono"] === 0 ? "" : rowData["abono"] ) | currency}}
-            </td>
-            <td class="text-end">
-                {{ rowData["saldo"] | currency }}
-            </td>
-            <!-- <td *ngFor="let col of columns">
-                <div *ngIf="col.field === 'cargo' || col.field === 'abono' ">
-                    {{ (rowData[col.field] === 0 ? "" : rowData[col.field]) | currency }}
-                </div>
-                <div>
-                    {{ rowData[col.field] }}
-                </div>
-            </td> -->
+        <tr [pSelectableRow]="rowData" [ngClass]="{'print': imprimirview }">
+            <td>{{ rowData["fecha"] }} </td>
+            <td class="col-large">{{ rowData["concepto"] }}</td>
+            <td class="text-end">{{ ( rowData["cargo"] === 0 ? "" : rowData["cargo"] ) | currency }}</td>
+            <td class="text-end">{{ ( rowData["abono"] === 0 ? "" : rowData["abono"] ) | currency}}</td>
+            <td class="text-end">{{ ( rowData["saldo"] ) | currency   }}</td>
         </tr>
     </ng-template>
 
@@ -114,12 +98,44 @@
             <td class="text-end">{{ saldo | currency }}</td>
         </tr>
     </ng-template>
-    
 </p-table>
-<hr>
-estadocuentareport : <pre>{{ estadocuentareport | json}}</pre>
+
+<table class="table-report" *ngIf="imprimirview">
+    <thead>
+        <tr [ngClass]="{'print': imprimirview }" class="table-header">
+            <th class="col-small text-center">Fecha</th>
+            <th class="col-large">Concepto</th>
+            <th class="col-small text-center">Cargo</th>
+            <th class="col-small text-center">Abono</th>
+            <th class="col-small text-center">Saldo</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let item of estadocuentareport" [ngClass]="{'print': imprimirview }" class="tr-report">
+            <td>{{ item.fecha }} </td>
+            <td class="col-large">{{ item.concepto }}</td>
+            <td class="text-end">{{ ( item.cargo === 0 ? "" : item.cargo ) | currency }}</td>
+            <td class="text-end">{{ ( item.abono === 0 ? "" : item.abono ) | currency}}</td>
+            <td class="text-end">{{ ( item.saldo ) | currency   }}</td>
+        </tr>
+    </tbody>
+
+    <tfoot>
+        <tr class="table-footer">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-end">Saldo:</td>
+            <td class="text-end">{{ saldo | currency }}</td>
+        </tr>
+    </tfoot>
+</table>
+
+<!-- <hr> -->
+<!-- estadocuentareport : <pre>{{ estadocuentareport | json}}</pre> -->
 <!-- estadocuentareport: <pre>{{ estadocuentareport | json}}</pre> -->
-<!-- pagos: <pre>{{ pagos | json}}</pre> -->
+<!-- pagos: <pre>{{ pagos | json}}</pre>  -->
 <!-- cargos: <pre>{{ cargos | json}}</pre>  -->
 
 <br>

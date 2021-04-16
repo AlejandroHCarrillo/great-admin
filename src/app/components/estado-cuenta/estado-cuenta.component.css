@@ -1,0 +1,40 @@
+.print{
+    font-size: small;
+    margin-top: 0;
+    margin-bottom: 0;
+    
+    padding: 0, 0 !important;
+
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+    padding: 0, 0 !important;
+}
+
+#reporttable {
+    table-layout: fixed;
+    width: 100%;
+}
+
+#reporttable td{
+    /* white-space: nowrap;
+    text-overflow: ellipsis; */
+    padding: 0, 0 !important;
+
+}
+
+.table-report{
+    width: 100%;
+}
+
+.tr-report{
+    border-bottom:gray 1px solid;
+}
+
+.tr-report:hover{
+    background-color: whitesmoke;
+}
+
+.table-header, .table-footer{
+    background-color: #eff5f5;
+}

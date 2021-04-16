@@ -231,6 +231,10 @@ export class AlumnoComponent implements OnInit {
                 }
               });
             }
+
+            console.log("alumno.nivel: ", alumno.nivel);
+            
+
             this.nivelSelected = this.setDDValue(alumno.nivel, this.niveles);
             this.stateSelected = this.setDDValue(alumno.estado, this.states);
 
@@ -339,9 +343,9 @@ export class AlumnoComponent implements OnInit {
   // }
 
   setDDValue(code:string, arrOptions: DropDownItem[] = []) : any {
-    console.log("Buscar: ", code, " en: ", arrOptions );
+    // console.log("Buscar: ", code, " en: ", arrOptions );
     
-    return arrOptions.find((obj : DropDownItem ) => ( obj.code === code ));
+    return arrOptions.find((obj : DropDownItem ) => ( String(obj.code).toUpperCase() === String(code).toUpperCase() ));
   }
 
 

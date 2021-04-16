@@ -10,14 +10,13 @@ import { Alumno } from 'src/app/interfaces/alumno';
 import { DialogService } from 'primeng/dynamicdialog';
 import { PagosService } from 'src/app/services/pagos.service';
 import { EstadocuentaItem } from 'src/app/interfaces/estadocuenta-item.model';
-import { element } from 'protractor';
+import { setfocus } from 'src/app/helpers/tools';
 
 @Component({
   selector: 'app-estado-cuenta',
   templateUrl: './estado-cuenta.component.html',
   styleUrls: ['./estado-cuenta.component.css']
 })
-
 
 export class EstadoCuentaComponent implements OnInit {
   fileName = "estadodecuenta";
@@ -37,6 +36,8 @@ export class EstadoCuentaComponent implements OnInit {
   exportColumns: any[] = [];
 
   saldo : number = 0;
+
+  imprimirview = false;
 
   constructor( 
     private messageService: MessageService,
@@ -58,41 +59,35 @@ export class EstadoCuentaComponent implements OnInit {
 
       this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
 
+      this.fakeInitdata();
   }
 
-  // loadCargos(){
-  //   this.cargosService.getCargosByAlumno("6050fc972a99ae688413d942")
-  //   .then(async (resp)=>{
-  //     // console.log(resp);
-  //     const body = await resp.json();
-  //     console.log(body);
+  async fakeInitdata(){
+    this.alumnoSelected = {
+      activo: true,
+      amaterno: "Carrillo",
+      apaterno: "Hernandez",
+      email: "el_grande_ahc@hotmail.com",
+      grado: "1",
+      grupo: "B",
+      id: "604b0343f4bc8f64f4d4b1cb",
+      img: "https://res.cloudinary.com/alexthegreat/image/upload/v1615835825/ssp6eiusq1csw0t4krtn.jpg",
+      matricula: "HECA19770404-1",
+      nivel: "LICENCIATURA",
+      nombre: "Alejandro",
+    }
 
-  //     if(!body.ok){
-  //       // console.log("No cargos");
-  //       this.showToastMessage("Cargos", "No hay cargos", eSeverityMessages.error);
-  //       return;        
-  //     }
-  //     this.cargos = [ ...body.cargos ];
-  //     this.mapCargosToReport(body.cargos);
-  //   });
-  // }
+    this.estadocuentareport = [];
 
-  // loadPagos(){
-  //   this.pagosService.getPagosByAlumno("6050fc972a99ae688413d942")
-  //   .then(async (resp)=>{
-  //     // console.log(resp);
-  //     const body = await resp.json();
-  //     console.log(body);
+    this.cargos = await this.cargosService.findCargosByAlumno( this.alumnoSelected.id );
+    this.mapCargosToReport(this.cargos);
 
-  //     if(!body.ok){
-  //       // console.log("No pagos");
-  //       this.showToastMessage("Pagos", "No hay pagos", eSeverityMessages.error);
-  //       return;        
-  //     }
-  //     this.pagos = [ ...body.pagos ];
-  //     this.mapPagosToReport(body.pagos);
-  //   });
-  // }
+    this.pagos = await this.pagosService.findPagosPorAlumno( this.alumnoSelected.id );
+    this.mapPagosToReport(this.pagos);
+
+    this.estadocuentareport.sort(this.comparefechas)
+    this.calcularSaldos();
+  }
 
   mapCargosToReport(data: any[]){
     this.estadocuentareport = [
@@ -101,7 +96,8 @@ export class EstadoCuentaComponent implements OnInit {
     ( 
       new EstadocuentaItem("", "cargo", 
         moment( cargo.fechavencimiento ).format("DD/MM/yyyy"), 
-        cargo.concepto, cargo.tipocargo, cargo.monto, 0, cargo.estatus)
+        cargo.concepto, cargo.tipocargo, cargo.monto, 0, 0, 
+        cargo.estatus)
     )
     )];
 
@@ -114,7 +110,9 @@ export class EstadoCuentaComponent implements OnInit {
     ( 
       new EstadocuentaItem("", "abono", 
         moment( abono.fechapago ).format("DD/MM/yyyy"), 
-        "Pago en " + String(abono.formapago).toLocaleLowerCase(), abono.formapago , 0, abono.montopagado, abono.estatus)
+        "Pago en " + String(abono.formapago).toLocaleLowerCase(), 
+        abono.formapago , 0, abono.montopagado, 0,  
+        abono.estatus)
     )
     )];
 
@@ -225,8 +223,12 @@ export class EstadoCuentaComponent implements OnInit {
         // console.log("Alumno seleccionado: ", alumno);
         if (!alumno) {
           this.cargos = [];
-          return
+          this.pagos = [];
+          return;
         };
+        console.log(alumno);
+        
+
         this.alumnoSelected = { ...alumno };
         this.messageService.add({severity:'info', summary: 'Alumno seleccionado', detail:'matricula:' + alumno.matricula });
         
@@ -254,6 +256,8 @@ export class EstadoCuentaComponent implements OnInit {
     let saldo = 0;
     for (let i = 0; i < this.estadocuentareport.length; i++) {
       // const element = this.estadocuentareport[i];
+      // console.log(this.estadocuentareport[i]);
+      
       saldo += this.estadocuentareport[i].cargo;
       saldo -= this.estadocuentareport[i].abono;
 
@@ -264,6 +268,15 @@ export class EstadoCuentaComponent implements OnInit {
 
     this.saldo = saldo;
 
+  }
+
+  imprimir(){
+    this.imprimirview = !this.imprimirview;
+    setTimeout(()=>{
+      window.print();
+      this.imprimirview = false;
+    }, 30);
+        
   }
 
 }
