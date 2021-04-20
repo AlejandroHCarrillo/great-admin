@@ -69,7 +69,7 @@ export class InscripcionesComponent implements OnInit {
       }
       let arrCursos : any[] = body.cursos;
 
-      console.log(arrCursos);
+      // console.log(arrCursos);
       
       this.cursos = [ { code: "", nombre: "Seleccione un curso" },
                       ...arrCursos.filter((x)=>(x.activo==true)) ] ;
@@ -97,7 +97,7 @@ export class InscripcionesComponent implements OnInit {
   }
 
   buildConcepto( cargo: any, index: number=0 ){
-    console.log(cargo);
+    // console.log(cargo);
     // console.log(this.cicloSelected);
     
     let intervalopagos = cargo.intervalopagos || 1;
@@ -150,8 +150,21 @@ export class InscripcionesComponent implements OnInit {
     }
 
     this.inscripcionesService.save({  alumno: this.alumnoSelected.id,
-                                      cicloescolar: this.cicloSelected.id
-    }).then(()=>{
+                                      cicloescolar: this.cicloSelected.id,
+                                      ciclo: this.cicloSelected.nombre,
+                                      matricula: this.alumnoSelected.matricula,
+                                      nivel: this.alumnoSelected.nivel,
+                                      grado: this.alumnoSelected.grado
+    }).then(async(resp)=>{
+
+      const body = await resp.json();
+      // console.log(body);
+
+      if(!body.ok){
+        // console.log("Hubo un error al guardar los cargos.");
+        this.showToastMessage("Error", "Hubo un error al guardar los cargos.", eSeverityMessages.error);
+        return;
+      }
 
       // console.log("Inscripcion realizada con exito");
       this.showToastMessage("Inscripcion", "Inscripcion realizada con exito.", eSeverityMessages.success);
@@ -165,7 +178,7 @@ export class InscripcionesComponent implements OnInit {
               // console.log("Los cargos fueron guardados.", resp);
 
               const body = await resp.json();
-              console.log(body);
+              // console.log(body);
 
               if(!body.ok){
                 // console.log("Hubo un error al guardar los cargos.");
@@ -202,7 +215,7 @@ export class InscripcionesComponent implements OnInit {
     let cargos : any[] = [];
 
     this.cursoSelected.cargos.forEach((element:any) => {
-      console.log( element );
+      // console.log( element );
       for (let i = 0; i < element.numpagos; i++) {
         let cargo = new CargoItem(
           "", this.alumnoSelected.id,

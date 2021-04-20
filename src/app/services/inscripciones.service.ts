@@ -12,6 +12,12 @@ export class InscripcionesService {
     return fetchToken(`inscripcion`, urlQueryParams, 'GET');
   }
 
+  getInscripcionesReport(urlQueryParams?:string) {
+    console.log("OJO: El del id Cliclo est hardcodeado.");
+    
+    return fetchToken(`inscripcion/report/60611e6d518f1f6074cd2b02`, urlQueryParams, 'GET');
+  }
+
   findInscripciones(urlQueryParams?:string, buscar:string = '') {
     return fetchToken(`inscripcion/find/${buscar}`, urlQueryParams, 'GET');
   }

@@ -70,6 +70,16 @@
                         <span class="icon" *ngIf="pageinfo.sort==='activo'" ><i class="fas fa-sort-alpha-down"></i></span>
                     </div>    
                 </th>
+                
+                <th>Nivel</th>
+
+                <th (click)="setOrder('grado')">
+                    <div [ngClass]="{'header-sort': pageinfo.sort==='grado'}">
+                        Grado&nbsp;
+                        <span class="icon" *ngIf="pageinfo.sort==='grado'" ><i class="fas fa-sort-alpha-down"></i></span>
+                    </div>    
+                </th>
+
                 <th></th>
             </tr>
         </ng-template>
@@ -83,6 +93,8 @@
                 <td>{{alumno.amaterno}}</td>
                 <td>{{alumno.matricula}}</td>
                 <td>{{!!alumno.activo}}</td>
+                <td>{{alumno.nivel}}</td>
+                <td>{{alumno.grado}} {{alumno.grupo}} </td>
                 <td >
                     <button class="btn btn-warning btn-sm" (click)="edit(alumno.id)">
                         <span class="icon"><i class="fas fa-pencil-alt"></i></span>    

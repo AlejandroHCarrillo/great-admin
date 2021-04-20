@@ -1,5 +1,38 @@
 <h1>Reporte de inscripciones</h1>
 <hr>
+
+<div class="row">
+    <div class="col-8">
+        <canvas baseChart
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [legend]="barChartLegend"
+            [chartType]="barChartType">
+        </canvas>
+    </div>
+    <div class="col-4">
+        <div class="row">
+            <div class="col title text-center mb-2">Resumen de inscripciones</div>
+        </div>
+        <hr>
+        <div class="row" *ngFor="let grado of barChartLabels; let i = index;" >
+            <div class="col"></div>
+            <div class="col-6">{{ grado }}</div>
+            <div class="col-4 text-end">{{ dataG[i] }}</div>
+            <div class="col"></div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-6 text-end">Total:</div>
+            <div class="col-4 text-end">{{ sum(dataG) }}</div>
+            <div class="col"></div>
+
+        </div>
+    </div>
+</div>
+
 <p-table #dt [columns]="cols" [value]="inscripcionesreport" selectionMode="multiple" [(selection)]="inscripcionesSelected"  name="reporttable" id="reporttable">
     <ng-template pTemplate="caption">
         <div class="p-d-flex text-end">

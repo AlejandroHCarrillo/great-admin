@@ -1,7 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { eSeverityMessages } from 'src/app/config/enums';
 import { InscripcionesService } from 'src/app/services/inscripciones.service';
+
+import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
+import * as pluginDataLabels from 'chartjs-plugin-datalabels';
+import { Label } from 'ng2-charts';
+
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import * as moment from 'moment';
@@ -19,6 +24,43 @@ export class IncripcionesReportComponent implements OnInit {
   cols: any[] = [];
   exportColumns: any[] = [];
 
+  dataGraph: any[] = [];
+  dataG: any[] = [];
+
+  // Grafica  
+  public barChartOptions: ChartOptions = {
+    responsive: true,
+    // We use these empty structures as placeholders for dynamic theming.
+    scales: { xAxes: [{}], 
+              yAxes: [{ ticks: { beginAtZero: true } }] 
+            },
+    plugins: {
+      datalabels: {
+        formatter: (value, ctx) =>{
+          let dataArr = this.barChartData;
+          let total = this.sum(dataArr);     // sum from lodash        
+          let percentage = (value * 100 / total).toFixed(2) + "%";
+          return percentage;
+        },
+        anchor: 'end',
+        align: 'end',
+      }
+    }
+  };
+
+  public barChartLabels: Label[] = [];
+  public barChartType: ChartType = 'bar';
+  public barChartLegend = true;
+  public barChartPlugins = [pluginDataLabels];
+
+  public barChartData: ChartDataSets[] = [{ 
+    label: '',
+    data: [], 
+    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+    borderColor: 'rgba(54, 162, 235, 1)',
+    borderWidth: 1
+  }];
+
   constructor( 
     private messageService: MessageService,
     private inscripcionesService: InscripcionesService 
@@ -26,6 +68,8 @@ export class IncripcionesReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadInscripciones();
+
+    this.loadInscripcionesReport("PRIMARIA");
 
     this.cols = [
       { field: 'cicloescolar', header: 'Ciclo Escolar' },
@@ -66,6 +110,50 @@ export class IncripcionesReportComponent implements OnInit {
     });
   }
 
+  loadInscripcionesReport(nivel: string){
+    this.inscripcionesService.getInscripcionesReport()
+    .then(async (resp)=>{
+      // console.log(resp);
+      const body = await resp.json();
+      // console.log(body);
+
+      if(!body.ok){
+        // console.log("No hay ciclos escolares");
+        this.showToastMessage("Incripciones", "No hay inscripciones", eSeverityMessages.error);
+        return;        
+      }
+      this.dataGraph = [ ...body.reporte ];
+      this.dataGraph.sort(this.compareGrados);
+
+      let labels = this.dataGraph.map((x)=>(`Grado ${x._id.grado}`));
+      this.dataG = this.dataGraph.map((x)=>( x.count ));
+
+      // console.log("labels: ", labels );
+      // console.log("dataG: ", this.dataG );
+      
+      this.barChartLabels = labels;
+      
+      // console.log(this.barChartLabels);
+      // console.log(this.dataGraph.map((x)=>( x.count )));
+      
+      this.barChartData = [
+        {
+          label: "Alumnos",
+          data: [ ...this.dataG ], 
+          backgroundColor:  'rgba(75, 192, 192, 0.3)',
+          borderColor: [ 'rgba(75, 192, 192, 0.8)' ],
+          borderWidth: 2
+        }
+      ];
+
+    });
+  }
+
+  private compareGrados(a:any, b:any) {
+    // sort by grado
+    return a._id.grado < b._id.grado  ? -1 : 1;
+  }
+
   showToastMessage(title: string = "", text: string = "", tipo: string = "success"){
     this.messageService.add( {
             key: 'tmKey', 
@@ -96,8 +184,8 @@ export class IncripcionesReportComponent implements OnInit {
     var data = [ [] ];    
     data = this.inscripcionesreport.map((x => ( Object.values(x) ) ));
 
-    console.log(headers);
-    console.log(this.inscripcionesreport);
+    // console.log(headers);
+    // console.log(this.inscripcionesreport);
 
     doc.setFont( "times", "italic", 500);
     doc.setTextColor("navy");
@@ -148,7 +236,7 @@ export class IncripcionesReportComponent implements OnInit {
 
   exportExcel() {
       import("xlsx").then(xlsx => {
-          const worksheet = xlsx.utils.json_to_sheet(this.inscripcionesreport );
+          const worksheet = xlsx.utils.json_to_sheet( this.inscripcionesreport );
           const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
           const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
           this.saveAsExcelFile(excelBuffer, "inscripciones");
@@ -165,4 +253,10 @@ export class IncripcionesReportComponent implements OnInit {
           FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
       });
   }
+
+  sum(dataArr: any){
+    if(!dataArr || dataArr.length === 0 ) return;
+    return [...dataArr].reduce((total, value) => ( total + value ) );;
+  }
+
 }

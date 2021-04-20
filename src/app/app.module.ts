@@ -28,6 +28,10 @@ import { TooltipModule } from 'primeng/tooltip';
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 
+// Graficas
+import { ChartsModule } from 'ng2-charts';
+// import { ChartModule } from 'primeng/chart';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/common/navbar/navbar.component';
@@ -114,6 +118,9 @@ import { EstadoCuentaComponent } from './components/estado-cuenta/estado-cuenta.
     ReactiveFormsModule,
 
     ServicesModule,
+
+    ChartsModule,
+    // ChartModule,
 
     MessagesModule,
     MessageModule,

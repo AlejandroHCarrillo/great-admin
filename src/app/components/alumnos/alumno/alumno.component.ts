@@ -89,7 +89,7 @@ export class AlumnoComponent implements OnInit {
       }
       
     } catch(e){
-      console.log(e);
+      // console.log(e);
       Swal.fire({
         title: 'Hubo un error',
         text: 'Error al guardar el alumno' + e,
@@ -293,7 +293,7 @@ export class AlumnoComponent implements OnInit {
     this.alumnosService.save(obj)
     .then( (resp) => {
       // console.log("La respuesta es: ", resp);
-      
+      this.editMode = false;      
       if(resp.ok){
         Swal.fire({
           title: 'Alumno guardado',
@@ -301,9 +301,9 @@ export class AlumnoComponent implements OnInit {
           icon: 'success',
           confirmButtonText: 'Ok'
         });
-        console.log(resp);
+        // console.log(resp);
         const body = resp.body;
-        console.log(body);
+        // console.log(body);
         this.router.navigate([`alumno/${this.alumno.Id}`]);
       }     
     });
@@ -325,8 +325,8 @@ export class AlumnoComponent implements OnInit {
     console.log("Actualizar: ", obj);
       this.alumnosService.update(obj)
       .then( (resp) => {
-        console.log("resp: ", resp);
-        
+        // console.log("resp: ", resp);
+        this.editMode = false;        
         if(resp.ok){
           Swal.fire({
             title: 'Alumno actualizado',

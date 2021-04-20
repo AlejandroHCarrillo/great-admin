@@ -28,6 +28,8 @@
             <tr>
                 <th class="col-small"></th>
                 <th class="col-extra-large">Nombre</th>
+                <th class="col-medium">Nivel</th>
+                <th class="col-small">Grado</th>
                 <th class="col-large">Matricula</th>
             </tr>
         </ng-template>
@@ -39,6 +41,8 @@
                     <img *ngIf="alumno.img" [src]="alumno.img" [alt]="alumno.nombre" class="image-small-rounded">
                 </td>
                 <td>{{alumno.nombre}} {{alumno.apaterno}} {{alumno.amaterno}} </td>
+                <td>{{alumno.nivel}}</td>
+                <td>{{alumno.grado}} {{alumno.grupo}}</td>
                 <td>{{alumno.matricula}}</td>
             </tr>
         </ng-template>

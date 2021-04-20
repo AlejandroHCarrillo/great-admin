@@ -1,5 +1,13 @@
 <div class="container">    
-    <div style="float: right;">
+    <div style="float: right; display: flex; flex-direction: row;">
+
+        <button type="button" 
+        class="btn btn-secondary btn-sm mt-2" 
+        [routerLink]="['/alumnos']">
+            <span class="icon"><i class="fas fa-chevron-left"></i></span>
+            Regresar
+        </button>
+
         <span class="icon"><i class="fas fa-pencil-alt"></i></span>
 
         <p-checkbox #editcheck
@@ -10,8 +18,8 @@
         >
         </p-checkbox>
     </div>
-    
     <h1><small>Alumno</small></h1>
+
     <!-- Nivel selected: {{ nivelSelected | json }} -->
     <hr>
     <form [formGroup]="form" (ngSubmit)="submit()">        
@@ -341,9 +349,7 @@
                     <button type="submit" 
                             class="btn btn-warning position-relative top-50 start-50 translate-middle" 
                             [disabled]="form.pristine || form.invalid">Guardar</button>
-                    <button type="button" 
-                            class="btn btn-secondary position-relative top-50 start-50 translate-middle" 
-                            [routerLink]="['/alumnos']">Regresar</button>
+
                 </div>
             </div>
         
