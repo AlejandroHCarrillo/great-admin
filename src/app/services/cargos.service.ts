@@ -17,6 +17,10 @@ export class CargosService {
     return fetchToken(`cargo/alumno/${id}`, 'GET');
   }
 
+  getCargosReport(year:string) {
+    return fetchToken(`cargo/report/${year}`, null, 'GET');
+  }
+
   async findCargos (buscar:string = '') {
     let retCargos: CargoItem[] = [];
     await fetchToken(`cargo/find/${buscar}`, "", 'GET')

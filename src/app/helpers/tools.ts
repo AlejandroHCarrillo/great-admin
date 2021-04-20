@@ -65,3 +65,8 @@ export const dateEsp2Eng = (fecha: string) => {
         return "";
     }
 }
+
+export const sumArrayNumeric = (dataArr: any) => {
+    if(!dataArr || dataArr.length === 0 ) return;
+    return [...dataArr].reduce((total, value) => ( total + value ) );;
+}

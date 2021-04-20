@@ -10,13 +10,14 @@ import { Label } from 'ng2-charts';
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import * as moment from 'moment';
+import { sumArrayNumeric } from 'src/app/helpers/tools';
 @Component({
   selector: 'app-incripciones-report',
   templateUrl: './incripciones-report.component.html',
   styleUrls: ['./incripciones-report.component.css']
 })
 export class IncripcionesReportComponent implements OnInit {
-
+  sum = sumArrayNumeric;
   inscripciones: any[] = [];
   inscripcionesreport: any[] = [];
   inscripcionesSelected: any[] = [];
@@ -38,7 +39,7 @@ export class IncripcionesReportComponent implements OnInit {
       datalabels: {
         formatter: (value, ctx) =>{
           let dataArr = this.barChartData;
-          let total = this.sum(dataArr);     // sum from lodash        
+          let total = sumArrayNumeric(dataArr);     // sum from lodash        
           let percentage = (value * 100 / total).toFixed(2) + "%";
           return percentage;
         },
@@ -123,7 +124,7 @@ export class IncripcionesReportComponent implements OnInit {
         return;        
       }
       this.dataGraph = [ ...body.reporte ];
-      this.dataGraph.sort(this.compareGrados);
+      this.dataGraph.sort(this.sortByGrado);
 
       let labels = this.dataGraph.map((x)=>(`Grado ${x._id.grado}`));
       this.dataG = this.dataGraph.map((x)=>( x.count ));
@@ -149,7 +150,7 @@ export class IncripcionesReportComponent implements OnInit {
     });
   }
 
-  private compareGrados(a:any, b:any) {
+  private sortByGrado(a:any, b:any) {
     // sort by grado
     return a._id.grado < b._id.grado  ? -1 : 1;
   }
@@ -252,11 +253,6 @@ export class IncripcionesReportComponent implements OnInit {
           });
           FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
       });
-  }
-
-  sum(dataArr: any){
-    if(!dataArr || dataArr.length === 0 ) return;
-    return [...dataArr].reduce((total, value) => ( total + value ) );;
   }
 
 }
