@@ -16,6 +16,13 @@ export class PagosService {
     return fetchToken(`pago/alumno/${id}`, 'GET');
   }
 
+  getPagosReport(year:string) {
+    return fetchToken(`pago/report/${year}`, null, 'GET');
+  }
+
+  getPagosByFormaPagoReport(year:string) {
+    return fetchToken(`pago/report/formapago/${year}`, null, 'GET');
+  }
 
   async findPagosPorAlumno(buscar:string = '') {
       let retPagos: any[] = [];

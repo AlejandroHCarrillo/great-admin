@@ -1,0 +1,86 @@
+
+<!-- yearSelected : {{ yearSelected | json }} -->
+<!-- dropDownYears : <pre>{{ dropDownYears | json}}</pre> -->
+<div class="row">
+    <div class="col-8"><h1>Reporte de Cobranza</h1></div>
+    <div class="col-4 mt-3">
+        <p-dropdown [options]="dropDownYears"
+            optionLabel="name"
+            name="yearSelected"
+            (onChange)="onChangeDDYears($event)"
+            [(ngModel)]="yearSelected">
+        </p-dropdown>
+    </div>
+</div>
+<hr>
+
+<div class="row">
+    <div class="col-8">
+        <canvas baseChart
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [legend]="barChartLegend"
+            [chartType]="barChartType">
+        </canvas>
+    </div>
+    <div class="col-4">
+        <div class="row">
+            <div class="col title text-center mb-2">Cobranza {{ yearSelected.code }}</div>
+        </div>
+        <hr>
+        <div class="row" *ngFor="let item of datareport" >
+            <div class="col"></div>
+            <div class="col-6">{{ item._id }}</div>
+            <div class="col-4 text-end">{{ item.montototal | currency }}</div>
+            <div class="col"></div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-6 text-end">Total:</div>
+            <div class="col-4 text-end">{{ grantotal | currency }}</div>
+            <div class="col"></div>
+
+        </div>
+    </div>
+</div>
+
+<!-- datareport : <pre>{{ datareport | json}}</pre> -->
+<hr>
+<div class="row">
+    <div class="col-8">
+        <canvas baseChart
+            [datasets]="barChartDataByFormaPago"
+            [labels]="barChartLabelsByFormaPago"
+            [options]="barChartOptionsByFormaPago"
+            [legend]="barChartLegend"
+            [chartType]="barChartType">
+        </canvas>
+    </div>
+    <div class="col-4">
+        <div class="row">
+            <div class="col title text-center mb-2">Cobranza por tipo de pago {{ yearSelected.code }}</div>
+        </div>
+        <hr>
+        <div class="row" *ngFor="let item of dataByFormaPagoReport" >
+            <div class="col"></div>
+            <div class="col-6">{{ getFormaPago(item._id) }}</div>
+            <div class="col-4 text-end">{{ item.montototal | currency }}</div>
+            <div class="col"></div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-6 text-end">Total:</div>
+            <div class="col-4 text-end">{{ grantotal | currency }}</div>
+            <div class="col"></div>
+
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>

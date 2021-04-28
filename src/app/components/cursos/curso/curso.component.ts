@@ -2,9 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Curso } from "src/app/interfaces/curso";
 import { CargoCurso } from "src/app/interfaces/cargocurso";
-import { NgForm } from "@angular/forms";
 
-import { CursosService, CargosService, UsuariosService } from "src/app/services/services.index";
+import { CursosService, UsuariosService } from "src/app/services/services.index";
 import { ddNiveles, ddTiposCargos, eSeverityMessages } from "src/app/config/enums";
 import { arraycounter, arrRemoveAt, setfocus } from "src/app/helpers/tools";
 import { DropDownItem } from "src/app/interfaces/drop-down-item";

@@ -23,8 +23,11 @@ import { CursosComponent } from './components/cursos/cursos.component';
 import { CursoComponent } from './components/cursos/curso/curso.component';
 import { IncripcionesReportComponent } from './components/inscripciones/incripciones-report/incripciones-report.component';
 import { EstadoCuentaComponent } from './components/estado-cuenta/estado-cuenta.component';
-import { CargosComponent } from './cargos/cargos.component';
-import { CargosReportComponent } from './cargos/cargos-report/cargos-report.component';
+import { CargosComponent } from './components/cargos/cargos.component';
+import { CargosReportComponent } from './components/cargos/cargos-report/cargos-report.component';
+import { PagosReportComponent } from './components/pagos/pagos-report/pagos-report.component';
+import { EstadoCuentaMailComponent } from './components/estado-cuenta/estado-cuenta-mail/estado-cuenta-mail.component';
+import { EstadoCuentaListComponent } from './components/estado-cuenta/estado-cuenta-list/estado-cuenta-list.component';
 
 const routes: Routes = [
   // Rutas protegidas
@@ -59,9 +62,14 @@ const routes: Routes = [
       {path: 'producto/:id', component: ProductoComponent},    
       
       {path: 'reportes/inscripciones', component: IncripcionesReportComponent},
+      {path: 'reportes/pagos', component: PagosReportComponent},
       {path: 'reportes/cargos', component: CargosReportComponent },
       {path: 'estadocuenta', component: EstadoCuentaComponent},
-
+      {path: 'estadocuenta/list', component: EstadoCuentaListComponent},
+      {path: 'estadocuenta/mail', component: EstadoCuentaMailComponent},
+      {path: 'estadocuenta/mail/:id', component: EstadoCuentaMailComponent},
+      
+      {path: 'notfound', component: NopagefoundComponent},
       {path: '', component: HomeComponent, pathMatch: 'full'},
 
     ]

@@ -1,16 +1,21 @@
 <div class="container">    
-    <div style="float: right;">
+    <div style="float: right; display: flex; flex-direction: row;">
+        <button type="button" 
+        class="btn btn-secondary btn-sm mt-2" 
+        [routerLink]="['/productos']">
+            <span class="icon"><i class="fas fa-chevron-left"></i></span>
+            Regresar
+        </button>
         <span class="icon"><i class="fas fa-pencil-alt"></i></span>
         <p-checkbox #editcheck
             name="edit" 
-            value="true" 
+            value="editMode" 
             label=""
             (click)="toggleEdit()"
-            [ngModel]="editMode"
-            checked="true"
         >
         </p-checkbox>
     </div>
+
     
     <h1><small>Producto</small></h1>
     <hr>
@@ -214,9 +219,6 @@
                     <button type="submit" 
                             class="btn btn-warning position-relative top-50 start-50 translate-middle" 
                             [disabled]="form.pristine || form.invalid">Guardar</button>
-                    <button type="button" 
-                            class="btn btn-secondary position-relative top-50 start-50 translate-middle" 
-                            [routerLink]="['/productos']">Cancelar</button>
                 </div>
             </div>
         </div>

@@ -228,7 +228,6 @@ export class EstadoCuentaComponent implements OnInit {
         };
         console.log(alumno);
         
-
         this.alumnoSelected = { ...alumno };
         this.messageService.add({severity:'info', summary: 'Alumno seleccionado', detail:'matricula:' + alumno.matricula });
         

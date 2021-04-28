@@ -74,8 +74,13 @@ import { CursoComponent } from './components/cursos/curso/curso.component';
 import { ServicesModule } from './services/services.module';
 import { IncripcionesReportComponent } from './components/inscripciones/incripciones-report/incripciones-report.component';
 import { EstadoCuentaComponent } from './components/estado-cuenta/estado-cuenta.component';
-import { CargosComponent } from './cargos/cargos.component';
-import { CargosReportComponent } from './cargos/cargos-report/cargos-report.component';
+import { CargosComponent } from './components/cargos/cargos.component';
+import { CargosReportComponent } from './components/cargos/cargos-report/cargos-report.component';
+import { PagosComponent } from './components/pagos/pagos.component';
+import { PagosReportComponent } from './components/pagos/pagos-report/pagos-report.component';
+import { EstadoCuentaMailComponent } from './components/estado-cuenta/estado-cuenta-mail/estado-cuenta-mail.component';
+import { EstadoCuentaListComponent } from './components/estado-cuenta/estado-cuenta-list/estado-cuenta-list.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -112,7 +117,11 @@ import { CargosReportComponent } from './cargos/cargos-report/cargos-report.comp
     IncripcionesReportComponent,
     EstadoCuentaComponent,
     CargosComponent,
-    CargosReportComponent
+    CargosReportComponent,
+    PagosComponent,
+    PagosReportComponent,
+    EstadoCuentaMailComponent,
+    EstadoCuentaListComponent
   ],
   imports: [
     BrowserModule,

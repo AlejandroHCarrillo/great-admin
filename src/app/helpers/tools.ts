@@ -1,4 +1,6 @@
 import * as moment from "moment";
+import { aMeses, ddFormasPago } from 'src/app/config/enums'
+import { DropDownItem } from "../interfaces/drop-down-item";
 
 export const isInvalidControl = (name: any, form:any) => {
     const control = form.get(name);
@@ -70,3 +72,29 @@ export const sumArrayNumeric = (dataArr: any) => {
     if(!dataArr || dataArr.length === 0 ) return;
     return [...dataArr].reduce((total, value) => ( total + value ) );;
 }
+
+export const getMes = (strNumMes: string) => {
+    return aMeses[Number(strNumMes)-1];
+}
+
+export const getFormaPago = (strcode: string) => {
+    return ddFormasPago.find((x)=>(x.code === strcode ))?.name;
+}
+
+export const getDropDownOption = (code:string, arrOptions: DropDownItem[] = []):any => {
+    return arrOptions.find((obj : DropDownItem ) => ( String(obj.code).toUpperCase() === String(code).toUpperCase() ));
+}
+
+export const getLastDayOfMonth = (yearmonth: string): string =>{
+    if(isDate(`${yearmonth}-31`)){
+      return `${yearmonth}-31`;
+    } else if (isDate(`${yearmonth}-30`)){
+      return `${yearmonth}-30`;
+    } else if (isDate(`${yearmonth}-29`)){
+      return `${yearmonth}-29`;
+    }
+    return `${yearmonth}-28`;
+  };
+
+
+

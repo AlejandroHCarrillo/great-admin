@@ -7,6 +7,7 @@ import { PAGE_SIZE } from '../../config/settings'
 import { Cliente } from 'src/app/interfaces/cliente';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { PageInfo } from 'src/app/interfaces/pageinfo.model';
+import { setfocus } from 'src/app/helpers/tools';
 
 @Component({
   selector: 'app-clientes',
@@ -30,6 +31,7 @@ export class ClientesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadClientes();
+    setfocus("buscar");
   }
 
   loadClientes(){

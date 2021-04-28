@@ -4,7 +4,7 @@ import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 
-import { sumArrayNumeric } from 'src/app/helpers/tools';
+import { getMes, sumArrayNumeric } from 'src/app/helpers/tools';
 import { CargosService } from 'src/app/services/cargos.service';
 import { DropDownItem } from 'src/app/interfaces/drop-down-item';
 
@@ -90,13 +90,13 @@ export class CargosReportComponent implements OnInit {
     
       this.completeData();
 
-      this.barChartLabels = this.datareport.map((x)=>(x._id));
+      this.barChartLabels = this.datareport.map((x)=>( getMes( (x._id).substr(-2) ) ));
 
       let data = this.datareport.map((x)=>(x.montototal));
 
       this.barChartData = [
         {
-          label: `Ingresos esperados ${ this.yearSelected.code } `,
+          label: `Ingresos`,
           data: data, 
           backgroundColor:  'rgba(75, 192, 192, 0.3)',
           borderColor: [ 'rgba(75, 192, 192, 0.8)' ],

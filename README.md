@@ -1,5 +1,9 @@
+## prime ng
+npm i primeicons
+
 
 https://iconarchive.com/show/office-icons-by-thalita-torres/color-catalog-icon.html
+
 
 
 ## PDF

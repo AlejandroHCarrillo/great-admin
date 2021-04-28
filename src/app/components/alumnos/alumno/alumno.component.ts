@@ -10,7 +10,7 @@ import { REGEXP_EMAIL, REGEXP_RFC, REGEXP_CURP } from '../../../config/settings'
 import { SharedService } from 'src/app/services/shared.service';
 import { AlumnosService } from 'src/app/services/alumnos.service';
 import { DropDownItem } from 'src/app/interfaces/drop-down-item';
-import { buildMatricula } from 'src/app/helpers/tools';
+import { buildMatricula, getDropDownOption } from 'src/app/helpers/tools';
 import { ddNiveles } from 'src/app/config/enums';
 @Component({
   selector: 'app-alumno',
@@ -232,11 +232,11 @@ export class AlumnoComponent implements OnInit {
               });
             }
 
-            console.log("alumno.nivel: ", alumno.nivel);
+            // console.log("alumno.nivel: ", alumno.nivel);
             
 
-            this.nivelSelected = this.setDDValue(alumno.nivel, this.niveles);
-            this.stateSelected = this.setDDValue(alumno.estado, this.states);
+            this.nivelSelected = getDropDownOption(alumno.nivel, this.niveles);
+            this.stateSelected = getDropDownOption(alumno.estado, this.states);
 
             console.log("this.stateSelected: ", this.stateSelected);
             console.log("this.nivelSelected.code: ", this.nivelSelected);
@@ -341,13 +341,6 @@ export class AlumnoComponent implements OnInit {
   // setDropDownValue(code:string) : any {
   //   return this.states.find((obj : DropDownItem ) => ( obj.code === code ));
   // }
-
-  setDDValue(code:string, arrOptions: DropDownItem[] = []) : any {
-    // console.log("Buscar: ", code, " en: ", arrOptions );
-    
-    return arrOptions.find((obj : DropDownItem ) => ( String(obj.code).toUpperCase() === String(code).toUpperCase() ));
-  }
-
 
   toggleEdit(enabled?:boolean){
     // console.log("is edit mode?", enabled)

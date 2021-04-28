@@ -1,0 +1,61 @@
+<h1 id="titulo" >Estado de cuenta(correo)</h1>
+<hr>
+<div class="row" style="margin-bottom: 10px;" >
+    <div class="col-2">
+        <p-dropdown [options]="mesesanio"
+        optionLabel="name"
+        name="meses"
+        [(ngModel)]="mesanioSelected"
+        (onChange) = "mesanioChanged($event)"
+        ></p-dropdown>
+    </div>
+    <div class="col-1">
+    </div>        
+</div>
+
+<div class="row">
+    <div class="col shadow p-3 mb-2 bg-body rounded" id="ecuenta">
+
+        <div style="display: flex; justify-content: flex-end; padding-right: 10%;">
+            <table style="width: 80%; align-self: center;">
+                <tr style="border-bottom: 1px black solid;">                    
+                    <td class="title">Folio</td>
+                    <td class="title">Matricula</td>
+                    <td class="title">Alumno</td>
+                    <td class="title">Cargos</td>
+                    <td class="title">Abonos</td>
+                    <td class="title">Saldo</td>
+                    <td class="title"></td>
+                </tr>
+                <tr *ngFor="let reg of estadosCuentaList"  style="border-bottom: 1px black solid;">
+                    <!-- <td>{{reg | json }}</td> -->
+                    <td>{{reg.alumno.folio}} {{reg.alumno.hoja}}</td>
+                    <td>{{reg.matricula}}</td>
+                    <td>{{reg.alumno.nombre}}</td>
+                    <!-- <td>{{reg.counter}}</td> -->
+                    <td style="text-align: end;">{{reg.totalcargos | currency }}</td>
+                    <td style="text-align: end;">{{reg.totalabonos | currency}}</td>
+                    <td style="text-align: end;">{{reg.saldo | currency}}</td>
+                    <td style="text-align: end;">
+                        <a href="/estadocuenta/mail/{{reg.matricula}}" class="btn btn-outline-primary btn-sm " style="padding: 5 3px; margin: 7px 3px;">
+                            <span class="icon" style="font-size: 15px;"><i class="fas fa-file-invoice"></i></span>
+                        </a> 
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+Lista de Estados de Cuenta : <pre>{{ estadosCuentaList | json}}</pre>
+
+<!-- alumnosList : <pre>{{ alumnosList | json}}</pre> -->
