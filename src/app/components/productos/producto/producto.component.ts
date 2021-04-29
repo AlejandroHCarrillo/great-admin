@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { TASA_IVA } from 'src/app/config/settings'
-import * as moment from 'moment';
 import Swal from 'sweetalert2'
 
 import { fileUpload } from "../../../helpers/uploadimages";
@@ -12,6 +11,7 @@ import { DropDownItem } from 'src/app/interfaces/drop-down-item';
 import { Producto } from 'src/app/interfaces/producto';
 import { ImagesService } from 'src/app/shared/services/images.service';
 import { ddTipoItemVenta, ddUnidadesMedida } from 'src/app/config/enums';
+import { getDropDownOption } from 'src/app/helpers/tools';
 
 @Component({
   selector: 'app-producto',
@@ -29,9 +29,12 @@ export class ProductoComponent implements OnInit {
   imagesUrls: string[] = [];
 
   clasificaciones: DropDownItem[] = ddTipoItemVenta;
-  unidadesmedida: DropDownItem[] = ddUnidadesMedida;
+  selectedClasificacion: DropDownItem = new DropDownItem();
 
-  unidadmedidaSelected: string = " ";
+  unidadesmedida: DropDownItem[] = ddUnidadesMedida;
+  unidadmedidaSelected: DropDownItem = new DropDownItem();
+  unidadmedidacode: string = "";
+
   results: string[] = [];
 
   form : FormGroup = new FormGroup({});
@@ -48,8 +51,8 @@ export class ProductoComponent implements OnInit {
     exentoIVA: false,
     clasificacion: "P",
     img: "",
-    selectedClasificacion: this.setDropDownValue('P'),
-    unidadmedida: this.setDropDownValue('', 'unidadesmedida')
+    selectedClasificacion: getDropDownOption('P', this.clasificaciones),
+    unidadmedidaSelected: getDropDownOption('', this.unidadesmedida)
   };
 
   
@@ -145,10 +148,16 @@ export class ProductoComponent implements OnInit {
         name: "Producto",
         code: "P"
       }],      
+      unidadmedidaSelected: [{
+        name: "",
+        code: ""
+      }],      
     });
   }
 
   loadFormData (){
+    console.log("Cargando datos del producto: ",  this.productoId);
+    
     if(this.productoId){
       // console.log("buscando el producto con el id:", this.productoId);
       this.productosService.getProductoById(this.productoId)
@@ -167,31 +176,27 @@ export class ProductoComponent implements OnInit {
               this.productoId = "";
               return;
             }
-
+            console.log(body.producto);
+            
             const producto = body.producto;
 
             this.producto = producto;
+            this.productoEmpty = producto;
+            this.selectedClasificacion = getDropDownOption(producto.clasificacion, this.clasificaciones);
+            this.unidadmedidaSelected = getDropDownOption(producto.unidadmedida, this.unidadesmedida);
+
+            this.productoEmpty.selectedClasificacion = this.selectedClasificacion;
+            this.productoEmpty.unidadmedidaSelected = this.unidadmedidaSelected;
+
+            // console.log(this.unidadesmedida);
+            // console.log("unidade de medida: ", producto.unidadmedida);
+            // console.log(this.unidadmedidaSelected);
+
+
+            // console.log(this.productoEmpty.unidadmedidaSelected);
             
-            if (producto){
-              Object.keys(this.productoEmpty).map((x)=>{            
-                if(x.toString().includes('fecha')){
-                  let Fecha = moment(eval(`producto.${x}`));
-                  eval(`valuesFormProducto.${x} = '${ Fecha.format('MM/DD/yyyy')}' `);
-                } else if(x.toString().includes('password2')){
-                  // Casos especiales
-                  // console.log(`valuesFormProducto.${x} = JSON.parse(producto.${x})`);
-                  //eval(`valuesFormProducto.${x} = JSON.parse(producto.${x})`);
-                } 
-                else {
-                  eval(`valuesFormProducto.${x} = producto.${x}`);
-                }
-              });
-            }
-
-            this.productoEmpty.selectedClasificacion = this.setDropDownValue(producto.clasificacion);
-
-            // console.log("producto", valuesFormProducto);
             this.form.reset(this.productoEmpty);
+            // console.log("producto obj", this.productoEmpty);
 
           });
     } else {
@@ -243,10 +248,17 @@ export class ProductoComponent implements OnInit {
   private updateProducto() {
     let obj = {...this.form.value};
     obj.clasificacion = this.form.value.selectedClasificacion.code;
+    obj.unidadmedida = this.form.value.unidadmedidaSelected.code;
+    obj.unidadmedidaSelected = this.form.value.unidadmedidaSelected;
+
+    console.log(obj);
 
       obj.id = this.productoId;
       this.productosService.update(obj)
-      .then( (resp) => {
+      .then( async (resp) => {
+        const body = await resp.json();
+        console.log(body);
+        
         if(resp.ok){
           Swal.fire({
             title: 'Actualizar producto',
@@ -268,12 +280,12 @@ export class ProductoComponent implements OnInit {
     }
   }
 
-  setDropDownValue(code:string, ddname: string = "") : any {
-    if (ddname === "unidadesmedida"){
-      return this.unidadesmedida.find((obj) => ( obj.code === code ));
-    }
-    return this.clasificaciones.find((obj) => ( obj.code === code ));
-  }
+  // setDropDownValue(code:string, ddname: string = "") : any {
+  //   if (ddname === "unidadesmedida"){
+  //     return this.unidadesmedida.find((obj) => ( obj.code === code ));
+  //   }
+  //   return this.clasificaciones.find((obj) => ( obj.code === code ));
+  // }
 
   toggleModal(){
     this.showModal = !this.showModal;
@@ -365,9 +377,8 @@ export class ProductoComponent implements OnInit {
 
   unidadMedidaChange(event: any){
     console.log(event);
-    this.unidadmedidaSelected = " " + event.value.code;
-    console.log(this.unidadmedidaSelected);
-    
+    this.unidadmedidacode = " " + event.value.code;
+    console.log(this.unidadmedidacode);    
   }
 
 }

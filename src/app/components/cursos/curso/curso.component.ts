@@ -208,7 +208,7 @@ export class CursoComponent implements OnInit {
       this.cargoSelected.precio = producto.precio;
       this.cargoSelected.tasaIVA = producto.tasaIVA;
 
-      this.cargoSelected.monto = (producto.precio * ( 1 +producto.tasaIVA ));
+      this.cargoSelected.monto = (producto.precio * ( 1 + producto.tasaIVA ));
 
       setfocus("cargonombre");
     });

@@ -158,6 +158,7 @@ hideDialog() {
 }
 
 save() {
+    // console.log("saving...");
     this.submitted = true;
 
     this.cicloescolar.fechaInicio = new Date( dateEsp2Eng(this.fInicio) );
@@ -171,8 +172,9 @@ save() {
             return;
     } else{
         if (this.cicloescolar.id) {
+    // console.log("updating...", this.cicloescolar);
             // Actualizar
-            this.ciclosService.save(this.cicloescolar)
+            this.ciclosService.update(this.cicloescolar)
                 .then(async (resp) => {
                     // console.log(resp);
                     if(resp.ok){

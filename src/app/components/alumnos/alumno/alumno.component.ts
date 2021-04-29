@@ -80,6 +80,15 @@ export class AlumnoComponent implements OnInit {
     // }
 
     try{
+      if((this.form.value.beca + this.form.value.prestacion + this.form.value.apoyo) > 100 ){
+        Swal.fire({
+          title: 'Error guandado al alumno',
+          text: 'La suma de los descuentos no pueden ser mayores a 100%',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        });
+        return;
+      }
       if(!this.alumnoId || this.alumnoId === ""){
         // console.log("Guardando Nuevo Alumno"); 
         this.saveAlumno();

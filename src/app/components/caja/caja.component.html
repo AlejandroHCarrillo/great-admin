@@ -37,11 +37,10 @@
         <div class="row">
             <div class="row">
                 <div *ngIf="alumnoSelected" class="row mb-3">
-                    <div class="col-1">&nbsp;</div>
                     <div class="col">
-                        <table style="width: 100%;">
+                        <table style="width: 100%; border: 1px black solid;">
                             <tr>
-                                <td>
+                                <td style="padding: 5px;">
                                     <img class="image-small-rounded" 
                                     [src]="alumnoSelected.img" 
                                     [alt]="alumnoSelected.nombre">
@@ -59,9 +58,7 @@
                             </tr>
                         </table>
                     </div>
-                    <div class="col-1"></div>
-                </div>
-        
+                </div>        
             </div>
     
         </div>

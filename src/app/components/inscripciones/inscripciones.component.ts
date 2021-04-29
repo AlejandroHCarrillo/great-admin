@@ -9,7 +9,7 @@ import { CiclosescolaresService } from 'src/app/services/ciclosescolares.service
 import { InscripcionesService } from 'src/app/services/inscripciones.service';
 import { aMeses, eEstatusCargos, eSeverityMessages } from '../../config/enums';
 import { AlumnosListComponent } from '../alumnos/alumnos-list/alumnos-list.component';
-import { arraycounter } from 'src/app/helpers/tools'
+import { arraycounter, getMes } from 'src/app/helpers/tools'
 import { CursosService } from 'src/app/services/cursos.service';
 import { Curso } from 'src/app/interfaces/curso';
 
@@ -36,6 +36,8 @@ export class InscripcionesComponent implements OnInit {
   fechaprimerpago: string = "";
 
   msgs: any;
+
+  baseCobro = 0;
 
   constructor(
     private dialogService: DialogService,
@@ -96,27 +98,49 @@ export class InscripcionesComponent implements OnInit {
     });
   }
 
-  buildConcepto( cargo: any, index: number=0 ){
-    // console.log(cargo);
-    // console.log(this.cicloSelected);
+  buildConcepto( cargo: any, index: number=0, fechavencimiento: string = "" ){
+    console.log("fechavencimiento: ", fechavencimiento);
+    
     
     let intervalopagos = cargo.intervalopagos || 1;
     let fechaInicio = new Date(this.cicloSelected.fechaInicio);
-
+    
     let mesini = fechaInicio.getMonth() + (index * intervalopagos);
     if (mesini>11) mesini -= 12;
     let mesfin = mesini + cargo.intervalopagos - 1;
     if (mesfin>11) mesfin -= 12;
-
+    
     let periodo = intervalopagos===1? this.meses[index] : ` ${this.meses[mesini]} - ${this.meses[mesfin]}`
+    let concepto = `${cargo.nombre}`;
 
-    return cargo.numpagos===1? cargo.nombre : `${cargo.nombre} ${ periodo }`
+    if(cargo.tipocargo === "COLEGIATURA"){
+      let mes = getMes(moment(fechavencimiento).format("MM"));
+
+      concepto = `${cargo.tipocargo} ${ mes }  ${ moment(fechavencimiento).format("YYYY") }.`
+      if(this.alumnoSelected.beca>0) concepto = `${concepto} Beca: ${this.alumnoSelected.beca}% `
+      if(this.alumnoSelected.prestacion>0) concepto = `${concepto} Prestacion: ${this.alumnoSelected.prestacion}% `
+      if(this.alumnoSelected.apoyo>0) concepto = `${concepto} Apoyo: ${this.alumnoSelected.apoyo}% `        
+    }
+
+    return concepto
+    // return cargo.numpagos===1? concepto : `${concepto} ${ periodo }`
 
   }
 
-  calculaFechaVencimiento(index: number, intervalopagos: number ){    
+  calculaFechaVencimiento(index: number, intervalopagos: number, tipocargo: string ){    
     let mes = index * intervalopagos;
-    return moment(this.cursoSelected.fechaprimerpago).add(mes, "month").format("MM/DD/YYYY");
+    if(tipocargo === "COLEGIATURA"){
+      mes += 1;
+    }
+
+    let yearini = new Date(this.cicloSelected.fechaInicio).getFullYear();
+    let strFecha = `${yearini}-${String(this.cursoSelected.fechaprimerpago).substring(5, 10)}`;
+    // console.log("->", strFecha);
+    // console.log(strFecha);
+    // console.log(fecha);
+    let fecha = moment(strFecha).add(mes, "month").format("MM/DD/YYYY");
+    
+    return fecha;
   }
 
   showAlumnosList() {
@@ -136,6 +160,9 @@ export class InscripcionesComponent implements OnInit {
         this.alumnoSelected = { ...alumno, index:0 };
     //  this.messageService.add({severity:'info', summary: 'Alumno seleccionado', detail:'matricula:' + alumno.matricula });
         let nombrecompleto = `${alumno.matricula || "" }  - ${alumno.nombre} ${alumno.apaterno}`
+        
+        this.baseCobro = this.calculaFactorDescuento();
+
         this.showToastMessage("Alumno seleccionado", nombrecompleto, eSeverityMessages.info);
         this.buscarInscripciones(alumno.id);
     });
@@ -207,6 +234,8 @@ export class InscripcionesComponent implements OnInit {
   }
 
   generarCargos(): any[]{
+    console.log("generarCargos...");
+    
     if(!this.alumnoSelected){
       this.showToastMessage('Atencion', 'Por favor seleccione un alumno', eSeverityMessages.warn)
       this.setfocus("alumnSearch");
@@ -214,24 +243,33 @@ export class InscripcionesComponent implements OnInit {
     }
     let cargos : any[] = [];
 
-    this.cursoSelected.cargos.forEach((element:any) => {
-      // console.log( element );
-      for (let i = 0; i < element.numpagos; i++) {
+    this.cursoSelected.cargos.forEach((cargoelement:any) => {
+      for (let i = 0; i < cargoelement.numpagos; i++) {
+        console.log("cargoelement", cargoelement);
+        let factor = 1;
+
+        if(cargoelement.tipocargo === "COLEGIATURA"){
+          factor = this.baseCobro;
+        }
+
+        let fechaVencimiento = this.calculaFechaVencimiento(i, cargoelement.intervalopagos, cargoelement.tipocargo) || ""
+
         let cargo = new CargoItem(
           "", this.alumnoSelected.id,
           // element.productoid, 
-          this.buildConcepto(element, i),
-          this.calculaFechaVencimiento(i, element.intervalopagos) || "", 
-          element.precio, 1, 
-          element.tasaIVA, 
-          (element.precio * element.tasaIVA), 
-          0,
-          element.monto,
+          this.buildConcepto( cargoelement, i, fechaVencimiento ),
+          fechaVencimiento, 
+          cargoelement.precio, 
+          1,
+          cargoelement.tasaIVA, 
+          (factor * cargoelement.precio * cargoelement.tasaIVA), 
+          ((1-factor) * cargoelement.precio ),
+          factor * cargoelement.monto,
           eEstatusCargos.NO_PAGADO,
-          element.tipocargo
+          cargoelement.tipocargo
           // element.producto.id || ""
         )
-        // console.log("Cargo ", i, cargo);
+        console.log("Cargo ", i, cargo);
         cargos.push(cargo);
       }
     });
@@ -239,11 +277,23 @@ export class InscripcionesComponent implements OnInit {
     return cargos;
   }
 
+  calculaFactorDescuento(){
+    let factor = 1;
+
+    if(this.alumnoSelected.beca > 0) factor *= (1 - this.alumnoSelected.beca/100);
+    if(this.alumnoSelected.prestacion > 0) factor *= (1 - this.alumnoSelected.prestacion/100);
+    if(this.alumnoSelected.apoyo > 0) factor *= (1 - this.alumnoSelected.apoyo/100);
+
+    return factor;
+  }
+
   setfocus(controlname: string){
     document.getElementsByName(controlname)[0].focus();  
   }
 
   cursosOnChange(event:any){
+    console.log("cursosOnChange...");
+    
     this.fechaprimerpago = event.value.fechaprimerpago;
   }
 
@@ -267,4 +317,10 @@ export class InscripcionesComponent implements OnInit {
     return !!this.inscripcionesAlumno.find((x) => ( x.cicloescolar.id === cicloId ) );
   }
 
+  getfactorBaseCobro(tipocargo: string): number{
+    // console.log(tipocargo);
+    if(tipocargo==='COLEGIATURA') return this.baseCobro;
+
+    return 1;
+  }
 }

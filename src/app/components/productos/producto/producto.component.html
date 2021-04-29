@@ -48,14 +48,14 @@
                         <small *ngIf="isInvalidControl('nombre')" class="text-danger">El nombre es obligatorio </small>
                     </div>
                 </div>
-
+                <!-- selectedClasificacion : <pre>{{ selectedClasificacion | json}}</pre> -->
                 <div class="col-3">
                     <div class="mb-3 form-group form">
                         <label for="selectedClasificacion" class="form-label">Clasificacion:</label>
                         <p-dropdown [options]="clasificaciones" 
                                 optionLabel="name"
                                 name="selectedClasificacion"
-                                formControlName="clasificacion"></p-dropdown>
+                                formControlName="selectedClasificacion"></p-dropdown>
                     </div>
                 </div>
 
@@ -73,6 +73,8 @@
                         >
                     </div>
                 </div>
+                <!-- unidades de medida : <pre>{{ unidadesmedida | json}}</pre> -->
+                <!-- unidadmedidaSelected : <pre>{{ unidadmedidaSelected | json}}</pre> -->
                 <div class="col-3">
                     <div class="mb-3 form-group form">
                         <label for="unidadmedida" class="form-label">Unidad medida:</label>
@@ -80,7 +82,7 @@
                         optionLabel="name"
                         name="unidadmedidaSelected"
                         (onChange)="unidadMedidaChange($event)"
-                        formControlName="unidadmedida"></p-dropdown>
+                        formControlName="unidadmedidaSelected"></p-dropdown>
                     </div>
                 </div>
             </div>
@@ -97,11 +99,12 @@
                         > -->
                         <p-inputNumber [min]="0" [max]="999999999"
                         id="costo" name="costo" placeholder="0"
-                        class="col-medium" [maxlength]="5"
+                        class="col-medium" [maxlength]="15"
                         inputStyleClass="text-numeric"
                         [showButtons]="false"
                         formControlName="costo"
-                        prefix="$"
+                        prefix="$" locale="es-MX"
+                        mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"
                     ></p-inputNumber>
 
                         <small *ngIf="isInvalidControl('costo')" class="text-danger">El costo es obligatorio </small>
@@ -128,7 +131,8 @@
                                 inputStyleClass="text-numeric"
                                 [showButtons]="false"
                                 formControlName="tasaIVA"
-                                suffix="%"
+                                suffix="%" locale="es-MX"
+                                mode="decimal" [minFractionDigits]="0" [maxFractionDigits]="2"
                             ></p-inputNumber>
                             <small *ngIf="isInvalidControl('tasaIVA')" class="text-danger">El tasa IVA es obligatorio </small>
                         </div>
@@ -149,11 +153,12 @@
                         > -->
                         <p-inputNumber [min]="0" [max]="999999999"
                         id="precio" name="precio" placeholder="0"
-                        class="col-medium" [maxlength]="5"
+                        class="col-medium" [maxlength]="15"
                         inputStyleClass="text-numeric"
                         [showButtons]="false"
                         formControlName="precio"
-                        prefix="$"
+                        prefix="$" locale="es-MX"
+                        mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"
                     ></p-inputNumber>
                         <small *ngIf="isInvalidControl('precio')" class="text-danger">El precio es obligatorio </small>
                     </div>
@@ -174,7 +179,7 @@
                             inputStyleClass="text-numeric"
                             [showButtons]="false"
                             formControlName="cantidad"
-                            [suffix]="unidadmedidaSelected"
+                            [suffix]="unidadmedidacode"
                         ></p-inputNumber>
     
                         </div>

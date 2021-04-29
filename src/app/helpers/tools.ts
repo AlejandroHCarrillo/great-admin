@@ -18,7 +18,7 @@ export const isDate = ( value: string ) => {
             return false;
         }
         
-        const fecha = moment( value );
+        const fecha = moment( new Date(value).getTime() );
         
         if (fecha.isValid()){
             return true;

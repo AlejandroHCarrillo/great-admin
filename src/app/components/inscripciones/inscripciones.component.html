@@ -53,36 +53,18 @@
                     >
                 </p-dropdown>
             </div>
-            <!-- 
-            <div class="col-2 title">
-                <strong>Fecha prmer pago:</strong>
-            </div>
-            <div class="col-2">
-                {{ cursoSelected?.fechaprimerpago }}
-                <div class="mb-3 form">
-                    <label for="fechaprimerpago" class="form-label">Fecha primer pago:</label>
-                    <p-calendar 
-                    name="fechaprimerpago" 
-                    [(ngModel)]="fechaprimerpago">
-                    </p-calendar> 
-                </div>        
-                <button class="btn btn-danger" (click)="showToastMessage('ok', 'choro lorem', 'error')">toast</button>
-            </div>
-        -->
-            <!-- <div class="col-2"></div> -->
         </div>
-
+<!-- cicloSelected : <pre>{{ cicloSelected | json}}</pre>
+cursoSelected: {{ cursoSelected | json }} -->
     </div>
-
     <div class="shadow p-3 mb-2 bg-body rounded">
         <div class="row">
             <div *ngIf="alumnoSelected" class="row mb-3">
-                <div class="col-1"></div>
                 <div class="col">
-                    <table>
-                        <tr>
+                    <table >
+                        <tr style="padding: 20px;">
                             <td>
-                                <img class="image-small-rounded" 
+                                <img class="image-small-rounded"
                                 [src]="alumnoSelected.img" 
                                 [alt]="alumnoSelected.nombre">
                             </td>
@@ -97,9 +79,18 @@
                             <td class="title">Grupo:</td>
                             <td>{{ alumnoSelected.grupo }}</td>
                         </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td colspan="2">Beca: {{alumnoSelected.beca}} %</td>
+                            <td colspan="2">Prestacion: {{alumnoSelected.prestacion}} %</td>
+                            <td colspan="2">Apoyo: {{alumnoSelected.apoyo}} %</td>
+                            <td></td>
+                            <td></td>
+                            <td>Total descuentos: {{ (1 - baseCobro )*100}}</td>
+                        </tr>
                     </table>
                 </div>
-                <div class="col-1"></div>
             </div>
     
         </div>
@@ -134,9 +125,9 @@
                 <div class="grid-cards">
                     <div *ngFor="let item of counter( cargo.numpagos ); let i = index" >
                         <div class="card cargo">
-                            <div><strong>Concepto:&nbsp;</strong>{{ buildConcepto( cargo, i ) }}</div>
-                            <div><strong>Monto:&nbsp;</strong>{{ cargo.monto | currency}}</div>
-                            <div><strong>Fecha:&nbsp;</strong>{{ calculaFechaVencimiento(i, cargo.intervalopagos) | date: 'dd/MMM/yyyy' }}</div>
+                            <div><strong>Concepto:&nbsp;</strong>{{ buildConcepto( cargo, i, calculaFechaVencimiento(i, cargo.intervalopagos, cargo.tipocargo ) ) }}</div>
+                            <div><strong>Monto:&nbsp;</strong>{{ getfactorBaseCobro(cargo.tipocargo ) * cargo.monto | currency}}</div>
+                            <div><strong>Fecha:&nbsp;</strong>{{ calculaFechaVencimiento(i, cargo.intervalopagos, cargo.tipocargo) | date: 'dd/MMM/yyyy' }}</div>
                             <small *ngIf="cargo.numpagos>1" >Pago {{i+1}} de {{ cargo.numpagos }}</small>
                         </div>
                     </div>
@@ -152,4 +143,4 @@
     </div>
 
 </div>
-<pre> cursos: {{ cursos | json }} </pre>
+<!-- <pre> cursos: {{ cursos | json }} </pre> -->

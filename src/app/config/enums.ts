@@ -84,6 +84,7 @@ export const ddTipoItemVenta = [
 export const ddUnidadesMedida = [
     { code: '', name: 'No unidad de medida.' },
     { code: 'PZA', name: 'Pieza' },
+    { code: 'PLZA', name: 'Poliza' },
     { code: 'KG', name: 'Kilogramo' },
     { code: 'CAJA', name: 'Caja' },
     { code: 'LB', name: 'Libra' },
