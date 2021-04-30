@@ -38,3 +38,17 @@
 .table-header, .table-footer{
     background-color: #eff5f5;
 }
+
+.icon-cargo, .icon-abono{
+    color: black;
+}
+
+.icon-cargo:hover{
+    color: rgb(250, 100, 100);
+    cursor: pointer;
+}
+
+.icon-abono:hover{
+    color: rgb(50, 200, 50);
+    cursor: pointer;
+}

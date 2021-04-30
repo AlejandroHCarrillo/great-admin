@@ -1,21 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DIA_MILLISECONDS, PAGE_SIZE } from '../../config/settings'
+import { DIA_MILLISECONDS } from '../../config/settings'
 import * as moment from 'moment';
+import { ConfirmationService, MessageService, MenuItem } from 'primeng/api';
 
+import { DialogService } from 'primeng/dynamicdialog';
+import { CargosService } from 'src/app/services/cargos.service';
+import { PagosService } from 'src/app/services/pagos.service';
+
+import { AlumnosListComponent } from '../alumnos/alumnos-list/alumnos-list.component';
+import { ProductosListComponent } from '../productos/productos-list/productos-list.component';
+
+import { eEstatusCargos, eSeverityMessages, ddFormasPago } from 'src/app/config/enums';
+import { DropDownItem } from 'src/app/interfaces/drop-down-item';
 import { Alumno } from 'src/app/interfaces/alumno';
 import { CartItem } from 'src/app/interfaces/cart-item';
-import { DialogService } from 'primeng/dynamicdialog';
 import { Producto } from 'src/app/interfaces/producto';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ProductosListComponent } from '../productos/productos-list/productos-list.component';
 import { CargoItem } from 'src/app/interfaces/cargo-item';
-import { CargosService } from 'src/app/services/cargos.service';
-import { eEstatusCargos, eSeverityMessages, ddFormasPago } from 'src/app/config/enums';
-import { AlumnosListComponent } from '../alumnos/alumnos-list/alumnos-list.component';
+
 import { arrRemoveAt, setfocus } from 'src/app/helpers/tools';
-import { DropDownItem } from 'src/app/interfaces/drop-down-item';
-import { PagosService } from 'src/app/services/pagos.service';
+import { Pago } from 'src/app/interfaces/pago';
 
 @Component({
   selector: 'app-caja',
@@ -24,6 +28,8 @@ import { PagosService } from 'src/app/services/pagos.service';
 })
 
 export class CajaComponent implements OnInit {
+  items: MenuItem[] = [];
+
   searchtext: string = "";
   searchResultMsg = ""; 
 
@@ -57,12 +63,7 @@ export class CajaComponent implements OnInit {
   formasPago: DropDownItem[] = ddFormasPago;
   formapagoSelected: DropDownItem = new DropDownItem();
 
-  pago: any = {
-    fechapago: new Date(),
-    alumno: "",
-    formapago: "", 
-    montopagado: 0
-  }
+  pago: Pago = new Pago();
 
   // private alumnosService: AlumnosService,
   constructor(  private router: Router,
@@ -78,6 +79,30 @@ export class CajaComponent implements OnInit {
     // this.loadAlumnos()
     // this.alumnochanged({ value: { code: "605018e1ab32bf465014d1a4"}});
     setfocus("alumnoSearch");
+    this.items = [
+      {
+          label: 'File',
+          items: [{
+                  label: 'New', 
+                  icon: 'pi pi-fw pi-plus',
+                  items: [
+                      {label: 'Project'},
+                      {label: 'Other'},
+                  ]
+              },
+              {label: 'Open'},
+              {label: 'Quit'}
+          ]
+      },
+      {
+          label: 'Edit',
+          icon: 'pi pi-fw pi-pencil',
+          items: [
+              {label: 'Delete', icon: 'pi pi-fw pi-trash'},
+              {label: 'Refresh', icon: 'pi pi-fw pi-refresh'}
+          ]
+      }
+  ];
   }
 
   edit(id?:string){
@@ -206,23 +231,14 @@ export class CajaComponent implements OnInit {
     if(cargoIndex === -1){
       cargoIndex = this.shoppingcart[index].cargoindex || -1;
     }
-    console.log("cargoIndex: ", cargoIndex);
+    // console.log("cargoIndex: ", cargoIndex);
     
-    this.confirmationService.confirm({
-      message: '¿En verdad deseas eliminar este cargo de la lista?',
-      accept: () => {
-        // let scClon = [...this.shoppingcart];
-        // this.shoppingcart = [ ...scClon.splice(0, index), 
-        //                       ...this.shoppingcart.splice(index+1)
-        //                     ];
-        this.shoppingcart = arrRemoveAt(this.shoppingcart, index);
-        
-        this.selectedIndex = -1;
+    this.shoppingcart = arrRemoveAt(this.shoppingcart, index);
+    this.selectedIndex = -1;
 
-        this.cargosalumno[cargoIndex].isAddedSC = false;        
-        this.showToastMessage('Cargo removido', `Se removio el cargo ${ this.cargosalumno[cargoIndex].concepto } de la lista`, eSeverityMessages.info );
-        }
-    });
+    this.cargosalumno[cargoIndex].isAddedSC = false;        
+    this.showToastMessage('Cargo removido', `Se removio el cargo ${ this.cargosalumno[cargoIndex].concepto } de la lista`, eSeverityMessages.info );
+
   }
 
   showProductosList() {

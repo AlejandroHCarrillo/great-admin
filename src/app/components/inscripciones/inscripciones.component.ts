@@ -99,8 +99,7 @@ export class InscripcionesComponent implements OnInit {
   }
 
   buildConcepto( cargo: any, index: number=0, fechavencimiento: string = "" ){
-    console.log("fechavencimiento: ", fechavencimiento);
-    
+    // console.log("fechavencimiento: ", fechavencimiento);
     
     let intervalopagos = cargo.intervalopagos || 1;
     let fechaInicio = new Date(this.cicloSelected.fechaInicio);

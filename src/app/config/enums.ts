@@ -81,6 +81,12 @@ export const ddTipoItemVenta = [
     { name: 'Servicio', code: 'S' }
 ];
 
+export const tiposmovimiento = {
+    cargo: "cargo",
+    abono: "abono",
+    saldo: "saldo"
+};
+
 export const ddUnidadesMedida = [
     { code: '', name: 'No unidad de medida.' },
     { code: 'PZA', name: 'Pieza' },

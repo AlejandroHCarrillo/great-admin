@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { eSeverityMessages } from 'src/app/config/enums';
+import { ddNiveles, eSeverityMessages } from 'src/app/config/enums';
 import { InscripcionesService } from 'src/app/services/inscripciones.service';
 
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
@@ -11,6 +11,9 @@ import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import * as moment from 'moment';
 import { sumArrayNumeric } from 'src/app/helpers/tools';
+import { DropDownItem } from 'src/app/interfaces/drop-down-item';
+import { CiclosescolaresService } from 'src/app/services/ciclosescolares.service';
+import { CicloEscolar } from 'src/app/interfaces/cicloescolar';
 @Component({
   selector: 'app-incripciones-report',
   templateUrl: './incripciones-report.component.html',
@@ -18,6 +21,12 @@ import { sumArrayNumeric } from 'src/app/helpers/tools';
 })
 export class IncripcionesReportComponent implements OnInit {
   sum = sumArrayNumeric;
+  ciclosescolares : DropDownItem[] = [];
+  cicloescolarSelected: DropDownItem = new DropDownItem("default", "6089bd91f9c0f20f9821e9ec");
+
+  niveles : DropDownItem[] = ddNiveles;
+  nivelSelected: DropDownItem = ddNiveles[1];
+
   inscripciones: any[] = [];
   inscripcionesreport: any[] = [];
   inscripcionesSelected: any[] = [];
@@ -64,13 +73,17 @@ export class IncripcionesReportComponent implements OnInit {
 
   constructor( 
     private messageService: MessageService,
-    private inscripcionesService: InscripcionesService 
+    private inscripcionesService: InscripcionesService,
+    private ciclosEscolaresService: CiclosescolaresService
     ) { }
 
   ngOnInit(): void {
+
+    this.loadCiclosEscolares();
+
     this.loadInscripciones();
 
-    this.loadInscripcionesReport("PRIMARIA");
+    this.loadInscripcionesReport( this.nivelSelected.name );
 
     this.cols = [
       { field: 'cicloescolar', header: 'Ciclo Escolar' },
@@ -82,6 +95,28 @@ export class IncripcionesReportComponent implements OnInit {
 
       this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
 
+  }
+
+  loadCiclosEscolares(){
+    this.ciclosEscolaresService.getCiclosEscolares()
+    .then(async (resp)=>{
+      // console.log(resp);
+      const body = await resp.json();
+      console.log(body.ciclosescolares);
+
+      if(!body.ok){
+        // console.log("No hay ciclos escolares");
+        this.showToastMessage("Ciclos escoleres", "No hay ciclos escolares", eSeverityMessages.error);
+        return;        
+      }
+
+      let ddciclos: any[] = (body.ciclosescolares as CicloEscolar[])
+                            .filter((x:CicloEscolar)=>( x.activo === true ))
+                            .map((x:CicloEscolar)=>( { name: x.nombre, code: x.id } ));
+
+      this.ciclosescolares = ddciclos;
+
+    });
   }
 
   loadInscripciones(){
@@ -98,6 +133,8 @@ export class IncripcionesReportComponent implements OnInit {
       }
       this.inscripciones = [ ...body.inscripciones ];
 
+      // console.log(this.inscripciones);
+      
       this.inscripcionesreport = this.inscripciones.map((x) => 
         ( 
           { cicloescolar: x["cicloescolar"].nombre,
@@ -112,7 +149,8 @@ export class IncripcionesReportComponent implements OnInit {
   }
 
   loadInscripcionesReport(nivel: string){
-    this.inscripcionesService.getInscripcionesReport()
+    const urlQueryParams = `nivel=${nivel}`;
+    this.inscripcionesService.getInscripcionesReport(this.cicloescolarSelected.code, urlQueryParams)
     .then(async (resp)=>{
       // console.log(resp);
       const body = await resp.json();
@@ -253,6 +291,14 @@ export class IncripcionesReportComponent implements OnInit {
           });
           FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
       });
+  }
+
+  onChangeNivel(event: any){
+    this.loadInscripcionesReport(this.nivelSelected.code);
+  }
+
+  onChangeCicloEscolar(event: any){    
+    this.loadInscripcionesReport(this.nivelSelected.code);
   }
 
 }

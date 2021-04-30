@@ -12,10 +12,8 @@ export class InscripcionesService {
     return fetchToken(`inscripcion`, urlQueryParams, 'GET');
   }
 
-  getInscripcionesReport(urlQueryParams?:string) {
-    console.log("OJO: El del id Cliclo est hardcodeado.");
-    
-    return fetchToken(`inscripcion/report/60611e6d518f1f6074cd2b02`, urlQueryParams, 'GET');
+  getInscripcionesReport(cicloEscolarId: string = "", urlQueryParams?:string) {
+    return fetchToken(`inscripcion/report/${cicloEscolarId}`, urlQueryParams, 'GET');
   }
 
   findInscripciones(urlQueryParams?:string, buscar:string = '') {

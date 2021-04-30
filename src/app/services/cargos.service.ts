@@ -37,7 +37,7 @@ export class CargosService {
     await fetchToken(`cargo/alumno/${alumnoId}`, "", 'GET')
       .then( async (resp) => {
         const body = await resp.json();
-  // console.log(body);
+  console.log(body.cargos);
         retCargos = body.cargos;
       } );
     return retCargos;

@@ -1,6 +1,30 @@
-<h1>Reporte de inscripciones</h1>
-<hr>
+<div class="row">
+    <div class="col-8">
+        <h1>Reporte de inscripciones</h1>
+    </div>
+    <div class="col-2 mt-3">
+        <p-dropdown [options]="ciclosescolares"
+        optionLabel="name"
+        name="cicloescolarSelected"
+        (onChange)="onChangeCicloEscolar($event)"
+        [(ngModel)] ="cicloescolarSelected"></p-dropdown>
+        <!-- [disabled]="!editMode" -->
+    </div>
+    <div class="col-2 mt-3">
+        <p-dropdown [options]="niveles"
+        optionLabel="name"
+        name="nivelSelected"
+        (onChange)="onChangeNivel($event)"
+        [(ngModel)] ="nivelSelected"></p-dropdown>
+        <!-- [disabled]="!editMode" -->
+    </div>
+</div>
 
+
+
+<hr>
+<!-- barChartData : <pre>{{ barChartData | json}}</pre> -->
+<!-- barChartData : <pre>{{ barChartData | json}}</pre> -->
 <div class="row">
     <div class="col-8">
         <canvas baseChart

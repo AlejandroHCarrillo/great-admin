@@ -10,7 +10,7 @@
                 <div class="col-3 text-end">
                     <button type="button" 
                         class="btn btn-secondary btn-sm mt-3" 
-                        [routerLink]="['/alumnos']">
+                        [routerLink]="['/cursos']">
                         <span class="icon"><i class="fas fa-chevron-left"></i></span>
                         Regresar
                     </button>
@@ -280,18 +280,8 @@
                         ></p-inputNumber>
                         </div>
                 </div>
-                <!-- <br>
-                <div class="row">
-                    <div class="col"></div>
-                    <div class="col">
-                        <button class="btn btn-primary" (click)="addCharge()" >Agregar</button>
-                        <button class="btn btn-primary" (click)="cancelEditCharge()" >Cancelar</button>
-                    </div>
-                </div> -->
             </div>
-
         </ng-template>
-        
         <ng-template pTemplate="footer">
             <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
             <button pButton pRipple [label]=" cargoSelected.id ? 'Guardar': 'Agregar'" icon="pi pi-check" class="p-button-text" (click)="addCharge()"></button>

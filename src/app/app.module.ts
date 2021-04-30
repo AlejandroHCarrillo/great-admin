@@ -24,6 +24,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { RatingModule } from 'primeng/rating';
 import { DialogModule } from 'primeng/dialog';
 import { TooltipModule } from 'primeng/tooltip';
+import { ContextMenuModule } from 'primeng/contextmenu';
 
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
@@ -156,7 +157,8 @@ import { EstadoCuentaListComponent } from './components/estado-cuenta/estado-cue
     ConfirmDialogModule,
     ConfirmPopupModule,
     ToolbarModule,
-    RatingModule
+    RatingModule,
+    ContextMenuModule
   ],
   providers: [
     MessageService,

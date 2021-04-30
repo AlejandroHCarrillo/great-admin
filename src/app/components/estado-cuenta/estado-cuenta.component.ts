@@ -1,16 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
-import { eSeverityMessages } from 'src/app/config/enums';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
+
 import { CargosService } from 'src/app/services/cargos.service';
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import * as moment from 'moment';
+
 import { AlumnosListComponent } from '../alumnos/alumnos-list/alumnos-list.component';
 import { Alumno } from 'src/app/interfaces/alumno';
 import { DialogService } from 'primeng/dynamicdialog';
 import { PagosService } from 'src/app/services/pagos.service';
 import { EstadocuentaItem } from 'src/app/interfaces/estadocuenta-item.model';
-import { setfocus } from 'src/app/helpers/tools';
+import { tiposmovimiento, ddFormasPago, ddTiposCargos, eSeverityMessages } from 'src/app/config/enums'
+import { arrRemoveAt, dateEsp2Eng, getDropDownOption, isDate } from 'src/app/helpers/tools';
+import { DropDownItem } from 'src/app/interfaces/drop-down-item';
+import { Pago } from 'src/app/interfaces/pago';
+import { Producto } from 'src/app/interfaces/producto';
+import { ProductosListComponent } from '../productos/productos-list/productos-list.component';
 
 @Component({
   selector: 'app-estado-cuenta',
@@ -26,7 +32,7 @@ export class EstadoCuentaComponent implements OnInit {
   searchResultMsg = "";
 
   cargos: any[] = [];
-  cargosSelected: any[] = [];
+  cargosSelected: any;
 
   estadocuentareport: EstadocuentaItem[] = [];
 
@@ -39,8 +45,26 @@ export class EstadoCuentaComponent implements OnInit {
 
   imprimirview = false;
 
+  cmItems: MenuItem[] = [];
+
+  pagoDialog:Boolean = false;
+  formasPago: DropDownItem[] = ddFormasPago;
+  formapagoSelected: DropDownItem = new DropDownItem();
+  pago: Pago = new Pago();
+
+
+  cargo: any; //Cargo = new Cargo();
+  tiposCargos: DropDownItem[] = [ { name:"Seleccione tipo de cargo", code: "" }, ...ddTiposCargos];
+  tipocargoSelected: DropDownItem = new DropDownItem();
+  productoSelected: any = {};
+
+  cargoDialog:Boolean = false;
+
+  selectedIndex: number = -1;
+
   constructor( 
     private messageService: MessageService,
+    private confirmationService: ConfirmationService,
     private dialogService: DialogService,
     private cargosService: CargosService,
     private pagosService: PagosService
@@ -48,9 +72,8 @@ export class EstadoCuentaComponent implements OnInit {
 
   ngOnInit(): void {
     this.cols = [
+      { field: 'id', header: 'id' },
       { field: 'fecha', header: 'Fecha' },
-      // { field: 'tipo', header: 'Tipo' },
-      // { field: 'estatus', header: 'Estatus' },
       { field: 'concepto', header: 'Concepto' },
       { field: 'cargo', header: 'Cargo' },
       { field: 'abono', header: 'Abono' },
@@ -60,6 +83,87 @@ export class EstadoCuentaComponent implements OnInit {
       this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
 
       this.fakeInitdata();
+      this.contextMenuOptions();
+  }
+
+  contextMenuOptions(){
+    this.cmItems = [
+          { label: 'Editar', 
+            icon: 'pi pi-fw pi-pencil', 
+            command: () =>  this.edit(this.cargosSelected)
+          },
+          { label: 'Delete', 
+            icon: 'pi pi-fw pi-times', 
+            command: () => this.delete(this.cargosSelected)
+          },
+          { label: 'Pagar', 
+            icon: 'pi pi-fw pi-money-bill', 
+            command: () => { 
+              if(this.cargosSelected.tipo === tiposmovimiento.cargo){
+                  console.log(this.cargosSelected);
+    
+                  this.pago.fechapago = this.cargosSelected.fecha;
+                  // this.pago.formapago = row.formapago;
+                  this.pago.montopagado = this.cargosSelected.cargo;                        
+                  console.log(this.pago);
+                  this.showPago();
+                }
+                else{
+                  // console.log("No se puede pagar un pago.");
+                  this.showToastMessage("Pagar", "Solo se pueden hacer pagos a los cargos", eSeverityMessages.error);                  
+                }
+            }
+        },
+    ];
+  }
+
+  edit( row: any ){
+    console.log(row);    
+    this.setData(row, 0);
+
+    this.showPago();
+
+  }
+
+  delete( row: any ){
+    console.log("Delete: ", row);
+    this.confirmationService.confirm({
+      message: `¿En verdad deseas remover el ${row.tipo} de "${row.concepto}"?`,
+      accept: () => {
+        const itemPosition = this.estadocuentareport.findIndex((x)=>( x.id === row.id ));
+        console.log("itemPosition: ", itemPosition);
+        
+        if( row.tipo === tiposmovimiento.cargo ){
+          this.cargosService.delete(row.id)
+              .then( async (resp)=>{
+                const body = await resp.json()
+                console.log(body);
+                if(body.ok){
+                  this.showToastMessage("Eliminar cargo", `Se elimino el ${ row.tipo } con exito`, eSeverityMessages.success);
+                } else{
+                  this.showToastMessage("Error", `Hubo un error al eliminar el ${ row.tipo } con exito`, eSeverityMessages.error);
+                }
+
+              })
+        }
+        if( row.tipo === tiposmovimiento.abono ){
+          this.pagosService.delete(row.id)
+          .then( async (resp)=>{
+            const body = await resp.json()
+            console.log(body);
+            if(body.ok){
+              this.showToastMessage(`Eliminar ${ row.tipo }`, `Se elimino el ${ row.tipo } con exito`, eSeverityMessages.success);
+            } else{
+              this.showToastMessage("Error", `Hubo un error al eliminar el ${ row.tipo } con exito`, eSeverityMessages.error);
+            }
+
+          })
+        }
+        
+        this.estadocuentareport = arrRemoveAt(this.estadocuentareport, itemPosition);
+ 
+        }
+    });
   }
 
   async fakeInitdata(){
@@ -94,8 +198,10 @@ export class EstadoCuentaComponent implements OnInit {
       ...this.estadocuentareport, 
       ...data.map((cargo) => 
     ( 
-      new EstadocuentaItem("", "cargo", 
-        moment( cargo.fechavencimiento ).format("DD/MM/yyyy"), 
+      new EstadocuentaItem(
+        cargo.id, 
+        tiposmovimiento.cargo, 
+        moment( new Date(cargo.fechavencimiento).getTime() ).format("DD/MM/YYYY"), 
         cargo.concepto, cargo.tipocargo, cargo.monto, 0, 0, 
         cargo.estatus)
     )
@@ -108,9 +214,11 @@ export class EstadoCuentaComponent implements OnInit {
       ...this.estadocuentareport, 
       ...data.map((abono) => 
     ( 
-      new EstadocuentaItem("", "abono", 
-        moment( abono.fechapago ).format("DD/MM/yyyy"), 
-        "Pago en " + String(abono.formapago).toLocaleLowerCase(), 
+      new EstadocuentaItem(
+        abono.id, 
+        tiposmovimiento.abono, 
+        moment( new Date(abono.fechapago).getTime() ).format("DD/MM/yyyy"), 
+        `Pago (${String( getDropDownOption(abono.formapago, ddFormasPago ).name ).toLocaleLowerCase()})`, 
         abono.formapago , 0, abono.montopagado, 0,  
         abono.estatus)
     )
@@ -226,7 +334,6 @@ export class EstadoCuentaComponent implements OnInit {
           this.pagos = [];
           return;
         };
-        console.log(alumno);
         
         this.alumnoSelected = { ...alumno };
         this.messageService.add({severity:'info', summary: 'Alumno seleccionado', detail:'matricula:' + alumno.matricula });
@@ -234,6 +341,7 @@ export class EstadoCuentaComponent implements OnInit {
         this.estadocuentareport = [];
 
         this.cargos = await this.cargosService.findCargosByAlumno( alumno.id );
+        
         this.mapCargosToReport(this.cargos);
 
         this.pagos = await this.pagosService.findPagosPorAlumno( alumno.id );
@@ -245,10 +353,7 @@ export class EstadoCuentaComponent implements OnInit {
   }
 
   private comparefechas(a:any, b:any) {
-    return moment(a.fecha).diff(b.fecha, "day") < 0 ? -1 : 1;
-    // if (a.fecha > b.fecha) return 1;
-    // if (b.fecha > a.fecha) return -1;  
-    // return 0;
+    return moment(dateEsp2Eng(String( a.fecha ))).diff(dateEsp2Eng(String( b.fecha )), "day") < 0 ? -1 : 1;
   }
 
   private calcularSaldos() {
@@ -277,5 +382,230 @@ export class EstadoCuentaComponent implements OnInit {
     }, 30);
         
   }
+
+  showPago(){
+    this.pago.alumno = this.alumnoSelected.id;
+    this.pagoDialog = true;
+  }
+
+  showCargo(){
+    this.pago.alumno = this.alumnoSelected.id;
+    this.cargoDialog = true;
+  }
+
+  onChangeFormapago(event: any){
+    console.log(event);
+    this.formapagoSelected = event.value;
+    this.pago.formapago = event.value.code;
+  }
+
+  hideDialog(){
+    this.pagoDialog = false;
+    this.selectedIndex = -1;
+    this.pago = new Pago();
+  }
+
+  pagar(){
+    console.log("Efectuando el pago...", this.pago);
+    if(this.pago.formapago === ""){
+      this.showToastMessage("Forma de Pago", "Por favor seleccione una forma de pago", eSeverityMessages.error);
+      return;
+    }
+
+    let fecha: string  = String( this.pago.fechapago );
+    if( !isDate(fecha) ){
+      this.showToastMessage("Fecha no valida", "Por favor seleccione una fecha valida", eSeverityMessages.error);
+      return;
+
+    }
+
+    if(this.pago.montopagado <= 0){
+      this.showToastMessage("Monto Pagado", "Por favor ingrese un monto mayor a cero.", eSeverityMessages.error);
+      return;
+    }
+
+    let objPago:any = {...this.pago};
+
+    let fechaEng = dateEsp2Eng(fecha);
+    objPago.fechapago = fechaEng;
+
+    if(objPago.id){
+      this.updatePago(objPago)
+    } else{
+      console.log("crear nuevo pago");
+      this.createPago(objPago);
+    }
+  }
+  
+  createPago(objPago: any){
+    objPago.formapago = this.formapagoSelected.code;
+    this.pagosService.save(objPago)
+    .then(async(resp)=>{
+      const body = await resp.json();
+      console.log("Guardado: ", body);
+      if(body.ok){
+
+        // Agregamos abono al grid
+        this.estadocuentareport.push( new EstadocuentaItem(
+          body.pago.id, "abono", 
+          moment( new Date(body.pago.fechapago)).format("DD/MM/YYYY") , 
+          "Pago", 
+          body.pago.formapago, 0, body.pago.montopagado)
+        );
+
+        // this.estadocuentareport[this.selectedIndex].fecha = String( body.pago.fechapago );
+        // // this.estadocuentareport[this.selectedIndex].concepto = objPago.concepto;
+        // this.estadocuentareport[this.selectedIndex].abono = objPago.montopagado;
+
+        // Ordena por fechas los registros
+        this.estadocuentareport.sort(this.comparefechas)
+        // Recalcula los saldos
+        this.calcularSaldos();
+
+        this.showToastMessage("Pago", "Registrado con exito", eSeverityMessages.success);
+        this.hideDialog();
+      } else{
+        this.showToastMessage("Pago", "Error al aplicar el pago del cargo", eSeverityMessages.error);
+      }
+    });
+    return;
+  }
+  
+  updatePago(objPago: any){
+    this.pagosService.update(objPago)
+    .then(async(resp)=>{
+      const body = await resp.json();
+      console.log("Guardado: ", body);
+      if(body.ok){
+
+        // Actualiza valores en el grid
+        this.estadocuentareport[this.selectedIndex].fecha = String( this.pago.fechapago );
+        // this.estadocuentareport[this.selectedIndex].concepto = objPago.concepto;
+        this.estadocuentareport[this.selectedIndex].abono = objPago.montopagado;
+
+        // Ordena por fechas los registros
+        this.estadocuentareport.sort(this.comparefechas)
+        // Recalcula los saldos
+        this.calcularSaldos();
+
+        this.showToastMessage("Pago", "Registrado con exito", eSeverityMessages.success);
+        this.hideDialog();
+      } else{
+        this.showToastMessage("Pago", "Error al aplicar el pago del cargo", eSeverityMessages.error);
+      }
+    });
+    return;
+  }
+  
+  setData(row: any, index: number){
+    // this.selectedIndex = index;
+    // console.log(row);
+    this.formapagoSelected = getDropDownOption(row.formapago, this.formasPago);
+    console.log(this.formapagoSelected);
+  
+    if(row.tipo === tiposmovimiento.cargo ){
+      console.log("TODO: Set datos del cargo");
+      
+      // this.pago.id = row.id;
+      // this.pago.fechapago = row.fecha;
+      // this.pago.formapago = row.formapago;
+      // this.pago.montopagado = row.abono;
+    }
+
+    if(row.tipo === tiposmovimiento.abono ){
+      this.pago.id = row.id;
+      this.pago.fechapago = row.fecha;
+      this.pago.formapago = row.formapago;
+      this.pago.montopagado = row.abono;
+    }
+
+  }
+
+  // onChangeNivel(event: any){
+  //   // console.log(event);
+  //   this.curso.nivel = event.value.code;
+  // }
+
+  onChangeTipocargo(event: any){
+    // console.log(event);
+    this.tipocargoSelected = event.value;
+    // if(this.cargoSelected.nombre === ""){
+    //   this.cargoSelected.nombre = event.value.name;
+    // }
+    // this.productoSearch = event.value.name;
+  }
+
+  showProductosList() {
+    const ref = this.dialogService.open(ProductosListComponent, {
+      header: 'Seleccione un producto',
+      width: '70%',
+      data: {
+        searchtext: this.cargo.nombre || ""
+      }
+    });
+
+    ref.onClose.subscribe((producto: Producto) => {
+      if (!producto) return;
+      this.productoSelected = producto;
+
+      this.cargo.nombre = producto.nombre;
+
+      this.cargo.precio = producto.precio;
+      this.cargo.tasaIVA = producto.tasaIVA;
+
+      this.cargo.monto = (producto.precio * ( 1 + producto.tasaIVA ));
+
+      // setfocus("cargonombre");
+    });
+  }
+
+  addCharge(){
+    console.log("Agregarndo cargo...");
+    
+    // if (!this.validaCargo()) return;
+
+    // if(!this.productoSelected) return;
+
+    // this.cargoSelected.monto = this.cargoSelected.precio * (1 + this.cargoSelected.tasaIVA );
+    // this.cargoSelected.tipocargo = this.tipocargoSelected.name;
+
+    // // console.log("this.cargoSelected: ", this.cargoSelected);
+    // // return;
+    
+    // if(this.curso.id){
+    //   // Si el curso ya existe lo guarda de una vez      
+    //   if(this.cargoSelected.id){
+    //     // Si el cargo ya existia lo actualizamos 
+        
+    //     this.cursosService.updateCharge(this.cargoSelected)
+    //         .then(async(resp)=>{              
+    //           const body = await resp.json();
+    //           // console.log("respuesta actualizacion: ", body);
+    //           this.showToastMessage("Cargo", "Actualizado con exito", eSeverityMessages.success);
+    //           this.curso.cargos[this.cargoSelectedIndex] = this.cargoSelected;
+    //         });
+    //   } else {
+    //     // console.log("Guardar cargo");
+        
+    //     this.cursosService.addCharge({...this.cargoSelected, curso: this.curso.id })
+    //         .then(async(resp)=>{
+    //           const body = await resp.json();
+    //           // console.log(body);
+    //           this.showToastMessage("Cargo", "Agregado con exito", eSeverityMessages.success);
+    //           this.curso.cargos[this.cargoSelectedIndex] = this.cargoSelected;
+    //         });
+    //   }
+
+    // }
+
+    // // Si es un curso nuevo sin id solo lo agrega a la lista
+    // if(this.cargoSelectedIndex < 0) {
+    //   this.curso.cargos?.push(this.cargoSelected);
+    // }
+
+    // this.curso.cargos[this.cargoSelectedIndex] = this.cargoSelected;
+    // this.hideDialog();
+  }
+
 
 }

@@ -1,3 +1,7 @@
+<p-toast key="tmKey" position="top-right"></p-toast>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-contextMenu #cm [model]="cmItems"></p-contextMenu>
+
 <h1 id="titulo" [ngClass]="{'print': imprimirview }" >Estado de cuenta</h1>
 <hr>
 <div class="row" style="margin-bottom: 10px;" *ngIf="!imprimirview" >
@@ -27,39 +31,77 @@
     </div>
 </div>
 </div>
+<!-- <pre>cargos: {{cargos | json }}</pre> -->
 <div class="row">
-    <div class="row">
-        <div *ngIf="alumnoSelected" class="row mb-3">
-            <!-- <div class="col"> -->
-                <table style="width: 100%; border: 1px;" [ngClass]="{'print': imprimirview }">
-                    <tr>
-                        <td>
-                            <img class="image-small-rounded" *ngIf="!imprimirview"
-                            [src]="alumnoSelected.img" 
-                            [alt]="alumnoSelected.nombre">
-                        </td>
-                        <td class="title">Alumno:</td>
-                        <td>{{ alumnoSelected.nombre }} {{ alumnoSelected.apaterno }} {{ alumnoSelected.amaterno }}</td>
-                        <td class="title">Matricula:</td>
-                        <td>{{ alumnoSelected.matricula }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td class="title">Nivel:</td>
-                        <td>{{ alumnoSelected.nivel }}</td>
-                        <td class="title">Grado:</td>
-                        <td>{{ alumnoSelected.grado }}</td>
-                        <td class="title">Grupo:</td>
-                        <td>{{ alumnoSelected.grupo }}</td>
-                    </tr>
-                </table>
-            <!-- </div> -->
-        </div>
-
+    <div *ngIf="alumnoSelected" class="row mb-3">
+        <!-- <div class="col"> -->
+            <table style="width: 100%; border: 1px;" [ngClass]="{'print': imprimirview }">
+                <tr>
+                    <td>
+                        <img class="image-small-rounded" *ngIf="!imprimirview"
+                        [src]="alumnoSelected.img" 
+                        [alt]="alumnoSelected.nombre">
+                    </td>
+                    <td class="title">Alumno:</td>
+                    <td>{{ alumnoSelected.nombre }} {{ alumnoSelected.apaterno }} {{ alumnoSelected.amaterno }}</td>
+                    <td class="title">Matricula:</td>
+                    <td>{{ alumnoSelected.matricula }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="title">Nivel:</td>
+                    <td>{{ alumnoSelected.nivel }}</td>
+                    <td class="title">Grado:</td>
+                    <td>{{ alumnoSelected.grado }}</td>
+                    <td class="title">Grupo:</td>
+                    <td>{{ alumnoSelected.grupo }}</td>
+                </tr>
+            </table>
+        <!-- </div> -->
     </div>
+
 </div>
 
-<p-table #dt [columns]="cols" [value]="estadocuentareport" selectionMode="single" [(selection)]="cargosSelected"  name="reporttable" id="reporttable"  *ngIf="!imprimirview">
+<div class="">
+    <p-table [value]="estadocuentareport" 
+            [(contextMenuSelection)]="cargosSelected" 
+            [contextMenu]="cm" dataKey="id">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Fecha</th>
+                <th>Concepto</th>
+                <th>Cargo <span class="icon-cargo"> <i class="pi pi-plus-circle" (click)= "showCargo()" ></i></span></th>
+                <th>Abono <span class="icon-abono"><i class="pi pi-plus-circle" (click)= "showPago()"> </i></span> </th>
+                <th>Saldo</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowec let-i="rowIndex">
+            <tr [pContextMenuRow]="rowec" (click)="selectedIndex=i; setData(rowec, i);" (dblclick)="showPago();">
+                <td>{{rowec.fecha}}</td>
+                <td>{{rowec.concepto}}</td>
+                <td>{{(rowec.cargo === 0 ? "" : rowec.cargo ) | currency: '$ '}}</td>
+                <td>{{(rowec.abono === 0 ? "" : rowec.abono ) | currency: '$ '}}</td>
+                <td>{{rowec.saldo | currency: '$ '}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="text-end">Saldo:</td>
+                <td class="text-end">{{ saldo | currency }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!-- [(contextMenuSelection)]="cargosSelected" [contextMenu]="cm" dataKey="concepto" -->
+<p-table #dt [columns]="cols" [value]="estadocuentareport" 
+            name="reporttable" id="reporttable"  *ngIf="!imprimirview" 
+            selectionMode="single" [(selection)]="cargosSelected"  
+
+>
     <ng-template pTemplate="caption">
         <div class="p-d-flex text-end">
             <button type="button" pButton pRipple icon="pi pi-file-o" (click)="dt.exportCSV()" class="p-mr-2" pTooltip="Exportar a CSV" tooltipPosition="top"></button> &nbsp;
@@ -142,3 +184,164 @@
 <br>
 <br>
 <br>
+
+<p-dialog [(visible)]="pagoDialog" [style]="{width: '750px'}" header="Registro de pago" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <!-- pago : <pre>{{ pago | json}}</pre> -->
+        selectedIndex: {{selectedIndex}}
+        <div class="shadow p-3 mb-2 bg-body rounded">
+            <div class="row">
+                <div class="col-3 title mt-4">Alumno:</div>
+                <div class="col  mt-4">
+                    {{ alumnoSelected.nombre }} {{ alumnoSelected.apaterno }} {{ alumnoSelected.amaterno }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-3 title mt-4">Fecha:</div>
+                <div class="col  mt-4">
+                    <p-inputMask 
+                    name="fechapago" 
+                    id="fechapago" 
+                    [(ngModel)]="pago.fechapago"
+                    mask="99/99/9999"
+                    #fpago
+                    ></p-inputMask>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-3 title mt-4">Forma de Pago:</div>
+                <div class="col  mt-4">
+                    <p-dropdown [options]="formasPago"
+                        optionLabel="name"
+                        name="formapago"
+                        [(ngModel)]="formapagoSelected"
+                        (onChange)="onChangeFormapago($event)"
+                        class="col-extra-large"
+                        >
+                    </p-dropdown>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-3 title">Monto:</div>
+                <div class="col"> 
+                    <p-inputNumber [min]="0" [max]="9999999"
+                        id="montopagado" name="montopagado" placeholder="$ 0.00"
+                        class="col-medium" [maxlength]="15"
+                        inputStyleClass="text-numeric"
+                        prefix="$ " locale="es-MX"
+                        mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"
+                        [showButtons]="false"
+                        [(ngModel)]="pago.montopagado" 
+                    ></p-inputNumber>
+                </div>
+                <div class="col"></div>
+            </div>
+            <div class="row">
+                <div class="col"></div>
+            </div>
+
+        </div>
+
+    </ng-template>
+    
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Pagar" icon="pi pi-check" class="p-button-text" (click)="pagar()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="cargoDialog" [style]="{width: '750px'}" header="Cargo" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <!-- selectedCargoIndex: {{cargoIndex}}
+        cursoId: {{ curso.id }} -->
+        <div class="shadow p-3 mb-2 bg-body rounded">
+            <div class="row">
+                <div class="col-3 title mt-4">Tipo Cargo:</div>
+                <div class="col  mt-4">
+                    <p-dropdown [options]="tiposCargos"
+                        optionLabel="name"
+                        name="tipocargoSelected"
+                        [(ngModel)]="tipocargoSelected"
+                        (onChange)="onChangeTipocargo($event)"
+                        class="col-extra-large"
+                        >
+                    </p-dropdown>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-3 title">Cargo:</div>
+                <div class="col">
+                    <input type="text" class="form-control" maxlength="30" 
+                    placeholder="Nombre del cargo"
+                    id="cargonombre" 
+                    name="cargonombre" 
+                    [(ngModel)]="cargo.nombre" 
+                    (keyup.enter)="showProductosList()" 
+                    >
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-3 title">Precio:</div>
+                <div class="col"> 
+                    <p-inputNumber [min]="0" [max]="9999999"
+                        id="precio" name="precio" placeholder="$ 0.00"
+                        class="col-medium" [maxlength]="15"
+                        inputStyleClass="text-numeric"
+                        prefix="$ " locale="es-MX"
+                        mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"
+                        [showButtons]="false"
+                        [(ngModel)]="cargo.precio" 
+                    ></p-inputNumber>
+                </div>
+                <div class="col"></div>
+            </div>
+            <div class="row">
+                <div class="col"></div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-3 title">Monto IVA:</div>
+                <div class="col-4 text-numeric">$ {{ (cargo.precio || 0) * (cargo.tasaIVA || 0 ) }} </div>
+                <div class="col-5 title">Tasa IVA: {{ (cargo.tasaIVA || 0 ) * 100 }} %</div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-3 title">Moto cargo:</div>
+                <div class="col-4 text-numeric">{{ cargo.precio * ( 1 + cargo.tasaIVA) | currency }} </div>
+                <div class="col-5"></div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-3
+                 title">Numero pagos:</div>
+                <div class="col">
+                    <p-inputNumber [min]="1" [max]="60"
+                        id="numpagos" name="numpagos" placeholder="0"
+                        class="col-medium" [maxlength]="10"
+                        [showButtons]="false"
+                        inputStyleClass="text-numeric"
+                        [(ngModel)]="cargo.numpagos"
+                        suffix=" pago(s)"
+                    ></p-inputNumber>
+                </div>
+                <div class="col-3 title">Intervalo:</div>
+                <div class="col">
+                    <p-inputNumber [min]="1" [max]="12"
+                        id="intervalopagos" name="intervalopagos" placeholder="0"
+                        class="col-medium" [maxlength]="11"
+                        inputStyleClass="text-numeric"
+                        [showButtons]="false"
+                        [(ngModel)]="cargo.intervalopagos"
+                        suffix=" mes(es)."
+                    ></p-inputNumber>
+                    </div>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple [label]=" cargo.id ? 'Guardar': 'Agregar'" icon="pi pi-check" class="p-button-text" (click)="addCharge()"></button>
+    </ng-template>
+</p-dialog>

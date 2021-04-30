@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
+import { company } from 'src/app/config/company';
 import { getDropDownOption, getMes, getLastDayOfMonth } from 'src/app/helpers/tools';
 import { DropDownItem } from 'src/app/interfaces/drop-down-item';
 import { EstadocuentaService } from 'src/app/services/estadocuenta.service';
@@ -13,6 +14,8 @@ import Swal from 'sweetalert2';
 })
 export class EstadoCuentaMailComponent implements OnInit {
   moment = moment;
+  company = company;
+  
   matricula: string = "";
   alumnosList: DropDownItem[] = [];
   alumnoSelected: DropDownItem = new DropDownItem();
