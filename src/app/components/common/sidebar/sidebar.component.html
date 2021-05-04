@@ -26,13 +26,13 @@
         </a>
     </li>
 
-    <li>
+    <li *ngIf="checkRole('ADMIN')">
         <a [routerLink]="['/productos']" routerLinkActive="active" >
             <span class="icon"><i class="fas fa-boxes"></i></span>
             <span class="title">Productos</span>
         </a>
     </li>
-    <li>
+    <li *ngIf="checkRole('ADMIN')">
         <a [routerLink]="['/ciclos']" routerLinkActive="active" >
             <span class="icon"><i class="fas fa-history"></i></span>
             <span class="title">Ciclos escolares</span>
@@ -44,33 +44,22 @@
             <span class="title">Catalogos</span>
         </a>
     </li> -->
-    <li>
-        <a [routerLink]="['/caja']" routerLinkActive="active" >
+    <li *ngIf="checkRole('ADMIN')">
+        <a [routerLink]="['/caja']" routerLinkActive="active">
             <span class="icon"><i class="fas fa-cash-register"></i></span>
-            <span class="title">Caja</span>
+            <span class="title" >Caja</span>
         </a>
     </li>
-    <li>
-        <!-- <a href="#">
-            <span class="icon"><i class="fas fa-envelope"></i></span>
-            <span class="title">Messages</span>
-        </a> -->
+    <li *ngIf="checkRole('ADMIN')">
         <a [routerLink]="['/estadocuenta']" routerLinkActive="active" >
             <span class="icon"><i class="fas fa-file-invoice"></i></span>
             <span class="title">Estado de cuenta</span>
         </a>
     </li>
-    <li>
+    <li  *ngIf="checkRole('ADMIN')">
         <a href="#">
             <span class="icon"><i class="fas fa-cogs"></i></span>
             <span class="title">Settings</span>
-        </a>
-    </li>
-
-    <li>
-        <a href="#">
-            <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
-            <span class="title">Logout</span>
         </a>
     </li>
 </ul>

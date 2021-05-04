@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { ddNiveles, eSeverityMessages } from 'src/app/config/enums';
 import { InscripcionesService } from 'src/app/services/inscripciones.service';
@@ -71,6 +71,8 @@ export class IncripcionesReportComponent implements OnInit {
     borderWidth: 1
   }];
 
+  strlabels: string[] = [];
+  showGraphic: boolean = false;
   constructor( 
     private messageService: MessageService,
     private inscripcionesService: InscripcionesService,
@@ -100,7 +102,6 @@ export class IncripcionesReportComponent implements OnInit {
   loadCiclosEscolares(){
     this.ciclosEscolaresService.getCiclosEscolares()
     .then(async (resp)=>{
-      // console.log(resp);
       const body = await resp.json();
       console.log(body.ciclosescolares);
 
@@ -149,9 +150,12 @@ export class IncripcionesReportComponent implements OnInit {
   }
 
   loadInscripcionesReport(nivel: string){
+    this.showGraphic = false;
+
     const urlQueryParams = `nivel=${nivel}`;
     this.inscripcionesService.getInscripcionesReport(this.cicloescolarSelected.code, urlQueryParams)
     .then(async (resp)=>{
+
       // console.log(resp);
       const body = await resp.json();
       // console.log(body);
@@ -164,15 +168,15 @@ export class IncripcionesReportComponent implements OnInit {
       this.dataGraph = [ ...body.reporte ];
       this.dataGraph.sort(this.sortByGrado);
 
-      let labels = this.dataGraph.map((x)=>(`Grado ${x._id.grado}`));
+      this.strlabels = this.dataGraph.map((x)=>(`Grado ${x._id.grado}`));
       this.dataG = this.dataGraph.map((x)=>( x.count ));
 
       // console.log("labels: ", labels );
-      // console.log("dataG: ", this.dataG );
+      console.log("dataG: ", this.dataG );
       
-      this.barChartLabels = labels;
+      this.barChartLabels = this.strlabels;
       
-      // console.log(this.barChartLabels);
+      console.log(this.barChartLabels);
       // console.log(this.dataGraph.map((x)=>( x.count )));
       
       this.barChartData = [
@@ -185,6 +189,7 @@ export class IncripcionesReportComponent implements OnInit {
         }
       ];
 
+      this.showGraphic = true;
     });
   }
 

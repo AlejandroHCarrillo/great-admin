@@ -38,7 +38,7 @@
         </p>
 
         <!-- resumen : <pre>{{ resumen | json}}</pre> -->
-        <div style="display: flex; justify-content: space-between; padding-right: 10%; padding-left: 10%;">
+        <div style="display: flex; justify-content: space-between; padding-right: 10%; padding-left: 10%;" *ngIf="alumno"> 
             <table>
                 <tr><td><img [src]="company.urllogo" [alt]="company.nombre" style="width: auto; height: 100px;"></td></tr>
                 <tr><td style="padding-top: 20px;"><strong>{{company.nombre}}</strong></td></tr>

@@ -64,7 +64,7 @@
                         <span class="icon" *ngIf="pageinfo.sort==='activo'" ><i class="fas fa-sort-alpha-down"></i></span>
                     </div>    
                 </th>
-                <th class="col-medium"></th>
+                <th class="col-large"></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-producto>
@@ -74,10 +74,10 @@
                 </td>
                 <td>{{producto.code}}</td>
                 <td>{{producto.nombre}}</td>
-                <td >{{producto.descripcion}}</td>
-                <td >{{producto.precio | currency }}</td>
+                <td>{{producto.descripcion}}</td>
+                <td>{{producto.precio | currency }}</td>
                 <td class="text-center">{{!!producto.activo}}</td>
-                <td >
+                <td>
                     <button class="btn btn-warning btn-sm" (click)="edit(producto.id)">
                         <span class="icon"><i class="fas fa-pencil-alt"></i></span>    
                     </button>

@@ -1,11 +1,23 @@
 import * as moment from "moment";
-import { aMeses, ddFormasPago } from 'src/app/config/enums'
+import { aMeses, ddFormasPago, enumRol } from 'src/app/config/enums'
 import { DropDownItem } from "../interfaces/drop-down-item";
 
 export const isInvalidControl = (name: any, form:any) => {
     const control = form.get(name);
     return (!control?.valid && control?.touched);
 }
+
+export const checkRole = (level: string = "GUEST") => {
+    let usuario: any;
+    if(level === "GUEST") return true;
+
+    let user = localStorage.getItem("usuario");
+    if(!user) return false;
+
+    usuario = JSON.parse( user );
+    return ( usuario.role === enumRol.ADMIN );
+  }
+
 
 export const setfocus = function (controlname: string="") {
     document.getElementsByName(controlname)[0].focus(); 
@@ -81,8 +93,9 @@ export const getFormaPago = (strcode: string) => {
     return ddFormasPago.find((x)=>(x.code === strcode ))?.name;
 }
 
-export const getDropDownOption = (code:string, arrOptions: DropDownItem[] = []):any => {
-    return arrOptions.find((obj : DropDownItem ) => ( String(obj.code).toUpperCase() === String(code).toUpperCase() ));
+export const getDropDownOption = (codeOrName:string, arrOptions: DropDownItem[] = [], byCode: boolean = true):any => {
+    if (byCode) return arrOptions.find((obj : DropDownItem ) => ( String(obj.code).toUpperCase() === String(codeOrName).toUpperCase() ));
+    if (!byCode) return arrOptions.find((obj : DropDownItem ) => ( String(obj.name).toUpperCase() === String(codeOrName).toUpperCase() ));
 }
 
 export const getLastDayOfMonth = (yearmonth: string): string =>{

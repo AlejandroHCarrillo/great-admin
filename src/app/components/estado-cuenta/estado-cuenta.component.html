@@ -2,7 +2,7 @@
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <p-contextMenu #cm [model]="cmItems"></p-contextMenu>
 
-<h1 id="titulo" [ngClass]="{'print': imprimirview }" >Estado de cuenta</h1>
+<h1 id="titulo" [ngClass]="{'print': imprimirview }" >Historial de movimientos financieros por alumno.</h1>
 <hr>
 <div class="row" style="margin-bottom: 10px;" *ngIf="!imprimirview" >
     <div class="col-1">
@@ -64,7 +64,7 @@
 
 <div class="">
     <p-table [value]="estadocuentareport" 
-            [(contextMenuSelection)]="cargosSelected" 
+            [(contextMenuSelection)]="cargoSelected" 
             [contextMenu]="cm" dataKey="id">
         <ng-template pTemplate="header">
             <tr>
@@ -96,10 +96,10 @@
     </p-table>
 </div>
 
-<!-- [(contextMenuSelection)]="cargosSelected" [contextMenu]="cm" dataKey="concepto" -->
+<!-- [(contextMenuSelection)]="cargoSelected" [contextMenu]="cm" dataKey="concepto" -->
 <p-table #dt [columns]="cols" [value]="estadocuentareport" 
             name="reporttable" id="reporttable"  *ngIf="!imprimirview" 
-            selectionMode="single" [(selection)]="cargosSelected"  
+            selectionMode="single" [(selection)]="cargoSelected"  
 
 >
     <ng-template pTemplate="caption">
@@ -174,12 +174,6 @@
     </tfoot>
 </table>
 
-<!-- <hr> -->
-<!-- estadocuentareport : <pre>{{ estadocuentareport | json}}</pre> -->
-<!-- estadocuentareport: <pre>{{ estadocuentareport | json}}</pre> -->
-<!-- pagos: <pre>{{ pagos | json}}</pre>  -->
-<!-- cargos: <pre>{{ cargos | json}}</pre>  -->
-
 <br>
 <br>
 <br>
@@ -187,8 +181,6 @@
 
 <p-dialog [(visible)]="pagoDialog" [style]="{width: '750px'}" header="Registro de pago" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <!-- pago : <pre>{{ pago | json}}</pre> -->
-        selectedIndex: {{selectedIndex}}
         <div class="shadow p-3 mb-2 bg-body rounded">
             <div class="row">
                 <div class="col-3 title mt-4">Alumno:</div>
@@ -254,6 +246,8 @@
 </p-dialog>
 
 <p-dialog [(visible)]="cargoDialog" [style]="{width: '750px'}" header="Cargo" [modal]="true" styleClass="p-fluid">
+    cargo : <pre>{{ cargo | json}}</pre>
+    tipocargoSelected : <pre>{{ tipocargoSelected | json}}</pre>
     <ng-template pTemplate="content">
         <!-- selectedCargoIndex: {{cargoIndex}}
         cursoId: {{ curso.id }} -->
@@ -279,7 +273,7 @@
                     placeholder="Nombre del cargo"
                     id="cargonombre" 
                     name="cargonombre" 
-                    [(ngModel)]="cargo.nombre" 
+                    [(ngModel)]="cargo.concepto" 
                     (keyup.enter)="showProductosList()" 
                     >
                 </div>

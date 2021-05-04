@@ -29,6 +29,10 @@ body{
     z-index: 100;
 }
 
+.active{
+    color: #fff !important
+}
+
 .navigation>ul{
     position: absolute;
     top:0;
@@ -54,7 +58,7 @@ body{
     width: 100%;
     display: flex;
     text-decoration: none;
-    color: #fff;
+    color: #ddd;
 
 }
 
@@ -75,7 +79,7 @@ div .toggle span.icon .fas{
     display: flex;
 
     text-decoration: none;
-    color: #fff;
+    color: #777;
 
     min-width: 60%;
     height: 60px;
@@ -106,7 +110,7 @@ div .toggle span.icon .fas{
     background: #330748;
     cursor: pointer;
 
-    color: #fff;
+    color: #777;
     text-align: center;
     line-height: 60px;
 }

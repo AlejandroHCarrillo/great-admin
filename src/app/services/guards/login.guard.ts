@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate } from '@angular/router';
 
 import { AuthService } from '../auth/auth.service';
 
@@ -7,17 +7,17 @@ import { AuthService } from '../auth/auth.service';
 export class LoginGuard implements CanActivate {
 
   constructor(
-    public _usuarioService: AuthService,
-    public router: Router
+    public _usuarioService: AuthService
   ) {}
 
   canActivate() {
-
+    console.log("estaLogueado?", this._usuarioService.estaLogueado());    
     if ( this._usuarioService.estaLogueado() ) {
       return true;
     } else {
-      console.log( 'Bloqueado por guard' );
-      this.router.navigate(['/login']);
+      this._usuarioService.logout();
+      // console.log( 'Bloqueado por guard' );
+      // this.router.navigate(['/login']);
       return false;
     }
 

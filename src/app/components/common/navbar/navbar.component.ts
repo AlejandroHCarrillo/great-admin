@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/services.index';
 
 @Component({
@@ -8,12 +9,33 @@ import { AuthService } from 'src/app/services/services.index';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor( private authService : AuthService ) { }
+  usuario = {
+    email: "",
+    nombre: "Invitado",
+    role: "GUEST_ROLE",
+    username: "guest"
+  }
+
+  constructor( private authService : AuthService, 
+               private router: Router                
+    ) { }
 
   ngOnInit(): void {
+    this.getUsuario();
   }
 
   signOut(){
     this.authService.logout();
+  }
+
+  getUsuario(){
+    let user = localStorage.getItem("usuario");
+    if(user){
+      this.usuario =  JSON.parse(user);
+    } else{
+      console.log("TODO: Usuario no loggeado. invitarlo a salir");
+    this.router.navigate([`login`]);
+
+    }
   }
 }

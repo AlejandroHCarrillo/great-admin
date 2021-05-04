@@ -97,13 +97,13 @@ export class EstadoCuentaMailComponent implements OnInit {
   }
 
   getResumenEstadoCuenta(matricula:string){
-    console.log("getResumenEstadoCuenta by matricula: ", matricula);    
-    console.log("matricula: ", matricula);
-    console.log(this.mesanioSelected.code);
+    // console.log("getResumenEstadoCuenta by matricula: ", matricula);    
+    // console.log("matricula: ", matricula);
+    // console.log(this.mesanioSelected.code);
 
     let fini = this.fechainiEC.substring(0,7) + '-01';
     let ffin = getLastDayOfMonth(this.mesanioSelected.code);
-    console.log("ffin: ", ffin);
+    // console.log("ffin: ", ffin);
     
     let urlQueryParams = `fini=${fini}&ffin=${ffin}`;
 
@@ -111,7 +111,7 @@ export class EstadoCuentaMailComponent implements OnInit {
     .then(async(resp)=>{
       
       const body = await resp.json();
-      console.log(body);
+      // console.log(body);
       this.resumen = body.resumen;
     });
   }
@@ -156,7 +156,7 @@ export class EstadoCuentaMailComponent implements OnInit {
     this.estcuentaservice.enviarCorreo(htmlEC?.innerHTML || "NO HAY CORREO QUE ENVIAR")
     .then( async(resp)=>{
       const body = await resp.json();
-      console.log(body);
+      // console.log(body);
       if(body.ok){
         Swal.fire({
           title: 'Estado de cuenta',

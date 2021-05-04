@@ -20,13 +20,17 @@
     </div>
 </div>
 
-
-
 <hr>
 <!-- barChartData : <pre>{{ barChartData | json}}</pre> -->
 <!-- barChartData : <pre>{{ barChartData | json}}</pre> -->
 <div class="row">
     <div class="col-8">
+        <app-bargraphic *ngIf="showGraphic"
+            [graphTitle]="'Pruebas del componente de graficas'" 
+            [labelsInput]="strlabels"
+            [dataInput]="dataG"
+        ></app-bargraphic>
+
         <canvas baseChart
             [datasets]="barChartData"
             [labels]="barChartLabels"
@@ -34,6 +38,12 @@
             [legend]="barChartLegend"
             [chartType]="barChartType">
         </canvas>
+
+barChartLabels : <pre>{{ barChartLabels | json}}</pre>
+barChartOptions : <pre>{{ barChartOptions | json}}</pre>
+barChartLegend : <pre>{{ barChartLegend | json}}</pre>
+barChartType : <pre>{{ barChartType | json}}</pre>
+
     </div>
     <div class="col-4">
         <div class="row">

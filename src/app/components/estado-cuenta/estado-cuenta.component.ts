@@ -32,7 +32,7 @@ export class EstadoCuentaComponent implements OnInit {
   searchResultMsg = "";
 
   cargos: any[] = [];
-  cargosSelected: any;
+  cargoSelected: any;
 
   estadocuentareport: EstadocuentaItem[] = [];
 
@@ -53,7 +53,7 @@ export class EstadoCuentaComponent implements OnInit {
   pago: Pago = new Pago();
 
 
-  cargo: any; //Cargo = new Cargo();
+  cargo: any = {}; //Cargo = new Cargo();
   tiposCargos: DropDownItem[] = [ { name:"Seleccione tipo de cargo", code: "" }, ...ddTiposCargos];
   tipocargoSelected: DropDownItem = new DropDownItem();
   productoSelected: any = {};
@@ -90,21 +90,21 @@ export class EstadoCuentaComponent implements OnInit {
     this.cmItems = [
           { label: 'Editar', 
             icon: 'pi pi-fw pi-pencil', 
-            command: () =>  this.edit(this.cargosSelected)
+            command: () =>  this.edit(this.cargoSelected)
           },
           { label: 'Delete', 
             icon: 'pi pi-fw pi-times', 
-            command: () => this.delete(this.cargosSelected)
+            command: () => this.delete(this.cargoSelected)
           },
           { label: 'Pagar', 
             icon: 'pi pi-fw pi-money-bill', 
             command: () => { 
-              if(this.cargosSelected.tipo === tiposmovimiento.cargo){
-                  console.log(this.cargosSelected);
+              if(this.cargoSelected.tipo === tiposmovimiento.cargo){
+                  console.log(this.cargoSelected);
     
-                  this.pago.fechapago = this.cargosSelected.fecha;
+                  this.pago.fechapago = this.cargoSelected.fecha;
                   // this.pago.formapago = row.formapago;
-                  this.pago.montopagado = this.cargosSelected.cargo;                        
+                  this.pago.montopagado = this.cargoSelected.cargo;                        
                   console.log(this.pago);
                   this.showPago();
                 }
@@ -118,10 +118,14 @@ export class EstadoCuentaComponent implements OnInit {
   }
 
   edit( row: any ){
-    console.log(row);    
+    console.log(row);
     this.setData(row, 0);
 
-    this.showPago();
+    if(row.tipo === tiposmovimiento.cargo){
+      this.showCargo();
+    } else {
+      this.showPago();
+    }
 
   }
 
@@ -500,19 +504,27 @@ export class EstadoCuentaComponent implements OnInit {
   setData(row: any, index: number){
     // this.selectedIndex = index;
     // console.log(row);
-    this.formapagoSelected = getDropDownOption(row.formapago, this.formasPago);
-    console.log(this.formapagoSelected);
   
     if(row.tipo === tiposmovimiento.cargo ){
-      console.log("TODO: Set datos del cargo");
+      let cargoItem = this.cargos.find((x)=>( x.id === row.id ));
+      // console.log("TODO: Set datos del cargo");
+      // console.log(row);
+      // console.log(cargoItem);
+      this.cargo = cargoItem;
+
+      console.log(cargoItem.tipocargo, this.tiposCargos);
+
+      this.tipocargoSelected = getDropDownOption(cargoItem.tipocargo, this.tiposCargos, false);
+
+      console.log("tipocargoSelected: ", this.tipocargoSelected);
       
-      // this.pago.id = row.id;
-      // this.pago.fechapago = row.fecha;
-      // this.pago.formapago = row.formapago;
-      // this.pago.montopagado = row.abono;
+
     }
 
     if(row.tipo === tiposmovimiento.abono ){
+      this.formapagoSelected = getDropDownOption(row.formapago, this.formasPago);
+      console.log(this.formapagoSelected);
+
       this.pago.id = row.id;
       this.pago.fechapago = row.fecha;
       this.pago.formapago = row.formapago;

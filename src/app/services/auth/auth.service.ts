@@ -3,11 +3,6 @@ import { environment } from '../../../environments/environment';
 import { Usuario } from "../../models/usuario.model";
 import { HttpClient } from "@angular/common/http";
 
-// import { Observable } from 'rxjs/Rx';
-// import { Observable } from 'rxjs/Observable';
-// import "rxjs/add/operator/map";
-// import "rxjs/add/operator/catch";
-
 import { Router } from "@angular/router";
 import { SubirArchivoService } from "../subir-archivo/subir-archivo.service";
 import { throwError } from "rxjs";
@@ -40,19 +35,7 @@ export class AuthService {
             Swal.fire('Error al renovar el token', 'El token no pudo ser renovado', 'error');
             return throwError(err);
         });
-    
-    // let url = environment.baseUrl + '/login/renuevatoken';
-    // url += '?token=' + this.token;
-    // return this.http.get(url).map((resp:any) => {
-    //   this.token = resp.token;
-    //   localStorage.setItem("token", resp.token);
-
-    // }).catch( err => {
-    //   this.router.navigate(['/login']);
-    //   Swal.fire('Error al renovar el token', 'El token no pudo ser renovado', 'error');
-    //   return throwError(err);
-    // });
-
+ 
   }
 
   estaLogueado() {
@@ -260,4 +243,12 @@ export class AuthService {
   //   //   return true;      
   //   // });
   // }
+
+  get role() {
+    return this.usuario.role;
+  };
+
+  get uid() {
+    return this.usuario._id;
+  };
 }

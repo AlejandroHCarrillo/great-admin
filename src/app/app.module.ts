@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { CalendarModule } from 'primeng/calendar';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -81,11 +81,14 @@ import { PagosComponent } from './components/pagos/pagos.component';
 import { PagosReportComponent } from './components/pagos/pagos-report/pagos-report.component';
 import { EstadoCuentaMailComponent } from './components/estado-cuenta/estado-cuenta-mail/estado-cuenta-mail.component';
 import { EstadoCuentaListComponent } from './components/estado-cuenta/estado-cuenta-list/estado-cuenta-list.component';
+import { TokenInterceptorService } from './interceptors/token-interceptor.service';
+import { BargraphicComponent } from './components/graphics/bargraphic/bargraphic.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
+    BargraphicComponent,
     HomeComponent,
     FooterComponent,
     SidebarComponent,
@@ -167,7 +170,13 @@ import { EstadoCuentaListComponent } from './components/estado-cuenta/estado-cue
     AuthService,
     SharedService,
     UploadFilesService,
-    SubirArchivoService
+    SubirArchivoService,
+
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    },
   ],
   bootstrap: [AppComponent]
 })

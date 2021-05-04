@@ -28,8 +28,12 @@ import { CargosReportComponent } from './components/cargos/cargos-report/cargos-
 import { PagosReportComponent } from './components/pagos/pagos-report/pagos-report.component';
 import { EstadoCuentaMailComponent } from './components/estado-cuenta/estado-cuenta-mail/estado-cuenta-mail.component';
 import { EstadoCuentaListComponent } from './components/estado-cuenta/estado-cuenta-list/estado-cuenta-list.component';
+import { AdminGuard } from './services/services.index';
 
 const routes: Routes = [
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},
+
   // Rutas protegidas
   { path: '', 
     component: PagesComponent, 
@@ -48,9 +52,9 @@ const routes: Routes = [
       {path: 'ciclos', component: CiclosEscolaresComponent },
       {path: 'inscripciones', component: InscripcionesComponent },
       {path: 'ventas', component: VentasComponent },
-      {path: 'usuarios', component: UsuariosComponent},
-      {path: 'usuario', component: UsuarioComponent},
-      {path: 'usuario/:id', component: UsuarioComponent},
+      {path: 'usuarios', component: UsuariosComponent, canActivate: [ AdminGuard ]},
+      {path: 'usuario', component: UsuarioComponent, canActivate: [ AdminGuard ]},
+      {path: 'usuario/:id', component: UsuarioComponent, canActivate: [ AdminGuard ]},
       {path: 'clientes', component: ClientesComponent},
       {path: 'cliente', component: ClienteComponent},
       {path: 'cliente/:id', component: ClienteComponent},
@@ -75,8 +79,6 @@ const routes: Routes = [
     ]
   },
 
-  {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterComponent},
 
   {path: '*', component:NopagefoundComponent},
 
