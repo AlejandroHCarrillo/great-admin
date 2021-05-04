@@ -1,17 +1,4 @@
-<p>Grafica de barras works!</p>
-<h3>{{graphTitle}}</h3>
-<h3>{{labelsInput}}</h3>
-<h3>{{dataInput}}</h3>
-
-<div *ngIf="dataInput.length>0">
-barChartLabels : <pre>{{ barChartLabels | json}}</pre>
-barChartOptions : <pre>{{ barChartOptions | json}}</pre>
-barChartLegend : <pre>{{ barChartLegend | json}}</pre>
-barChartType : <pre>{{ barChartType | json}}</pre>
-
-<!-- 
-    barChartData : <pre>{{ barChartData | json}}</pre>
- -->
+<div >
      <canvas baseChart
      [datasets]="barChartData"
      [labels]="barChartLabels"

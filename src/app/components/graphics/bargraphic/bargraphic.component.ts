@@ -14,13 +14,7 @@ export class BargraphicComponent implements OnInit {
   @Input() labelsInput: string[] = [];
   @Input() dataInput: any[] = [];
 
-  // [datasets]="barChartData"
-  // [labels]="barChartLabels"
-  // [options]="barChartOptions"
-  // [legend]="barChartLegend"
-  // [chartType]="barChartType"
-
-    // Grafica  
+  // Grafica  
     public barChartOptions: ChartOptions = {
       responsive: true,
       // We use these empty structures as placeholders for dynamic theming.
@@ -57,16 +51,8 @@ export class BargraphicComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    // Fake input variables
-    // this.barChartLabels = ["Grado 1", "Grado 3"];
-    // this.barChartData[0].label = this.graphTitle;
-    // this.barChartData[0].data = [1, 1];
 
-    
-    // setTimeout(() => {
-      this.barChartLabels = this.labelsInput;
-      console.log("llenar los datos de la grafica: ", this.dataInput);
-      
+      this.barChartLabels = this.labelsInput;      
       this.barChartData = [
         {
           label: this.graphTitle,
@@ -75,12 +61,7 @@ export class BargraphicComponent implements OnInit {
           borderColor: [ 'rgba(75, 192, 192, 0.8)' ],
           borderWidth: 2
         }
-      ];      
-    // }, 3500);
-
-
-
-
+      ];
   }
 
 }

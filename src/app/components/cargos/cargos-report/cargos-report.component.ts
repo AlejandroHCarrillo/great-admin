@@ -1,9 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { Label } from 'ng2-charts';
-import * as pluginDataLabels from 'chartjs-plugin-datalabels';
-
 import { getMes, sumArrayNumeric } from 'src/app/helpers/tools';
 import { CargosService } from 'src/app/services/cargos.service';
 import { DropDownItem } from 'src/app/interfaces/drop-down-item';
@@ -14,7 +9,6 @@ import { DropDownItem } from 'src/app/interfaces/drop-down-item';
   styleUrls: ['./cargos-report.component.css']
 })
 export class CargosReportComponent implements OnInit {
-  sum = sumArrayNumeric;
   datareport: any[] = [];
   grantotal: number = 0;
   totalrecords: number = 0;
@@ -28,39 +22,12 @@ export class CargosReportComponent implements OnInit {
   // barChartLabels: any[] = [];
   // barChartOptions: any[] = [];
 
-  // Configurar grafica
-  barChartOptions: ChartOptions = {
-    responsive: true,
-    // We use these empty structures as placeholders for dynamic theming.
-    scales: { xAxes: [{}], 
-              yAxes: [{ ticks: { beginAtZero: true } }] 
-            },
-    plugins: {
-      datalabels: {
-        formatter: (value, ctx) =>{
-          let dataArr = this.barChartData;
-          let total = sumArrayNumeric(dataArr);     // sum from lodash        
-          let percentage = (value * 100 / total).toFixed(2) + "%";
-          return percentage;
-        },
-        anchor: 'end',
-        align: 'end',
-      }
-    }
-  };
+  // dataGraph: any[] = [];
+  dataG: any[] = [];
 
-  public barChartLabels: Label[] = [];
-  public barChartType: ChartType = 'bar';
-  public barChartLegend = true;
-  public barChartPlugins = [pluginDataLabels];
-
-  public barChartData: ChartDataSets[] = [{ 
-    label: '',
-    data: [], 
-    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-    borderColor: 'rgba(54, 162, 235, 1)',
-    borderWidth: 1
-  }];
+  strlabels: string[] = [];
+  showGraphic: boolean = false;
+  graphTitle: string = "Ingresos año";
 
   constructor( private cargosService: CargosService ) {
 
@@ -74,6 +41,8 @@ export class CargosReportComponent implements OnInit {
   getDataGraph(){
     this.cargosService.getCargosReport(this.yearSelected.code)
     .then(async (resp)=>{
+      this.showGraphic = false;
+
       // console.log(resp);
       const body = await resp.json();
       // console.log(body);
@@ -90,19 +59,11 @@ export class CargosReportComponent implements OnInit {
     
       this.completeData();
 
-      this.barChartLabels = this.datareport.map((x)=>( getMes( (x._id).substr(-2) ) ));
+      this.strlabels = this.datareport.map((x)=>( getMes( (x._id).substr(-2) ) ));
+      this.dataG = this.datareport.map((x)=>(x.montototal));
 
-      let data = this.datareport.map((x)=>(x.montototal));
-
-      this.barChartData = [
-        {
-          label: `Ingresos`,
-          data: data, 
-          backgroundColor:  'rgba(75, 192, 192, 0.3)',
-          borderColor: [ 'rgba(75, 192, 192, 0.8)' ],
-          borderWidth: 2
-        }
-      ];
+      this.graphTitle = `Ingresos estimados ${ this.yearSelected.name }`;
+      this.showGraphic = true;
 
     });
   }

@@ -3,10 +3,6 @@ import { MessageService } from 'primeng/api';
 import { ddNiveles, eSeverityMessages } from 'src/app/config/enums';
 import { InscripcionesService } from 'src/app/services/inscripciones.service';
 
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import * as pluginDataLabels from 'chartjs-plugin-datalabels';
-import { Label } from 'ng2-charts';
-
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import * as moment from 'moment';
@@ -22,7 +18,7 @@ import { CicloEscolar } from 'src/app/interfaces/cicloescolar';
 export class IncripcionesReportComponent implements OnInit {
   sum = sumArrayNumeric;
   ciclosescolares : DropDownItem[] = [];
-  cicloescolarSelected: DropDownItem = new DropDownItem("default", "6089bd91f9c0f20f9821e9ec");
+  cicloescolarSelected: DropDownItem = new DropDownItem("", "6089bd91f9c0f20f9821e9ec");
 
   niveles : DropDownItem[] = ddNiveles;
   nivelSelected: DropDownItem = ddNiveles[1];
@@ -37,42 +33,10 @@ export class IncripcionesReportComponent implements OnInit {
   dataGraph: any[] = [];
   dataG: any[] = [];
 
-  // Grafica  
-  public barChartOptions: ChartOptions = {
-    responsive: true,
-    // We use these empty structures as placeholders for dynamic theming.
-    scales: { xAxes: [{}], 
-              yAxes: [{ ticks: { beginAtZero: true } }] 
-            },
-    plugins: {
-      datalabels: {
-        formatter: (value, ctx) =>{
-          let dataArr = this.barChartData;
-          let total = sumArrayNumeric(dataArr);     // sum from lodash        
-          let percentage = (value * 100 / total).toFixed(2) + "%";
-          return percentage;
-        },
-        anchor: 'end',
-        align: 'end',
-      }
-    }
-  };
-
-  public barChartLabels: Label[] = [];
-  public barChartType: ChartType = 'bar';
-  public barChartLegend = true;
-  public barChartPlugins = [pluginDataLabels];
-
-  public barChartData: ChartDataSets[] = [{ 
-    label: '',
-    data: [], 
-    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-    borderColor: 'rgba(54, 162, 235, 1)',
-    borderWidth: 1
-  }];
-
   strlabels: string[] = [];
   showGraphic: boolean = false;
+  graphTitle: string = "Incripciones NIVEL - CICLO";
+
   constructor( 
     private messageService: MessageService,
     private inscripcionesService: InscripcionesService,
@@ -115,6 +79,7 @@ export class IncripcionesReportComponent implements OnInit {
                             .filter((x:CicloEscolar)=>( x.activo === true ))
                             .map((x:CicloEscolar)=>( { name: x.nombre, code: x.id } ));
 
+      this.cicloescolarSelected = ddciclos[0];
       this.ciclosescolares = ddciclos;
 
     });
@@ -168,27 +133,11 @@ export class IncripcionesReportComponent implements OnInit {
       this.dataGraph = [ ...body.reporte ];
       this.dataGraph.sort(this.sortByGrado);
 
-      this.strlabels = this.dataGraph.map((x)=>(`Grado ${x._id.grado}`));
+      this.graphTitle = `Inscripciones ${ this.nivelSelected.name } ${ this.cicloescolarSelected.name }`
+      this.strlabels = this.dataGraph.map((x)=>(`Grado ${x._id.grado}º`));
       this.dataG = this.dataGraph.map((x)=>( x.count ));
 
-      // console.log("labels: ", labels );
-      console.log("dataG: ", this.dataG );
-      
-      this.barChartLabels = this.strlabels;
-      
-      console.log(this.barChartLabels);
-      // console.log(this.dataGraph.map((x)=>( x.count )));
-      
-      this.barChartData = [
-        {
-          label: "Alumnos",
-          data: [ ...this.dataG ], 
-          backgroundColor:  'rgba(75, 192, 192, 0.3)',
-          borderColor: [ 'rgba(75, 192, 192, 0.8)' ],
-          borderWidth: 2
-        }
-      ];
-
+      console.log("dataGraph: ", this.dataGraph );
       this.showGraphic = true;
     });
   }

@@ -26,23 +26,23 @@
 <div class="row">
     <div class="col-8">
         <app-bargraphic *ngIf="showGraphic"
-            [graphTitle]="'Pruebas del componente de graficas'" 
+            [graphTitle]="graphTitle" 
             [labelsInput]="strlabels"
             [dataInput]="dataG"
         ></app-bargraphic>
 
-        <canvas baseChart
+        <!-- <canvas baseChart
             [datasets]="barChartData"
             [labels]="barChartLabels"
             [options]="barChartOptions"
             [legend]="barChartLegend"
             [chartType]="barChartType">
-        </canvas>
+        </canvas> -->
 
-barChartLabels : <pre>{{ barChartLabels | json}}</pre>
+<!-- barChartLabels : <pre>{{ barChartLabels | json}}</pre>
 barChartOptions : <pre>{{ barChartOptions | json}}</pre>
 barChartLegend : <pre>{{ barChartLegend | json}}</pre>
-barChartType : <pre>{{ barChartType | json}}</pre>
+barChartType : <pre>{{ barChartType | json}}</pre> -->
 
     </div>
     <div class="col-4">
@@ -50,7 +50,7 @@ barChartType : <pre>{{ barChartType | json}}</pre>
             <div class="col title text-center mb-2">Resumen de inscripciones</div>
         </div>
         <hr>
-        <div class="row" *ngFor="let grado of barChartLabels; let i = index;" >
+        <div class="row" *ngFor="let grado of strlabels; let i = index;" >
             <div class="col"></div>
             <div class="col-6">{{ grado }}</div>
             <div class="col-4 text-end">{{ dataG[i] }}</div>
