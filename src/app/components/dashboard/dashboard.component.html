@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-8"><h1>
+        Dashboard
+    </h1></div>
+    <div class="col-4 mt-3">
+        <!-- <p-dropdown [options]="dropDownYears"
+            optionLabel="name"
+            name="yearSelected"
+            (onChange)="onChangeDDYears($event)"
+            [(ngModel)]="yearSelected">
+        </p-dropdown> -->
+    </div>
+</div>
+<hr>
+
+<!-- environment: {{ environment | json }} -->
+
+<div class="container">
+    <div class="grid-cards">
+
+        <div class="card" >
+            <div class="card-img-overlay text-center btn-primary">
+                <h5 class="card-title">84</h5>
+                <h6 class="card-subtitle mb-2">Matricula actual</h6>
+
+                <a href="/reportes/inscripciones" class="btn btn-primary">
+                    ver
+                </a>
+            </div>
+        </div>
+
+        <div class="card" >
+            <div class="card-img-overlay text-center btn-danger">
+                <h5 class="card-title">45,234.00</h5>
+                <h6 class="card-subtitle mb-2">Cartera vencida</h6>
+            </div>
+        </div>
+
+        <div class="card" >
+            <div class="card-img-overlay text-center btn-warning">
+                <h5 class="card-title">445,234.00</h5>
+                <h6 class="card-subtitle mb-2">Cobranza del mes</h6>
+            </div>
+        </div>
+
+        <div class="card" >
+            <div class="card-img-overlay text-center btn-success">
+                <h5 class="card-title">987,234.00</h5>
+                <h6 class="card-subtitle mb-2">Ingresos del mes</h6>
+            </div>
+        </div>
+
+    </div>    
+</div>
+
+

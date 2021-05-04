@@ -83,6 +83,7 @@ import { EstadoCuentaMailComponent } from './components/estado-cuenta/estado-cue
 import { EstadoCuentaListComponent } from './components/estado-cuenta/estado-cuenta-list/estado-cuenta-list.component';
 import { TokenInterceptorService } from './interceptors/token-interceptor.service';
 import { BargraphicComponent } from './components/graphics/bargraphic/bargraphic.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -125,7 +126,8 @@ import { BargraphicComponent } from './components/graphics/bargraphic/bargraphic
     PagosComponent,
     PagosReportComponent,
     EstadoCuentaMailComponent,
-    EstadoCuentaListComponent
+    EstadoCuentaListComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

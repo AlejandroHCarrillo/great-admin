@@ -1,0 +1,11 @@
+.card{
+    width: 300px;
+}
+
+.card-title{
+    font-size: 3rem;
+}
+
+.card-subtitle{
+    font-size: 2rem;
+}

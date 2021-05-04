@@ -17,6 +17,8 @@
             [graphTitle]="graphTitle" 
             [labelsInput]="strlabels"
             [dataInput]="dataG"
+            [graphTypeInput]="'bar'"
+
         ></app-bargraphic>
     </div>
     <div class="col-4">
@@ -34,7 +36,7 @@
         <div class="row">
             <div class="col"></div>
             <div class="col-6 text-end">Total:</div>
-            <div class="col-4 text-end">{{ grantotal | currency }}</div>
+            <div class="col-4 text-end title">{{ grantotal | currency }}</div>
             <div class="col"></div>
 
         </div>
@@ -48,6 +50,7 @@
             [graphTitle]="graphTitleXFormaPago" 
             [labelsInput]="strlabelsXFormaPago"
             [dataInput]="dataGXFormaPago"
+            [graphTypeInput]="'doughnut'"
         ></app-bargraphic>
     </div>
     <div class="col-4">
@@ -65,7 +68,7 @@
         <div class="row">
             <div class="col"></div>
             <div class="col-6 text-end">Total:</div>
-            <div class="col-4 text-end">{{ grantotal | currency }}</div>
+            <div class="col-4 text-end title">{{ grantotal | currency }}</div>
             <div class="col"></div>
 
         </div>

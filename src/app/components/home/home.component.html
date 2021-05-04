@@ -12,6 +12,15 @@
             </div>
         </div>
 
+        <div class="card" *ngIf="checkRole('ADMIN')">
+            <div class="card-img-overlay text-center">
+                <a [routerLink]="['/dashboard']" routerLinkActive="active" >
+                    <span class="icon"><i class="fas fa-tachometer-alt"></i></span>
+                </a>
+                <h5 class="card-title">Dashboard</h5>
+            </div>
+        </div>
+
         <div class="card" *ngIf="checkRole()">
             <div class="card-img-overlay text-center">
                 <a [routerLink]="['/cursos']" routerLinkActive="active" >

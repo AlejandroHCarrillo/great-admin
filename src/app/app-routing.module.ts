@@ -29,6 +29,7 @@ import { PagosReportComponent } from './components/pagos/pagos-report/pagos-repo
 import { EstadoCuentaMailComponent } from './components/estado-cuenta/estado-cuenta-mail/estado-cuenta-mail.component';
 import { EstadoCuentaListComponent } from './components/estado-cuenta/estado-cuenta-list/estado-cuenta-list.component';
 import { AdminGuard } from './services/services.index';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -39,6 +40,7 @@ const routes: Routes = [
     component: PagesComponent, 
     children: [
       {path: 'home', component: HomeComponent},
+      {path: 'dashboard', component: DashboardComponent},
       {path: 'catalogos', component: CatalogosComponent },
       {path: 'bancos', component: NopagefoundComponent },
       {path: 'cuentas', component: NopagefoundComponent },
