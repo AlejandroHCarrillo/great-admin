@@ -5,10 +5,6 @@ let baseURL = environment.baseUrl;
 const fetchSimple = (endpoint:string, data:any, method:string = 'GET') => {
     const url = `${ baseURL }/${endpoint}/`;
 
-    // console.log("url: ", url );
-    // console.log("method: ", method );
-    // console.log("data: ", data );
-
     if ( method === 'GET' ){
         return fetch( url );
     }
@@ -23,12 +19,6 @@ const fetchSimple = (endpoint:string, data:any, method:string = 'GET') => {
 const fetchToken = (endpoint:string, data:any, method:string = 'GET') => {
     let url = `${ baseURL }/${endpoint}`;
     const token = localStorage.getItem('token') || '';
-
-    // console.log("url: ", url );
-    // console.log("method: ", method );
-    // console.log("input data: ", data );
-    // console.log("token: ", token );
-    // console.log("data:", data);
 
     if ( method === 'GET' ) {        
         // console.log("Ejecutamos el fetch sin token");        
@@ -47,9 +37,9 @@ const fetchToken = (endpoint:string, data:any, method:string = 'GET') => {
         method,
         headers: {
             'Content-type': 'application/json',
-            'x-token': token 
+            'x-token': token
         },
-        body: JSON.stringify( data )
+        body: JSON.stringify( data ),
     });
 }
 

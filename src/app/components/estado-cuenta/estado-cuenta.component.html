@@ -183,28 +183,15 @@
     <ng-template pTemplate="content">
         <div class="shadow p-3 mb-2 bg-body rounded">
             <div class="row">
-                <div class="col-3 title mt-4">Alumno:</div>
-                <div class="col  mt-4">
+                <div class="col-3 title mt-2">Alumno:</div>
+                <div class="col  mt-2 title">
                     {{ alumnoSelected.nombre }} {{ alumnoSelected.apaterno }} {{ alumnoSelected.amaterno }}
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-3 title mt-4">Fecha:</div>
-                <div class="col  mt-4">
-                    <p-inputMask 
-                    name="fechapago" 
-                    id="fechapago" 
-                    [(ngModel)]="pago.fechapago"
-                    mask="99/99/9999"
-                    #fpago
-                    ></p-inputMask>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-3 title mt-4">Forma de Pago:</div>
-                <div class="col  mt-4">
+                <div class="col-3 title mt-2">Forma de Pago:</div>
+                <div class="col  mt-2">
                     <p-dropdown [options]="formasPago"
                         optionLabel="name"
                         name="formapago"
@@ -216,7 +203,20 @@
                 </div>
             </div>
 
-            <div class="row mt-2">
+            <div class="row">
+                <div class="col-3 title mt-5">Fecha:</div>
+                <div class="col  mt-5">
+                    <p-inputMask 
+                    name="fechapago" 
+                    id="fechapago" 
+                    [(ngModel)]="pago.fechapago"
+                    mask="99/99/9999"
+                    #fpago
+                    ></p-inputMask>
+                </div>
+            </div>
+
+            <div class="row mt-5">
                 <div class="col-3 title">Monto:</div>
                 <div class="col"> 
                     <p-inputNumber [min]="0" [max]="9999999"
@@ -232,7 +232,9 @@
                 <div class="col"></div>
             </div>
             <div class="row">
-                <div class="col"></div>
+                <div class="col">
+                    <br>
+                </div>
             </div>
 
         </div>
@@ -246,8 +248,8 @@
 </p-dialog>
 
 <p-dialog [(visible)]="cargoDialog" [style]="{width: '750px'}" header="Cargo" [modal]="true" styleClass="p-fluid">
-    cargo : <pre>{{ cargo | json}}</pre>
-    tipocargoSelected : <pre>{{ tipocargoSelected | json}}</pre>
+    <!-- cargo : <pre>{{ cargo | json}}</pre> -->
+    <!-- tipocargoSelected : <pre>{{ tipocargoSelected | json}}</pre> -->
     <ng-template pTemplate="content">
         <!-- selectedCargoIndex: {{cargoIndex}}
         cursoId: {{ curso.id }} -->

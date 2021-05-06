@@ -442,6 +442,9 @@ export class EstadoCuentaComponent implements OnInit {
   }
   
   createPago(objPago: any){
+    console.log("Creando pago: ", objPago);
+    
+
     objPago.formapago = this.formapagoSelected.code;
     this.pagosService.save(objPago)
     .then(async(resp)=>{

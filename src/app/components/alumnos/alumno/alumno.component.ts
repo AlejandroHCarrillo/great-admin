@@ -334,7 +334,7 @@ export class AlumnoComponent implements OnInit {
     console.log("Actualizar: ", obj);
       this.alumnosService.update(obj)
       .then( (resp) => {
-        // console.log("resp: ", resp);
+        console.log("resp: ", resp);
         this.editMode = false;        
         if(resp.ok){
           Swal.fire({
@@ -343,7 +343,15 @@ export class AlumnoComponent implements OnInit {
             icon: 'success',
             confirmButtonText: 'Ok'
           });
-        }         
+        } else {
+          Swal.fire({
+            title: `Error ${ resp.status }: Actualizado alumno`,
+            text: `Hubo un error al actualizar el alumno: ${ resp.statusText } `,
+            icon: 'error',
+            confirmButtonText: 'Ok'
+          });
+        }
+
       });
   }
 
